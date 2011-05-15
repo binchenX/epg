@@ -31,7 +31,7 @@ public class EPGProvider extends ContentProvider
 	
 	public static final String TAG = "EPGProvider";
 	
-	public static final String _ID = "_rowid";
+	public static final String _ID = "_id";
 	public static final String SECTION_GUID = "sguid";
 	public static final String TSID = "tsid";
 	public static final String ONID = "onid";
@@ -163,11 +163,11 @@ public class EPGProvider extends ContentProvider
 	      sqlBuilder.setTables(DATABASE_TABLE);
 	       
 	      //---if getting a particular event
-	      if (uriMatcher.match(uri) == EVENT_ID) {
-	       
-	         sqlBuilder.appendWhere(
-	            _ID + " = " + uri.getPathSegments().get(1));     
-	      }
+//	      if (uriMatcher.match(uri) == EVENT_ID) {
+//	       
+//	         sqlBuilder.appendWhere(
+//	            _ID + " = " + uri.getPathSegments().get(1));     
+//	      }
 	       
 	      if (sortOrder==null || sortOrder=="")
 	         sortOrder = _ID;

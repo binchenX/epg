@@ -41,24 +41,20 @@ public class EPGProviderActivity extends Activity {
         //display those two events 
         
         //TODO: error handling ... 
-//       Uri allEvents = Uri.parse(
-//        "content://com.trident.android.tv.si.provider.EPG/events");
-//    Cursor c = managedQuery(allEvents , null, null, null, "_id ASC");
+       Uri allEvents = Uri.parse(
+        "content://com.trident.android.tv.si.provider.EPG/events");
+    Cursor c = managedQuery(allEvents , null, null, null, null);
      
     Toast.makeText(this,"Hello Android", 2000);
-//     
-//     if (c.moveToFirst()) {
-//        do{
-//           Toast.makeText(this, 
-//              c.getString(c.getColumnIndex(
-//              EPGProvider._ID)) + ", " +                     
-//              c.getString(c.getColumnIndex(
-//                 EPGProvider.NAME)) + ", " +                     
-//              c.getString(c.getColumnIndex(
-//                 EPGProvider.SHORT_DESCRIPTION)), 
-//              Toast.LENGTH_LONG).show();               
-//        } while (c.moveToNext());
-//     }
+     
+     if (c.moveToFirst()) {
+        do{
+           Toast.makeText(this, 
+              c.getString(c.getColumnIndexOrThrow(
+                 EPGProvider.NAME)), 
+              Toast.LENGTH_LONG).show();               
+        } while (c.moveToNext());
+     }
 
 
         
