@@ -14,6 +14,14 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
+
+/**
+ * ref : 
+ * http://www.reigndesign.com/blog/using-your-own-sqlite-database-in-android-applications/
+ * http://www.devx.com/wireless/Article/41133/0/page/2
+ * @author Pierr Chen
+ *
+ */
 public class EPGProvider extends ContentProvider 
 {
 	public static final String PROVIDER_NAME = "com.trident.android.tv.si.provider.EPG";
@@ -36,29 +44,44 @@ public class EPGProvider extends ContentProvider
 	
 	
 	  //---for database use---
+	  //the database have alredy been created by native code
+      //we just need to open so as to get an handle of it
 	   private SQLiteDatabase epgDB;
-	   private static final String DATABASE_NAME =  "epg.db";
+	   private static final String DATABASE_NAME =  "epg_1.db";
 	   private static final String DATABASE_TABLE = "tblEvent_basic";
 	   private static final int DATABASE_VERSION = 1;
 	   private static final String DATABASE_CREATE =
 	         "CREATE TABLE IF NOT EXISTS " + DATABASE_TABLE + 
-	         " (_id integer primary key autoincrement, "+
+	         " (_id INTEGER PRIMARY KEY AUTOINCREMENT, "+
 	         " sguid  INT,tsid  INT,onid  INT,service_id  INT," +
 	         " event_id  INT, start_time  INT,duration  INT,running_status  INT,free_ca_mode  INT," +
 	         " event_name  VARCHAR(256)," +
 	         " text VARCHAR(256)," +
 	         " end_time  INT);";
+	   
+	   public static final int EVENTS = 1;
+	   public static final int EVENT_ID = 2;
 	         		
+	   
+	   private static final UriMatcher uriMatcher;
+	      static{
+	         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+	         uriMatcher.addURI(PROVIDER_NAME, "events", EVENTS);
+	         uriMatcher.addURI(PROVIDER_NAME, "events/#", EVENT_ID);      
+	      }
+
 	   
 	   private static class EPGDatabaseOpenHelper extends SQLiteOpenHelper 
 	   {
 		   EPGDatabaseOpenHelper(Context context) {
-	         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+	       super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	      }
 
 	      @Override
 	      public void onCreate(SQLiteDatabase db) 
 	      {
+	    	  
+	    	  //create a db at /data/data/your_package/database
 	         db.execSQL(DATABASE_CREATE);
 	      }
 
@@ -98,7 +121,35 @@ public class EPGProvider extends ContentProvider
    @Override
    public Cursor query(Uri uri, String[] projection, String selection,
          String[] selectionArgs, String sortOrder) {
-      return null;
+	   
+	
+
+	      SQLiteQueryBuilder sqlBuilder = new SQLiteQueryBuilder();
+	      sqlBuilder.setTables(DATABASE_TABLE);
+	       
+	      //---if getting a particular event
+	      if (uriMatcher.match(uri) == EVENT_ID) {
+	       
+	         sqlBuilder.appendWhere(
+	            _ID + " = " + uri.getPathSegments().get(1));     
+	      }
+	       
+	      if (sortOrder==null || sortOrder=="")
+	         sortOrder = _ID;
+	   
+	      Cursor c = sqlBuilder.query(
+	         epgDB, 
+	         projection, 
+	         selection, 
+	         selectionArgs, 
+	         null, 
+	         null, 
+	         sortOrder);
+	   
+	      //---register to watch a content URI for changes---
+	      c.setNotificationUri(getContext().getContentResolver(), uri);
+	      return c;
+      
    }
 
    @Override
