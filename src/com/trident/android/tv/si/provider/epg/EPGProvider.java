@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 
+
 /**
  * ref : 
  * http://www.reigndesign.com/blog/using-your-own-sqlite-database-in-android-applications/
@@ -24,10 +25,11 @@ import android.util.Log;
  */
 public class EPGProvider extends ContentProvider 
 {
+	
 	public static final String PROVIDER_NAME = "com.trident.android.tv.si.provider.EPG";
 	public static final Uri CONTENT_URI = Uri.parse("content://" + PROVIDER_NAME + "/events");
 	
-	
+	public static final String TAG = "EPGProvider";
 	
 	public static final String _ID = "_rowid";
 	public static final String SECTION_GUID = "sguid";
@@ -82,6 +84,7 @@ public class EPGProvider extends ContentProvider
 	      {
 	    	  
 	    	  //create a db at /data/data/your_package/database
+	    	 Log.d(TAG, "databasa was created/open");
 	         db.execSQL(DATABASE_CREATE);
 	      }
 
@@ -105,24 +108,56 @@ public class EPGProvider extends ContentProvider
 
    @Override
    public String getType(Uri uri) {
-      return null;
+	   
+	   switch (uriMatcher.match(uri)){
+       //---get all books---
+       case EVENTS:
+          return "vnd.android.cursor.dir/vnd.trident.tv.si.events ";
+       //---get a particular book---
+       case EVENT_ID:                
+          return "vnd.android.cursor.item/vnd.trident.tv.si.events ";
+       default:
+          throw new IllegalArgumentException("Unsupported URI: " + uri);        
+    }   
+
+     
    }
 
    @Override
    public Uri insert(Uri uri, ContentValues values) {
-      return null;
+	   
+	  Log.d(TAG, "INSERT EVENTS  TO DATABASE xxxxx.................");
+	  
+	  //---add a new book---
+      long rowID = epgDB.insert(
+         DATABASE_TABLE, "", values);
+           
+      //---if added successfully---
+      if (rowID>0)
+      {
+         Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
+         getContext().getContentResolver().notifyChange(_uri, null);    
+         return _uri;                
+      }        
+      throw new SQLException("Failed to insert row into " + uri);
+
    }
 
    @Override
    public boolean onCreate() {
-      return false;
+	   
+	      Log.d(TAG, "onCreate");
+    	  Context context = getContext();
+    	  EPGDatabaseOpenHelper dbHelper = new EPGDatabaseOpenHelper(context);
+	      epgDB = dbHelper.getWritableDatabase();
+	      return (epgDB == null)? false:true;
    }
 
    @Override
    public Cursor query(Uri uri, String[] projection, String selection,
          String[] selectionArgs, String sortOrder) {
 	   
-	
+	   Log.d(TAG, "QUERY the database DATABASE..................");
 
 	      SQLiteQueryBuilder sqlBuilder = new SQLiteQueryBuilder();
 	      sqlBuilder.setTables(DATABASE_TABLE);
