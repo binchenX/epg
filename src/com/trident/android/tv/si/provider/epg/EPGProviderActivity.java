@@ -3,6 +3,7 @@ package com.trident.android.tv.si.provider.epg;
 import android.R.*;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.net.Uri;
 import android.database.*;
 import android.widget.*;
@@ -16,7 +17,7 @@ import android.widget.AdapterView.*;
 import android.view.*;
 import android.widget.*;
 import android.R.layout.*;
-
+import android.content.Intent;
 
 /**
  * 
@@ -38,41 +39,34 @@ public class EPGProviderActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.main);
         
-        //The database is created and populated by Native code
-        //
-        
-        
+    
        if (!use_preexsit_database) {
                populate_the_database();
         
        }
         
-       
-       //pupulate the event list first 
-     //display those two events  
+  
        Uri allEvents = Uri.parse(
            "content://com.trident.android.tv.si.provider.EPG/events");
        Cursor c = managedQuery(allEvents , null, null, null, null);
         
        
-       if (c.moveToFirst()) {
-           do{
-//              Toast.makeText(this, 
-//           	  c.getString(c.getColumnIndexOrThrow(
-//           	                 EPGProvider.NAME)) +
-//                 c.getString(c.getColumnIndexOrThrow(
-//                    EPGProvider.SHORT_DESCRIPTION)), 
-//                 Toast.LENGTH_LONG).show();       
-        	   
-        	   
-           } while (c.moveToNext());
-        }
-       
-       
-     //use list view to display the Events available
-       
-      
+//       if (c.moveToFirst()) {
+//           do{
+////              Toast.makeText(this, 
+////           	  c.getString(c.getColumnIndexOrThrow(
+////           	                 EPGProvider.NAME)) +
+////                 c.getString(c.getColumnIndexOrThrow(
+////                    EPGProvider.SHORT_DESCRIPTION)), 
+////                 Toast.LENGTH_LONG).show();       
+//        	   
+//        	   
+//           } while (c.moveToNext());
+//        }
+//       
+             
        // Used to map notes entries from the database to views
+       // show only the event name
        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, c,
                new String[] { "event_name" }, new int[] { android.R.id.text1 });
        
@@ -87,21 +81,18 @@ public class EPGProviderActivity extends ListActivity {
              int position, long id) {
            // When clicked, show a toast with the TextView text
            // TODO: when clicked , show the detail information of the events ,
+        	 
+           //start another activity......
            Toast.makeText(getApplicationContext(), ((TextView) view).getText(),
                Toast.LENGTH_SHORT).show();
+           
+           Intent myIntent = new Intent(EPGProviderActivity.this, EventDetail.class);
+          // myIntent.putExtra(name, value);
+           startActivity(myIntent);
+           finish();
+           
          }
        });
-
-       
-       
-       //lv1.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1 , lv_arr));
-       
-   
-    //Toast.makeText(this,"Hello Android", 2000);
-     
-     
-
-
         
     }
 	
