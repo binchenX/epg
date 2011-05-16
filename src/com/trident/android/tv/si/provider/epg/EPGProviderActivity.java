@@ -83,11 +83,14 @@ public class EPGProviderActivity extends ListActivity {
            // TODO: when clicked , show the detail information of the events ,
         	 
            //start another activity......
-           Toast.makeText(getApplicationContext(), ((TextView) view).getText(),
-               Toast.LENGTH_SHORT).show();
+          // Toast.makeText(getApplicationContext(), ((TextView) view).getText(),
+          //     Toast.LENGTH_SHORT).show();
            
            Intent myIntent = new Intent(EPGProviderActivity.this, EventDetail.class);
-          // myIntent.putExtra(name, value);
+           
+           //The detailActivity will use this to query the detail information.
+           
+           myIntent.putExtra("EVENT_NAME", ((TextView) view).getText());
            startActivity(myIntent);
            finish();
            

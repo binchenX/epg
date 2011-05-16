@@ -43,13 +43,39 @@ public class EventDetail extends Activity {
 		
 		Button button = (Button)findViewById(R.id.backbutton);
 				
-//		Bundle bundle = getIntent().getExtras();
-//		if (bundle != null) {
-//			button.setText("Item name = " + bundle.getString("NAME")
-//					+ " --- Go Back ");
-//		} else {
-//			
-//		}
+		Bundle bundle = getIntent().getExtras();
+		
+		if (bundle != null) {
+			String event_name = bundle.getString("EVENT_NAME");
+			//use the event_name to query
+			
+		   Uri allEvents = Uri.parse(
+	           "content://com.trident.android.tv.si.provider.EPG/events");
+		   String selection = "tblEvent_basic.event_name = ?";
+		   String [] selectionArgs = new String[] {event_name};
+		   //selectionArgs[0] = event_name;
+	       Cursor c = managedQuery(allEvents , null, selection, selectionArgs, null);
+	       
+	       //should return only one record
+	       String details;
+	       if(c.getCount() < 1)
+	       {
+	    	   details = "No details information avaliable";
+	    	   
+	       }else{
+	    	   c.moveToFirst();
+	    	   details = c.getString(c.getColumnIndexOrThrow(EPGProvider.SHORT_DESCRIPTION));
+	       }
+	       
+	       //show the details
+	       
+	       TextView textView = (TextView)findViewById(R.id.detail_event_text);
+	       textView.setText(details);
+	       
+	       
+		} else {
+			
+		}
 		
 		context = this;
 		button.setOnClickListener(new OnClickListener() {
