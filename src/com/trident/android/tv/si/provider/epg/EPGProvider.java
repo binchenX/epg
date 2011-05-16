@@ -103,8 +103,8 @@ public class EPGProvider extends ContentProvider
 	    	 //db.execSQL(DATABASE_CREATE);
 
 	    	 //copy database from assert to data/data/package_name/
-	    	 
-	    	 copyDatabaseFromAssetToDataDir();
+	    	 //did not work..... 
+	    	 //copyDatabaseFromAssetToDataDir();
 	         
 	      }
 
