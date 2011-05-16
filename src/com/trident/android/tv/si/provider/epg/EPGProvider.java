@@ -79,10 +79,12 @@ public class EPGProvider extends ContentProvider
 		   private final Context myContext;
 		   private static final String PACKAGE_NAME = "com.trident.android.tv.si.provider.epg";
 		   private static final String DATABASE_PATH = "/data/data/" + PACKAGE_NAME + "/databases/";
-		
+			
 		   
 		   EPGDatabaseOpenHelper(Context context) {
+			   
 	       super(context, DATABASE_NAME, null, DATABASE_VERSION);
+	       Log.d(TAG, "EPGDatabaseOpenhelper constructor");
 	       
 	       this.myContext = context;
 	      }
@@ -115,6 +117,7 @@ public class EPGProvider extends ContentProvider
 		     // Path to the just created empty db
 		      	String outFileName = DATABASE_PATH + DATABASE_NAME;
 	    	
+		      	Log.d(TAG, "copy database from apk to /data/data/package/database");
 		      	
 	    	  try {
 	    		//Open your local db ,which stored in the assert direct of the apk file , as the input stream

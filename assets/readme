@@ -1,0 +1,1 @@
+adb push epg_1.db /data/data/com.trident.android.tv.si.provider.epg/databases/epg_1.db
