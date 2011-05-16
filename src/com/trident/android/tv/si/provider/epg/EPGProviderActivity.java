@@ -86,6 +86,7 @@ public class EPGProviderActivity extends ListActivity {
          public void onItemClick(AdapterView<?> parent, View view,
              int position, long id) {
            // When clicked, show a toast with the TextView text
+           // TODO: when clicked , show the detail information of the events ,
            Toast.makeText(getApplicationContext(), ((TextView) view).getText(),
                Toast.LENGTH_SHORT).show();
          }
