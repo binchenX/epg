@@ -13,7 +13,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
-
+import java.io.*;
 
 
 /**
@@ -75,19 +75,76 @@ public class EPGProvider extends ContentProvider
 	   
 	   private static class EPGDatabaseOpenHelper extends SQLiteOpenHelper 
 	   {
+		   
+		   private final Context myContext;
+		   private static final String PACKAGE_NAME = "com.trident.android.tv.si.provider.epg";
+		   private static final String DATABASE_PATH = "/data/data/" + PACKAGE_NAME + "/databases/";
+		
+		   
 		   EPGDatabaseOpenHelper(Context context) {
 	       super(context, DATABASE_NAME, null, DATABASE_VERSION);
+	       
+	       this.myContext = context;
 	      }
 
+		   
+		   
 	      @Override
 	      public void onCreate(SQLiteDatabase db) 
 	      {
 	    	  
 	    	  //create a db at /data/data/your_package/database
-	    	 Log.d(TAG, "databasa was created/open");
-	         db.execSQL(DATABASE_CREATE);
+	    	 Log.d(TAG, "EPGDatabaseOpenHelper::onCreate");
+	    	 
+	    	 //a database will be created at 
+	    	 ///data/data/com.trident.android.tv.si.provider.epg/databases
+	    	 //db.execSQL(DATABASE_CREATE);
+
+	    	 //copy database from assert to data/data/package_name/
+	    	 
+	    	 copyDatabaseFromAssetToDataDir();
+	         
 	      }
 
+	      boolean copyDatabaseFromAssetToDataDir()
+	      {
+	    	  
+	     	   InputStream myInput; 
+	    	  //Open the empty db as the output stream
+		      	OutputStream myOutput;
+		     // Path to the just created empty db
+		      	String outFileName = DATABASE_PATH + DATABASE_NAME;
+	    	
+		      	
+	    	  try {
+	    		//Open your local db ,which stored in the assert direct of the apk file , as the input stream
+	    	  myInput = myContext.getAssets().open(DATABASE_NAME);
+	    	  myOutput = new FileOutputStream(outFileName);
+	    	  
+	    	 //transfer bytes from the inputfile to the outputfile
+		      	byte[] buffer = new byte[1024];
+		      	int length;
+		      	while ((length = myInput.read(buffer))>0){
+		      		myOutput.write(buffer, 0, length);
+		      	}
+	    	 
+	 	      	//Close the streams
+			   	myOutput.flush();
+			    myOutput.close();
+			    myInput.close();
+	    	  
+	    	  }catch(IOException x)  {
+	    		  x.printStackTrace();
+	    		  Log.d(TAG,x.toString());
+	    		  
+	    		  return false;
+	    	  }
+	  
+	      	
+	    	  return true;
+	      }
+	      
+	    
 	      @Override
 	      public void onUpgrade(SQLiteDatabase db, int oldVersion, 
 	      int newVersion) {
@@ -146,7 +203,7 @@ public class EPGProvider extends ContentProvider
    @Override
    public boolean onCreate() {
 	   
-	      Log.d(TAG, "onCreate");
+	      Log.d(TAG, "EPGProvider::onCreate");
     	  Context context = getContext();
     	  EPGDatabaseOpenHelper dbHelper = new EPGDatabaseOpenHelper(context);
 	      epgDB = dbHelper.getWritableDatabase();
