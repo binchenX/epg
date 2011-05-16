@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, EPGProviderActivity!</string>
+    <string name="epg">Electronic Program Guide</string>
     <string name="app_name">EPGProvider</string>
+    <string name="back"> Back </string>
+    
 </resources>

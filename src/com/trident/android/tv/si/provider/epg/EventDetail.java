@@ -33,29 +33,38 @@ import android.content.Intent;
 public class EventDetail extends Activity {
 	
 	private Context context;
+	private static final String TAG = "EventDetail";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		RelativeLayout relativeLayout = new RelativeLayout(this);
-		Button button = new Button(this);
-		Bundle bundle = getIntent().getExtras();
-		if (bundle != null) {
-			button.setText("Item name = " + bundle.getString("NAME")
-					+ " --- Go Back ");
-		} else {
-			button.setText("Go Back");
-		}
+		//This is a MUST...otherise, findViewByID will return NULL
+		setContentView(R.layout.event_detail_layout);
+		
+		Button button = (Button)findViewById(R.id.backbutton);
+				
+//		Bundle bundle = getIntent().getExtras();
+//		if (bundle != null) {
+//			button.setText("Item name = " + bundle.getString("NAME")
+//					+ " --- Go Back ");
+//		} else {
+//			
+//		}
+		
 		context = this;
 		button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(context,  EPGProvider.class));
+				
+				//create a intent for the EPGProviderActivity
+				startActivity(new Intent(context,  EPGProviderActivity.class));
 				finish();
 			}
 		});
-		relativeLayout.addView(button);
+		
+//		setContentView(detailViewLayout);
+		
+	//	relativeLayout.addView(button);
 	//	LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT,
 	//			LayoutParams.FILL_PARENT);
 	//	setContentView(relativeLayout, params);

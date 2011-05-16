@@ -37,8 +37,8 @@ public class EPGProviderActivity extends ListActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.main);
-        
+ //       setContentView(R.layout.main);
+       
     
        if (!use_preexsit_database) {
                populate_the_database();
