@@ -7,6 +7,7 @@ import java.io.OutputStream;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -16,7 +17,14 @@ import android.util.Log;
 	       private static final String TAG = "EPGDatabaseHelp"; 		   
 		   private final Context myContext;
 		   private static final String PACKAGE_NAME = "com.trident.android.tv.si.provider.epg";
-		   private static final String DATABASE_PATH = "/data/data/" + PACKAGE_NAME + "/databases/";
+		   //path for application mode
+		   //private static final String DATABASE_PATH = "/data/data/" + PACKAGE_NAME + "/databases/";
+		   
+		   //From the native code's perspective it is something like /mnt/nfsroot/data/system, 
+		   //The native code should be able to write to this directory,
+		   //the ContentProviderEPG.apk should be able to read it..
+		   private static final String DATABASE_PATH = "/data/system/";
+		   
 		   private String dbName;	
 		   private static final String DATABASE_NAME =  "epg_1.db";
 		   private static final int DATABASE_VERSION = 2;
@@ -76,6 +84,19 @@ import android.util.Log;
 	      }
 
 		   
+		   @Override
+		   public synchronized SQLiteDatabase getReadableDatabase ()
+		   {
+			 try{  
+			 return   SQLiteDatabase.openDatabase(DATABASE_PATH + DATABASE_NAME, null, SQLiteDatabase.OPEN_READONLY);
+			
+			 }catch(SQLiteException ex)
+			 {
+				 Log.d(TAG, "unable to open the database..");
+				 ex.printStackTrace();
+				 return null;
+			 }
+			 }
 		   
 	      @Override
 	      public void onCreate(SQLiteDatabase db) 

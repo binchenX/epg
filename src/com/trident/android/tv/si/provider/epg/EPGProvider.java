@@ -136,7 +136,7 @@ public class EPGProvider extends ContentProvider
 	      Log.d(TAG, "EPGProvider::onCreate");
     	  Context context = getContext();
     	  EPGDatabaseHelp dbHelper = new EPGDatabaseHelp(context);
-	      epgDB = dbHelper.getWritableDatabase();
+	      epgDB = dbHelper.getReadableDatabase();
 	      return (epgDB == null)? false:true;
    }
 
