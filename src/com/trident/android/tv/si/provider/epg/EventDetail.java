@@ -83,11 +83,11 @@ public class EventDetail extends Activity {
 	    	  String eguid = c.getString(c.getColumnIndexOrThrow(BasicColumns._ID));
 	    	
 	    	  Log.d(TAG, "get extended information.....................");
-			   
-		       Cursor c2 = managedQuery(EPGProvider.CONTENT_URI_QUERY_EXTENED, 
+			  	    	  
+		      Cursor c2 = managedQuery(Uri.parse(EPGProvider.CONTENT_URI_QUERY_EXTENED + "/" + eguid),
 		    		   null, 
-		    		   "eguid = ?" ,          //selection 
-		    		   new String[] {eguid},  //selection args
+		    		   null, //"eguid = ?" ,          //selection 
+		    		   null, //new String[] {eguid},  //selection args
 		    		   null);
 		       
 		       

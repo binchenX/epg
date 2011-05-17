@@ -2,6 +2,7 @@ package com.trident.android.tv.si.provider.epg;
 
 import android.content.ContentProvider;
 //import android.content.ContentUris;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
@@ -11,11 +12,13 @@ import android.database.sqlite.SQLiteDatabase;
 //import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+//import android.provider.ContactsContract.Contacts;
 //import android.text.TextUtils;
 import android.util.Log;
 //import java.io.*;
 
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.BasicColumns;
+import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ExtendedColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.Table;
 
 
@@ -77,7 +80,7 @@ public class EPGProvider extends ContentProvider
 	         //extended/eguid/3 , query the extended information whose eguid = 3
 	         //extended/id/3 , query the extended information whose _id = 3
 	         uriMatcher.addURI(PROVIDER_NAME, "extended/id/#", EXTENDED_QUERY_ID);
-	         uriMatcher.addURI(PROVIDER_NAME, "extended/eguid", EXTENDED_QUERY_EGUID);   
+	         uriMatcher.addURI(PROVIDER_NAME, "extended/eguid/#", EXTENDED_QUERY_EGUID);   
 	      }
 
 	   
@@ -143,7 +146,7 @@ public class EPGProvider extends ContentProvider
 	   
 	   Log.d(TAG, "QUERY the database DATABASE " + uri);
 	   
-	   SQLiteQueryBuilder sqlBuilder = new SQLiteQueryBuilder();
+	   SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 	   Cursor c = null;
 	   
 	   
@@ -152,7 +155,7 @@ public class EPGProvider extends ContentProvider
 	   
 	   case EVENTS:
 	     
-	      sqlBuilder.setTables(Table.BASIC);	       
+	      qb.setTables(Table.BASIC);	       
 	       
 	      if (sortOrder==null || sortOrder=="")
 	         sortOrder = BasicColumns._ID;
@@ -160,19 +163,33 @@ public class EPGProvider extends ContentProvider
 	    
 	      
 	   case EXTENDED_QUERY_EGUID:
-		   
-		   sqlBuilder.setTables(Table.EXTENDED);	 
-		   if (sortOrder==null || sortOrder=="")
-		         sortOrder = BasicColumns._ID;
-		      break;		     		   
+
+			qb.setTables(Table.EXTENDED);
+			if (sortOrder == null || sortOrder == "") {
+				sortOrder = BasicColumns._ID;
+			}
+			long event_guid = ContentUris.parseId(uri);
+			// setTablesAndProjectionMapForContacts(qb, uri, projection);
+			
+			//the final selectionArgs is:
+			//even_guid , query()'s selectionArgs parameters
+			selectionArgs = insertSelectionArg(selectionArgs, String.valueOf(event_guid));
+			
+			//the final where statement is:
+			//WHERE (<append chunk 1><append chunk2>) AND (<query() selection parameter>)
+			qb.appendWhere(ExtendedColumns.EVENG_GUID + " = ? ");
+
+            break;
 	   
 	   default:
-		   return null;
+	   
+		   throw new IllegalArgumentException("unknown Content Uri");
+		  // break;
 	   }
 	   
 	   
 	   //2. execute the query and return the cursor
-	    c = sqlBuilder.query(
+	    c = qb.query(
 		         epgDB, 
 		         projection, 
 		         selection, 
@@ -191,6 +208,33 @@ public class EPGProvider extends ContentProvider
    public int update(Uri uri, ContentValues values, String selection,
          String[] selectionArgs) {
       return 0;
+   }
+   
+   
+   /**
+    * Inserts an argument at the beginning of the selection arg list.
+    */
+   private String[] insertSelectionArg(String[] selectionArgs, String arg) {
+       if (selectionArgs == null) {
+           return new String[] {arg};
+       } else {
+           int newLength = selectionArgs.length + 1;
+           String[] newSelectionArgs = new String[newLength];
+           newSelectionArgs[0] = arg;
+           System.arraycopy(selectionArgs, 0, newSelectionArgs, 1, selectionArgs.length);
+           return newSelectionArgs;
+       }
+   }
+
+   private String[] appendProjectionArg(String[] projection, String arg) {
+       if (projection == null) {
+           return null;
+       }
+       final int length = projection.length;
+       String[] newProjection = new String[length + 1];
+       System.arraycopy(projection, 0, newProjection, 0, length);
+       newProjection[length] = arg;
+       return newProjection;
    }
 }
 
