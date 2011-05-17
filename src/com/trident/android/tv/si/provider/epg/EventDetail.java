@@ -4,6 +4,8 @@ package com.trident.android.tv.si.provider.epg;
 
 import android.R.*;
 
+import java.util.*; //For Date
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -57,20 +59,38 @@ public class EventDetail extends Activity {
 	       Cursor c = managedQuery(allEvents , null, selection, selectionArgs, null);
 	       
 	       //should return only one record
-	       String details;
+	       String short_description;
+	       long startTime = 0;
+	       int duration = 0;
+	       
 	       if(c.getCount() < 1)
 	       {
-	    	   details = "No details information avaliable";
+	    	   short_description = "No details information avaliable";
 	    	   
 	       }else{
 	    	   c.moveToFirst();
-	    	   details = c.getString(c.getColumnIndexOrThrow(EPGProvider.SHORT_DESCRIPTION));
+	    	   short_description = c.getString(c.getColumnIndexOrThrow(EPGProvider.SHORT_DESCRIPTION));
+	    	   startTime = c.getInt(c.getColumnIndexOrThrow(EPGProvider.START_TIME));
+	    	   duration  = c.getInt(c.getColumnIndexOrThrow(EPGProvider.DURATION));
+	    	   
+	    	   //show the details
+		       
+		       //starTime
+		       TextView startTimeView = (TextView)findViewById(R.id.event_starttime);
+		       startTimeView.setText((new Date(startTime)).toLocaleString());
+		       //duration
+		       TextView durationView = (TextView)findViewById(R.id.event_duration);
+		       durationView.setText(Integer.toString(duration/60) + "minutes");
+		       
+		       
+		       TextView textView = (TextView)findViewById(R.id.event_short_descriptor);
+		       textView.setText(short_description);
+		       
+	    	   
+	    	   
 	       }
 	       
-	       //show the details
-	       
-	       TextView textView = (TextView)findViewById(R.id.detail_event_text);
-	       textView.setText(details);
+	     ;
 	       
 	       
 		} else {

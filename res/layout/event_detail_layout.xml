@@ -2,13 +2,25 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent" android:layout_height="fill_parent">
 
+     <TextView android:layout_width="fill_parent"
+        android:layout_height="100px" android:id="@+id/event_starttime"
+        android:layout_alignParentTop="true"  />
+        
+     <TextView android:layout_width="fill_parent"
+        android:layout_height="100px" android:id="@+id/event_duration"
+        android:layout_below="@id/event_starttime"
+        />
+    
+    <TextView android:layout_width="fill_parent"
+        android:layout_height="100px" android:id="@+id/event_short_descriptor"
+        android:layout_below="@id/event_duration"
+         />
+        
     <Button android:layout_width="fill_parent"
         android:layout_height="wrap_content" android:id="@+id/backbutton"
         android:text="@string/back" android:layout_alignParentBottom="true" />
 
-    <TextView android:layout_width="fill_parent"
-        android:layout_height="fill_parent" android:id="@+id/detail_event_text"
-        android:layout_alignParentTop="true" android:layout_above="@id/backbutton" />
+   
 
 </RelativeLayout>
 
