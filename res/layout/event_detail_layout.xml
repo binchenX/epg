@@ -3,8 +3,10 @@
     android:layout_width="fill_parent" android:layout_height="fill_parent">
 
     
-    <Button android:layout_width="fill_parent"
-        android:layout_height="wrap_content" android:id="@+id/backbutton"
+    <Button android:layout_width= "100px"
+            android:layout_height="wrap_content"
+        
+         android:id="@+id/backbutton"
         android:text="@string/back"  android:layout_alignParentTop="true" />
         
      <ListView android:layout_width="fill_parent"
