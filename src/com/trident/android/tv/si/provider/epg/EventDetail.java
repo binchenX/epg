@@ -75,17 +75,23 @@ public class EventDetail extends Activity {
 	    	   
 	    	   //show the details
 		       
-		       //starTime
-		       TextView startTimeView = (TextView)findViewById(R.id.event_starttime);
-		       startTimeView.setText((new Date(startTime)).toLocaleString());
-		       //duration
-		       TextView durationView = (TextView)findViewById(R.id.event_duration);
-		       durationView.setText(Integer.toString(duration/60) + "minutes");
-		       
-		       
-		       TextView textView = (TextView)findViewById(R.id.event_short_descriptor);
-		       textView.setText(short_description);
-		       
+//		       //starTime
+//		       TextView startTimeView = (TextView)findViewById(R.id.event_starttime);
+//		       startTimeView.setText((new Date(startTime)).toLocaleString());
+//		       //duration
+//		       TextView durationView = (TextView)findViewById(R.id.event_duration);
+//		       durationView.setText(Integer.toString(duration/60) + "minutes");
+//		       
+//		       
+//		       TextView textView = (TextView)findViewById(R.id.event_short_descriptor);
+//		       textView.setText(short_description);
+	    	   
+	    	   ListView detailListView = (ListView)findViewById(R.id.event_detail_list);
+		       String []info = new String[] {
+		    		   (new Date(startTime)).toLocaleString(),   //star_time
+		    		   Integer.toString(duration/60) + "minutes", //duration
+		    		   short_description};
+	    	   detailListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1,info));
 	    	   
 	    	   
 	       }
