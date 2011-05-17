@@ -8,12 +8,14 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+//import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.text.TextUtils;
+//import android.text.TextUtils;
 import android.util.Log;
-import java.io.*;
+//import java.io.*;
+
+import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.Table;
 
 
 /**
@@ -43,124 +45,56 @@ public class EPGProvider extends ContentProvider
 	public static final String NAME = "event_name";
 	public static final String SHORT_DESCRIPTION = "text";
 	
+	public static final String TABLE_BASIC = "tblEvent_basic";
+	public static final String TABLE_EXTENDED = "tblEvent_extended";
+	public static final String TABLE_GROUP = "tblEvent_group";
+	
 	
 	
 	  //---for database use---
 	  //the database have alredy been created by native code
       //we just need to open so as to get an handle of it
-	   private SQLiteDatabase epgDB;
-	   private static final String DATABASE_NAME =  "epg_1.db";
-	   private static final String DATABASE_TABLE = "tblEvent_basic";
-	   private static final int DATABASE_VERSION = 1;
-	   private static final String DATABASE_CREATE =
-	         "CREATE TABLE IF NOT EXISTS " + DATABASE_TABLE + 
-	         " (_id INTEGER PRIMARY KEY AUTOINCREMENT, "+
-	         " sguid  INT,tsid  INT,onid  INT,service_id  INT," +
-	         " event_id  INT, start_time  INT,duration  INT,running_status  INT,free_ca_mode  INT," +
-	         " event_name  VARCHAR(256)," +
-	         " text VARCHAR(256)," +
-	         " end_time  INT);";
+	 private SQLiteDatabase epgDB;
+	 private static final String DATABASE_NAME =  "epg_1.db";
+
+	
+	   
+	   
+	 
+	   
+	   //we don't create database. we use the one created by native code. 
+	   
+//	   private static final String DATABASE_CREATE =
+//	         "CREATE TABLE IF NOT EXISTS " + TABLE_BASIC + 
+//	         " (_id INTEGER PRIMARY KEY AUTOINCREMENT, "+
+//	         " sguid  INT,tsid  INT,onid  INT,service_id  INT," +
+//	         " event_id  INT, start_time  INT,duration  INT,running_status  INT,free_ca_mode  INT," +
+//	         " event_name  VARCHAR(256)," +
+//	         " text VARCHAR(256)," +
+//	         " end_time  INT);";
 	   
 	   public static final int EVENTS = 1;
 	   public static final int EVENT_ID = 2;
+	   public static final int EXTENDED_QUERY_ID = 3;
+	   public static final int EXTENDED_QUERY_EGUID = 4;
 	         		
 	   
 	   private static final UriMatcher uriMatcher;
 	      static{
 	         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 	         uriMatcher.addURI(PROVIDER_NAME, "events", EVENTS);
-	         uriMatcher.addURI(PROVIDER_NAME, "events/#", EVENT_ID);      
+	         uriMatcher.addURI(PROVIDER_NAME, "events/#", EVENT_ID);   
+	         
+	         //uriMatcher.addURI(PROVIDER_NAME, "extended", EVENTS);
+	         //extended/eguid/3 , query the extended information whose eguid = 3
+	         //extended/id/3 , query the extended information whose _id = 3
+	         uriMatcher.addURI(PROVIDER_NAME, "extended/id/#", EXTENDED_QUERY_ID);
+	         uriMatcher.addURI(PROVIDER_NAME, "extended/eguid/#", EXTENDED_QUERY_EGUID);   
 	      }
 
 	   
-	   private static class EPGDatabaseOpenHelper extends SQLiteOpenHelper 
-	   {
-		   
-		   private final Context myContext;
-		   private static final String PACKAGE_NAME = "com.trident.android.tv.si.provider.epg";
-		   private static final String DATABASE_PATH = "/data/data/" + PACKAGE_NAME + "/databases/";
-			
-		   
-		   EPGDatabaseOpenHelper(Context context) {
-			   
-	       super(context, DATABASE_NAME, null, DATABASE_VERSION);
-	       Log.d(TAG, "EPGDatabaseOpenhelper constructor");
-	       
-	       this.myContext = context;
-	      }
-
-		   
-		   
-	      @Override
-	      public void onCreate(SQLiteDatabase db) 
-	      {
-	    	  
-	    	  //create a db at /data/data/your_package/database
-	    	 Log.d(TAG, "EPGDatabaseOpenHelper::onCreate");
-	    	 
-	    	 //a database will be created at 
-	    	 ///data/data/com.trident.android.tv.si.provider.epg/databases
-	    	 //db.execSQL(DATABASE_CREATE);
-
-	    	 //copy database from assert to data/data/package_name/
-	    	 //did not work..... 
-	    	 //copyDatabaseFromAssetToDataDir();
-	         
-	      }
-
-	      boolean copyDatabaseFromAssetToDataDir()
-	      {
-	    	  
-	     	   InputStream myInput; 
-	    	  //Open the empty db as the output stream
-		      	OutputStream myOutput;
-		     // Path to the just created empty db
-		      	String outFileName = DATABASE_PATH + DATABASE_NAME;
-	    	
-		      	Log.d(TAG, "copy database from apk to /data/data/package/database");
-		      	
-	    	  try {
-	    		//Open your local db ,which stored in the assert direct of the apk file , as the input stream
-	    	  myInput = myContext.getAssets().open(DATABASE_NAME);
-	    	  myOutput = new FileOutputStream(outFileName);
-	    	  
-	    	 //transfer bytes from the inputfile to the outputfile
-		      	byte[] buffer = new byte[1024];
-		      	int length;
-		      	while ((length = myInput.read(buffer))>0){
-		      		myOutput.write(buffer, 0, length);
-		      	}
-	    	 
-	 	      	//Close the streams
-			   	myOutput.flush();
-			    myOutput.close();
-			    myInput.close();
-	    	  
-	    	  }catch(IOException x)  {
-	    		  x.printStackTrace();
-	    		  Log.d(TAG,x.toString());
-	    		  
-	    		  return false;
-	    	  }
-	  
-	      	
-	    	  return true;
-	      }
-	      
-	    
-	      @Override
-	      public void onUpgrade(SQLiteDatabase db, int oldVersion, 
-	      int newVersion) {
-	         Log.w("Content provider database", 
-	              "Upgrading database from version " + 
-	              oldVersion + " to " + newVersion + 
-	              ", which will destroy all old data");
-	         db.execSQL("DROP TABLE IF EXISTS titles");
-	         onCreate(db);
-	      }
-	   }   
-
-	
+	 
+	 
    @Override
    public int delete(Uri arg0, String arg1, String[] arg2) {
       return 0;
@@ -190,7 +124,7 @@ public class EPGProvider extends ContentProvider
 	  
 	  //---add a new book---
       long rowID = epgDB.insert(
-         DATABASE_TABLE, "", values);
+         TABLE_BASIC, "", values);
            
       //---if added successfully---
       if (rowID>0)
@@ -208,7 +142,7 @@ public class EPGProvider extends ContentProvider
 	   
 	      Log.d(TAG, "EPGProvider::onCreate");
     	  Context context = getContext();
-    	  EPGDatabaseOpenHelper dbHelper = new EPGDatabaseOpenHelper(context);
+    	  EPGDatabaseHelp dbHelper = new EPGDatabaseHelp(context, DATABASE_NAME);
 	      epgDB = dbHelper.getWritableDatabase();
 	      return (epgDB == null)? false:true;
    }
@@ -218,33 +152,47 @@ public class EPGProvider extends ContentProvider
          String[] selectionArgs, String sortOrder) {
 	   
 	   Log.d(TAG, "QUERY the database DATABASE..................");
-
-	      SQLiteQueryBuilder sqlBuilder = new SQLiteQueryBuilder();
-	      sqlBuilder.setTables(DATABASE_TABLE);
-	       
-	      //---if getting a particular event
-//	      if (uriMatcher.match(uri) == EVENT_ID) {
-//	       
-//	         sqlBuilder.appendWhere(
-//	            _ID + " = " + uri.getPathSegments().get(1));     
-//	      }
+	   
+	   SQLiteQueryBuilder sqlBuilder = new SQLiteQueryBuilder();
+	   Cursor c = null;
+	   
+	   
+	   //1.construct the sqlbuild
+	   switch(uriMatcher.match(uri)) {
+	   
+	   case EVENTS:
+	     
+	      sqlBuilder.setTables(Table.BASIC);	       
 	       
 	      if (sortOrder==null || sortOrder=="")
 	         sortOrder = _ID;
+	      break;
+	    
+	      
+	   case EXTENDED_QUERY_EGUID:
+		   
+		   sqlBuilder.setTables(Table.EXTENDED);	 
+		   break;
 	   
-	      Cursor c = sqlBuilder.query(
-	         epgDB, 
-	         projection, 
-	         selection, 
-	         selectionArgs, 
-	         null, 
-	         null, 
-	         sortOrder);
+	   default:
+		   return null;
+	   }
 	   
-	      //---register to watch a content URI for changes---
-	      c.setNotificationUri(getContext().getContentResolver(), uri);
-	      return c;
-      
+	   
+	   //2. execute the query and return the cursor
+	    c = sqlBuilder.query(
+		         epgDB, 
+		         projection, 
+		         selection, 
+		         selectionArgs, 
+		         null, 
+		         null, 
+		         sortOrder);
+		   
+		      //---register to watch a content URI for changes---
+		      c.setNotificationUri(getContext().getContentResolver(), uri);
+		      return c;
+	   
    }
 
    @Override

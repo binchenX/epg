@@ -2,28 +2,28 @@
 
 package com.trident.android.tv.si.provider.epg;
 
-import android.R.*;
+//import android.R.*;
 
 import java.util.*; //For Date
 
-import android.content.ContentValues;
+//import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.database.*;
 import android.widget.*;
 import android.util.Log;
-import android.app.ListActivity;
+//import android.app.ListActivity;
 
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.widget.AdapterView.*;
+//import android.widget.AdapterView.*;
 import android.view.*;
 import android.view.View.OnClickListener;
-import android.widget.*;
-import android.R.layout.*;
-import android.content.Intent;
+//import android.widget.*;
+//import android.R.layout.*;
+//import android.content.Intent;
 
 /**
  * 
@@ -42,6 +42,8 @@ public class EventDetail extends Activity {
 		super.onCreate(savedInstanceState);
 		//This is a MUST...otherise, findViewByID will return NULL
 		setContentView(R.layout.event_detail_layout);
+		
+		Log.d(TAG, "onCreate");
 		
 		Button button = (Button)findViewById(R.id.backbutton);
 				
@@ -73,18 +75,13 @@ public class EventDetail extends Activity {
 	    	   startTime = c.getInt(c.getColumnIndexOrThrow(EPGProvider.START_TIME));
 	    	   duration  = c.getInt(c.getColumnIndexOrThrow(EPGProvider.DURATION));
 	    	   
+	    	   
+	    	   //Let's try to get the extended information in another table
+	    	  
+	    	   
+	    	   
 	    	   //show the details
-		       
-//		       //starTime
-//		       TextView startTimeView = (TextView)findViewById(R.id.event_starttime);
-//		       startTimeView.setText((new Date(startTime)).toLocaleString());
-//		       //duration
-//		       TextView durationView = (TextView)findViewById(R.id.event_duration);
-//		       durationView.setText(Integer.toString(duration/60) + "minutes");
-//		       
-//		       
-//		       TextView textView = (TextView)findViewById(R.id.event_short_descriptor);
-//		       textView.setText(short_description);
+
 	    	   
 	    	   ListView detailListView = (ListView)findViewById(R.id.event_detail_list);
 		       String []info = new String[] {

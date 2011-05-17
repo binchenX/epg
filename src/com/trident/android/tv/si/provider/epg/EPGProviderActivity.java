@@ -1,8 +1,8 @@
 package com.trident.android.tv.si.provider.epg;
 
-import android.R.*;
+//import android.R.*;
 
-import android.content.ContentValues;
+//import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.database.*;
@@ -11,13 +11,13 @@ import android.util.Log;
 import android.app.ListActivity;
 
 
-import android.app.Activity;
+//import android.app.Activity;
 import android.os.Bundle;
 import android.widget.AdapterView.*;
 import android.view.*;
-import android.widget.*;
-import android.R.layout.*;
-import android.content.Intent;
+//import android.widget.*;
+//import android.R.layout.*;
+//import android.content.Intent;
 
 /**
  * 
@@ -39,6 +39,7 @@ public class EPGProviderActivity extends ListActivity {
         super.onCreate(savedInstanceState);
  //       setContentView(R.layout.main);
        
+        Log.d(TAG, "onCreate");
     
        if (!use_preexsit_database) {
                populate_the_database();
@@ -105,17 +106,17 @@ public class EPGProviderActivity extends ListActivity {
 	{
 		  //add 2 EPG events after app starte
 	       //---add an event
-	        ContentValues values = new ContentValues();
-	        values.put(EPGProvider.NAME, "hello");
-	        values.put(EPGProvider.SHORT_DESCRIPTION, "hello android");        
-	        Uri uri = getContentResolver().insert(
-	           EPGProvider.CONTENT_URI, values);
-	               
-	        //---add another event---
-	        values.clear();
-	        values.put(EPGProvider.NAME, "hello2");
-	        values.put(EPGProvider.SHORT_DESCRIPTION, "hello android2");        
-	        uri = getContentResolver().insert(
-	           EPGProvider.CONTENT_URI, values);
+//	        ContentValues values = new ContentValues();
+//	        values.put(EPGProvider.NAME, "hello");
+//	        values.put(EPGProvider.SHORT_DESCRIPTION, "hello android");        
+//	        Uri uri = getContentResolver().insert(
+//	           EPGProvider.CONTENT_URI, values);
+//	               
+//	        //---add another event---
+//	        values.clear();
+//	        values.put(EPGProvider.NAME, "hello2");
+//	        values.put(EPGProvider.SHORT_DESCRIPTION, "hello android2");        
+//	        uri = getContentResolver().insert(
+//	           EPGProvider.CONTENT_URI, values);
 	}
 }
