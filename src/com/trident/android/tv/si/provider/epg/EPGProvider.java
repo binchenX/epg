@@ -61,10 +61,10 @@ public class EPGProvider extends ContentProvider
 //	         " text VARCHAR(256)," +
 //	         " end_time  INT);";
 	   
-	   public static final int EVENTS = 1;
-	   public static final int EVENT_ID = 2;
-	   public static final int EXTENDED_QUERY_ID = 3;
-	   public static final int EXTENDED_QUERY_EGUID = 4;
+	   private static final int EVENTS = 1;
+	   private static final int EVENT_ID = 2;
+	   private static final int EXTENDED_QUERY_ID = 3;
+	   private static final int EXTENDED_QUERY_EGUID = 4;
 	         		
 	   
 	   private static final UriMatcher uriMatcher;
@@ -77,7 +77,7 @@ public class EPGProvider extends ContentProvider
 	         //extended/eguid/3 , query the extended information whose eguid = 3
 	         //extended/id/3 , query the extended information whose _id = 3
 	         uriMatcher.addURI(PROVIDER_NAME, "extended/id/#", EXTENDED_QUERY_ID);
-	         uriMatcher.addURI(PROVIDER_NAME, "extended/eguid/#", EXTENDED_QUERY_EGUID);   
+	         uriMatcher.addURI(PROVIDER_NAME, "extended/eguid", EXTENDED_QUERY_EGUID);   
 	      }
 
 	   
@@ -141,7 +141,7 @@ public class EPGProvider extends ContentProvider
    public Cursor query(Uri uri, String[] projection, String selection,
          String[] selectionArgs, String sortOrder) {
 	   
-	   Log.d(TAG, "QUERY the database DATABASE..................");
+	   Log.d(TAG, "QUERY the database DATABASE " + uri);
 	   
 	   SQLiteQueryBuilder sqlBuilder = new SQLiteQueryBuilder();
 	   Cursor c = null;
@@ -162,7 +162,9 @@ public class EPGProvider extends ContentProvider
 	   case EXTENDED_QUERY_EGUID:
 		   
 		   sqlBuilder.setTables(Table.EXTENDED);	 
-		   break;
+		   if (sortOrder==null || sortOrder=="")
+		         sortOrder = BasicColumns._ID;
+		      break;		     		   
 	   
 	   default:
 		   return null;

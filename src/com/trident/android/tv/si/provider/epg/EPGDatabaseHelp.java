@@ -62,6 +62,10 @@ import android.util.Log;
 			   
 		   }
 		   
+		   public interface Clause{
+			   public static final String QUERY_BASIC_INFO_BY_EVENT_NAME = BasicColumns.NAME + " = ?";
+		   }
+		   
 		   EPGDatabaseHelp(Context context) {
 			   
 	       super(context, DATABASE_NAME, null, DATABASE_VERSION);

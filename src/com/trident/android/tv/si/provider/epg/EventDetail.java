@@ -7,6 +7,8 @@ package com.trident.android.tv.si.provider.epg;
 import java.util.*; //For Date
 
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.BasicColumns;
+import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.Clause;
+import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ExtendedColumns;
 
 //import android.content.ContentValues;
 import android.content.Context;
@@ -54,13 +56,13 @@ public class EventDetail extends Activity {
 		if (bundle != null) {
 			String event_name = bundle.getString("EVENT_NAME");
 			//use the event_name to query
-			
-		  
-	       Uri allEvents = EPGProvider.CONTENT_URI_EVENTS;
-		   String selection = BasicColumns.NAME + " = ?";
+		   String selection = Clause.QUERY_BASIC_INFO_BY_EVENT_NAME;
 		   String [] selectionArgs = new String[] {event_name};
-		   //selectionArgs[0] = event_name;
-	       Cursor c = managedQuery(allEvents , null, selection, selectionArgs, null);
+	       Cursor c = managedQuery(EPGProvider.CONTENT_URI_EVENTS , 
+	    		   null, 
+	    		   selection, 
+	    		   selectionArgs, 
+	    		   null);
 	       
 	       //should return only one record
 	       String short_description;
@@ -78,18 +80,33 @@ public class EventDetail extends Activity {
 	    	   duration  = c.getInt(c.getColumnIndexOrThrow(BasicColumns.DURATION));
 	    	   
 	    	   
-	    	   //Let's try to get the extended information in another table
-	    	  
+	    	  String eguid = c.getString(c.getColumnIndexOrThrow(BasicColumns._ID));
+	    	
+	    	  Log.d(TAG, "get extended information.....................");
+			   
+		       Cursor c2 = managedQuery(EPGProvider.CONTENT_URI_QUERY_EXTENED, 
+		    		   null, 
+		    		   "eguid = ?" ,          //selection 
+		    		   new String[] {eguid},  //selection args
+		    		   null);
+		       
+		       
 	    	   
+	    	   String extended_description = "No extended description";
+	    	   c2.moveToFirst();
+		       
+	    	   extended_description = c2.getString(c2.getColumnIndexOrThrow(ExtendedColumns.ITEM_DES)) 
+	    	                        + " : " 
+	    	   	    	            + c2.getString(c2.getColumnIndexOrThrow(ExtendedColumns.ITEM_CONTENT));
 	    	   
 	    	   //show the details
-
-	    	   
+		       
 	    	   ListView detailListView = (ListView)findViewById(R.id.event_detail_list);
 		       String []info = new String[] {
 		    		   (new Date(startTime)).toLocaleString(),   //star_time
 		    		   Integer.toString(duration/60) + "minutes", //duration
-		    		   short_description};
+		    		   short_description,
+		    		   extended_description};
 	    	   detailListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1,info));
 	    	   
 	    	   
