@@ -18,6 +18,7 @@ import android.util.Log;
 		   private static final String PACKAGE_NAME = "com.trident.android.tv.si.provider.epg";
 		   private static final String DATABASE_PATH = "/data/data/" + PACKAGE_NAME + "/databases/";
 		   private String dbName;	
+		   private static final String DATABASE_NAME =  "epg_1.db";
 		   private static final int DATABASE_VERSION = 2;
 		   
 		   
@@ -30,11 +31,42 @@ import android.util.Log;
 			   
 			   
 		   }
-		   EPGDatabaseHelp(Context context ,String dbName) {
+		   
+		   public interface BasicColumns{
+			    public static final String _ID = "_id";
+				public static final String SECTION_GUID = "sguid";
+				public static final String TSID = "tsid";
+				public static final String ONID = "onid";
+				public static final String SERVICE_ID = "service_id";
+			    public static final String START_TIME = "start_time";
+			    public static final String DURATION = "duration";
+			    public static final String RUNNING_STATUS = "running_status";
+			    public static final String CA_MODE = "free_ca_mode";
+				public static final String NAME = "event_name";
+				public static final String SHORT_DESCRIPTION = "text";
+				
+		   }
+		   
+		   public interface ExtendedColumns{
 			   
-	       super(context, dbName, null, DATABASE_VERSION);
+			   public static final String _ID = "_id";
+			   public static final String SECTION_GUID = "sguid";
+			   public static final String EVENG_GUID = "eguid";
+			   public static final String ITEM_DES = "item_description";
+			   public static final String ITEM_CONTENT = "item";
+			   public static final String SERVICE_ID = "service_id";
+			   public static final String EVENT_ID = "event_id";
+			   public static final String DESCRIPTOR_NUMBER = "descriptor_number";
+			   public static final String LAST_DESCRIPTOER_NUMER = "last_descriptor_number";
+			   
+			   
+		   }
+		   
+		   EPGDatabaseHelp(Context context) {
+			   
+	       super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	       Log.d(TAG, "EPGDatabaseOpenhelper constructor");
-	       this.dbName = dbName;
+	       this.dbName = DATABASE_NAME;
 	       
 	       this.myContext = context;
 	      }

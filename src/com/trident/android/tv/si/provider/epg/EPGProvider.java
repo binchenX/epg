@@ -1,7 +1,7 @@
 package com.trident.android.tv.si.provider.epg;
 
 import android.content.ContentProvider;
-import android.content.ContentUris;
+//import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.util.Log;
 //import java.io.*;
 
+import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.BasicColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.Table;
 
 
@@ -29,33 +30,20 @@ public class EPGProvider extends ContentProvider
 {
 	
 	public static final String PROVIDER_NAME = "com.trident.android.tv.si.provider.EPG";
-	public static final Uri CONTENT_URI = Uri.parse("content://" + PROVIDER_NAME + "/events");
+	public static final Uri CONTENT_URI_EVENTS = Uri.parse("content://" + PROVIDER_NAME + "/events");
+	public static final Uri CONTENT_URI_QUERY_EXTENED = Uri.parse("content://" + PROVIDER_NAME + "/extended/eguid");
 	
 	public static final String TAG = "EPGProvider";
 	
-	public static final String _ID = "_id";
-	public static final String SECTION_GUID = "sguid";
-	public static final String TSID = "tsid";
-	public static final String ONID = "onid";
-	public static final String SERVICE_ID = "service_id";
-    public static final String START_TIME = "start_time";
-    public static final String DURATION = "duration";
-    public static final String RUNNING_STATUS = "running_status";
-    public static final String CA_MODE = "free_ca_mode";
-	public static final String NAME = "event_name";
-	public static final String SHORT_DESCRIPTION = "text";
 	
-	public static final String TABLE_BASIC = "tblEvent_basic";
-	public static final String TABLE_EXTENDED = "tblEvent_extended";
-	public static final String TABLE_GROUP = "tblEvent_group";
+
 	
 	
-	
-	  //---for database use---
-	  //the database have alredy been created by native code
-      //we just need to open so as to get an handle of it
+	//---for database use---
+	//the database have alredy been created by native code
+    //we just need to open so as to get an handle of it
 	 private SQLiteDatabase epgDB;
-	 private static final String DATABASE_NAME =  "epg_1.db";
+	
 
 	
 	   
@@ -122,18 +110,20 @@ public class EPGProvider extends ContentProvider
 	   
 	  Log.d(TAG, "INSERT EVENTS  TO DATABASE xxxxx.................");
 	  
-	  //---add a new book---
-      long rowID = epgDB.insert(
-         TABLE_BASIC, "", values);
-           
-      //---if added successfully---
-      if (rowID>0)
-      {
-         Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
-         getContext().getContentResolver().notifyChange(_uri, null);    
-         return _uri;                
-      }        
-      throw new SQLException("Failed to insert row into " + uri);
+//	  //---add a new book---
+//      long rowID = epgDB.insert(
+//         TABLE_BASIC, "", values);
+//           
+//      //---if added successfully---
+//      if (rowID>0)
+//      {
+//         Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
+//         getContext().getContentResolver().notifyChange(_uri, null);    
+//         return _uri;                
+//      }        
+//      throw new SQLException("Failed to insert row into " + uri);
+	  
+	  throw new SQLException("Failed to insert row into " + uri);
 
    }
 
@@ -142,7 +132,7 @@ public class EPGProvider extends ContentProvider
 	   
 	      Log.d(TAG, "EPGProvider::onCreate");
     	  Context context = getContext();
-    	  EPGDatabaseHelp dbHelper = new EPGDatabaseHelp(context, DATABASE_NAME);
+    	  EPGDatabaseHelp dbHelper = new EPGDatabaseHelp(context);
 	      epgDB = dbHelper.getWritableDatabase();
 	      return (epgDB == null)? false:true;
    }
@@ -165,7 +155,7 @@ public class EPGProvider extends ContentProvider
 	      sqlBuilder.setTables(Table.BASIC);	       
 	       
 	      if (sortOrder==null || sortOrder=="")
-	         sortOrder = _ID;
+	         sortOrder = BasicColumns._ID;
 	      break;
 	    
 	      
@@ -190,8 +180,8 @@ public class EPGProvider extends ContentProvider
 		         sortOrder);
 		   
 		      //---register to watch a content URI for changes---
-		      c.setNotificationUri(getContext().getContentResolver(), uri);
-		      return c;
+	    c.setNotificationUri(getContext().getContentResolver(), uri);
+		return c;
 	   
    }
 

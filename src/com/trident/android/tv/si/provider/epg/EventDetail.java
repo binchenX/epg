@@ -6,6 +6,8 @@ package com.trident.android.tv.si.provider.epg;
 
 import java.util.*; //For Date
 
+import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.BasicColumns;
+
 //import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -53,9 +55,9 @@ public class EventDetail extends Activity {
 			String event_name = bundle.getString("EVENT_NAME");
 			//use the event_name to query
 			
-		   Uri allEvents = Uri.parse(
-	           "content://com.trident.android.tv.si.provider.EPG/events");
-		   String selection = "tblEvent_basic.event_name = ?";
+		  
+	       Uri allEvents = EPGProvider.CONTENT_URI_EVENTS;
+		   String selection = BasicColumns.NAME + " = ?";
 		   String [] selectionArgs = new String[] {event_name};
 		   //selectionArgs[0] = event_name;
 	       Cursor c = managedQuery(allEvents , null, selection, selectionArgs, null);
@@ -71,9 +73,9 @@ public class EventDetail extends Activity {
 	    	   
 	       }else{
 	    	   c.moveToFirst();
-	    	   short_description = c.getString(c.getColumnIndexOrThrow(EPGProvider.SHORT_DESCRIPTION));
-	    	   startTime = c.getInt(c.getColumnIndexOrThrow(EPGProvider.START_TIME));
-	    	   duration  = c.getInt(c.getColumnIndexOrThrow(EPGProvider.DURATION));
+	    	   short_description = c.getString(c.getColumnIndexOrThrow(BasicColumns.SHORT_DESCRIPTION));
+	    	   startTime = c.getInt(c.getColumnIndexOrThrow(BasicColumns.START_TIME));
+	    	   duration  = c.getInt(c.getColumnIndexOrThrow(BasicColumns.DURATION));
 	    	   
 	    	   
 	    	   //Let's try to get the extended information in another table
