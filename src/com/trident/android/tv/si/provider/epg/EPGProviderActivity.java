@@ -19,6 +19,7 @@ import android.view.*;
 //import android.widget.*;
 //import android.R.layout.*;
 //import android.content.Intent;
+import android.view.View.OnClickListener;
 
 /**
  * 
@@ -103,6 +104,18 @@ public class EPGProviderActivity extends ListActivity {
            
          }
        });
+       
+       Button searchButton = (Button)findViewById(R.id.searchbutton);
+       
+       searchButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+				//start an search
+				onSearchRequested();
+				//finish();
+			}
+		});
         
     }
 	
