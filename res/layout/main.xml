@@ -9,6 +9,7 @@
         android:id="@+id/searchbutton"
         android:text="@string/search"  
         android:layout_alignParentTop="true" 
+         android:layout_alignParentLeft="true"
         />
         
         
@@ -17,7 +18,9 @@
     	android:layout_height="wrap_content"
         android:id="@+id/bt_movie"
         android:text="@string/movie"  
-        android:layout_alignParentBottom="true"
+         android:layout_alignParentTop="true" 
+         android:layout_alignParentRight="true"
+        
         
         />
     

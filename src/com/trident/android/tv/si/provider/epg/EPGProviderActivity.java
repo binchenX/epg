@@ -146,24 +146,9 @@ public class EPGProviderActivity extends ListActivity {
 			public void onClick(View v) {
 
 				// start an search
-				//onSearchRequested();
+				onSearchRequested();
 				//finish() should not be called
-				
-				
-
-				Log.d(TAG, "movie button has been pressed...........");
-				// start himself...
-				Intent myIntent = new Intent(EPGProviderActivity.this,
-						EPGProviderActivity.class);
-
-				// The detailActivity will use this to query the detail
-				// information.
-
-				myIntent.putExtra("TYPE", "movie");
-				startActivity(myIntent);
-				finish();
-				
-				
+						
 			}
 		});
 
