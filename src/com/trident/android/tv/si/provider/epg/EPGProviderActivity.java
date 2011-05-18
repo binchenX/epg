@@ -125,7 +125,7 @@ public class EPGProviderActivity extends ListActivity {
 			//TODO: use FTS instead of LIKE
 			c = managedQuery(EPGProvider.CONTENT_URI_EVENTS , 
 					null, 
-					"event_name LIKE " + "%" + constraint + "%", 
+					"event_name LIKE " + "\"%" + constraint + "%\"", 
 					null, 
 					null);
 			
