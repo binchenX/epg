@@ -23,6 +23,14 @@ import android.view.*;
  * 
  * This Activity is just a demonstration of how to use EPGProvider to write a EPG Program
  * @author Pierr
+ * 
+ * Feature list: 
+ * 
+ * 1. Display the Basic Event list - only event name , might add more filed later in the first page
+ * 2. When press will show detail information
+ * 3. Be able to filter/search against the event name
+ * 4. Be able to search by event type
+ * 
  *
  */
 
@@ -51,20 +59,6 @@ public class EPGProviderActivity extends ListActivity {
            "content://com.trident.android.tv.si.provider.EPG/events");
        Cursor c = managedQuery(allEvents , null, null, null, null);
         
-       
-//       if (c.moveToFirst()) {
-//           do{
-////              Toast.makeText(this, 
-////           	  c.getString(c.getColumnIndexOrThrow(
-////           	                 EPGProvider.NAME)) +
-////                 c.getString(c.getColumnIndexOrThrow(
-////                    EPGProvider.SHORT_DESCRIPTION)), 
-////                 Toast.LENGTH_LONG).show();       
-//        	   
-//        	   
-//           } while (c.moveToNext());
-//        }
-//       
              
        // Used to map notes entries from the database to views
        // show only the event name
