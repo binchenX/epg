@@ -72,6 +72,7 @@ import android.util.Log;
 		   
 		   public interface Clause{
 			   public static final String QUERY_BASIC_INFO_BY_EVENT_NAME = BasicColumns.NAME + " = ?";
+			   public static final String SEARCH_BY_TYPE = "_id IN (select eguid FROM tblEvent_content WHERE level1=? )";
 		   }
 		   
 		   EPGDatabaseHelp(Context context) {

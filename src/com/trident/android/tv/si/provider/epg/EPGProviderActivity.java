@@ -63,6 +63,8 @@ public class EPGProviderActivity extends ListActivity {
 		
 		int query_type = 0 ;
 
+		
+		//it should not be nulll
 		if (intent == null) {
 			// no search, display all the events.
 			Log.d(TAG, "started without search query ,will display all the events..");
@@ -76,15 +78,26 @@ public class EPGProviderActivity extends ListActivity {
 
 			} else {
 
-				query_type = 1;
+				
 				// intent from movie/news button
-				String type = getIntent().getExtras().getString("TYPE");
-
-				Log.d(TAG, "try to get events belong to type " + type);
-
-				if (type.equals("movie")) {
-					// query()
+				Bundle bd = getIntent().getExtras();
+				
+				String type;
+				if(bd != null){
+				
+					type = bd.getString("TYPE");
+					
+					if(type.equals("movie") || type.equals("news"))
+					{
+					query_type = 1;
+					
+					Log.d(TAG, "try to get events belong to type " + type);
+					
+					}	
+					
+					
 				}
+				
 
 			}
 		}
@@ -125,7 +138,7 @@ public class EPGProviderActivity extends ListActivity {
 			}
 		});
 
-		// back button
+		// search button
 		Button searchButton = (Button) findViewById(R.id.searchbutton);
 
 		searchButton.setOnClickListener(new OnClickListener() {
@@ -133,8 +146,24 @@ public class EPGProviderActivity extends ListActivity {
 			public void onClick(View v) {
 
 				// start an search
-				// onSearchRequested();
-				// finish();
+				//onSearchRequested();
+				//finish() should not be called
+				
+				
+
+				Log.d(TAG, "movie button has been pressed...........");
+				// start himself...
+				Intent myIntent = new Intent(EPGProviderActivity.this,
+						EPGProviderActivity.class);
+
+				// The detailActivity will use this to query the detail
+				// information.
+
+				myIntent.putExtra("TYPE", "movie");
+				startActivity(myIntent);
+				finish();
+				
+				
 			}
 		});
 
@@ -145,6 +174,7 @@ public class EPGProviderActivity extends ListActivity {
 			@Override
 			public void onClick(View v) {
 
+				Log.d(TAG, "movie button has been pressed...........");
 				// start himself...
 				Intent myIntent = new Intent(EPGProviderActivity.this,
 						EPGProviderActivity.class);
@@ -188,7 +218,7 @@ public class EPGProviderActivity extends ListActivity {
 	
 	ListAdapter doMySearchByType(String query)
 	{
-		
+		Cursor c = null;
 		// TODO: use FTS instead of LIKE
 		c = managedQuery(EPGProvider.CONTENT_URI_EVENTS_MOVIE, null,
 				null, null, null);

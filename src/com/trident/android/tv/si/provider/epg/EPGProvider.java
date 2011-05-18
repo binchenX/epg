@@ -18,6 +18,7 @@ import android.util.Log;
 //import java.io.*;
 
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.BasicColumns;
+import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.Clause;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ExtendedColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.Table;
 
@@ -188,9 +189,21 @@ public class EPGProvider extends ContentProvider
             break;
             
 	   case MOVIE:
+		   
+		   qb.setTables(Table.BASIC);
+		   //suppose 1 is MOVIE
+		   selectionArgs = insertSelectionArg(selectionArgs, String.valueOf(1));
+		   qb.appendWhere(Clause.SEARCH_BY_TYPE);
+		   
 		   break;
 		   
 	   case NEWS:
+		   
+		   qb.setTables(Table.BASIC);
+		   //suppose 2 is NEWS
+		   selectionArgs = insertSelectionArg(selectionArgs, String.valueOf(2));
+		   qb.appendWhere(Clause.SEARCH_BY_TYPE);
+		   
 		   break;
 	   
 	   default:
