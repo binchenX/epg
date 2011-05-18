@@ -3,5 +3,7 @@
     <string name="epg">Electronic Program Guide</string>
     <string name="app_name">Fantastic EPG</string>
     <string name="back"> Back </string>
+    <string name="search_hint"> Type to search the events </string>
+    <string name="search_app_label"> epgSearch </string>
     
 </resources>

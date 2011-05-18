@@ -9,6 +9,7 @@ import android.database.*;
 import android.widget.*;
 import android.util.Log;
 import android.app.ListActivity;
+import android.app.SearchManager;
 
 
 //import android.app.Activity;
@@ -31,6 +32,11 @@ import android.view.*;
  * 3. Be able to filter/search against the event name
  * 4. Be able to search by event type
  * 
+ * Others:
+ * 
+ * 1. db_populator will keep populating the database locating at /data/system/epg-1.db, which is 
+ * the database the contentProvider open and read.
+ * 
  *
  */
 
@@ -38,32 +44,47 @@ public class EPGProviderActivity extends ListActivity {
 	
 	private static final String TAG = "EPGProviderActivity";
 	
-	private static final boolean  use_preexsit_database = true;
+    
+	/** Called when the activity is first created. */
 	
-    /** Called when the activity is first created. */
+	
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
- //       setContentView(R.layout.main);
+ //     setContentView(R.layout.main);
        
         Log.d(TAG, "onCreate");
-    
-       if (!use_preexsit_database) {
-               populate_the_database();
+
+        //This is activity could also started by an intent from the search dialog..
+        Intent intent = getIntent();
         
-       }
+        String query = null;
         
+        if(intent == null) 
+        {
+        	//no search, display all the events.
+        	 Log.d(TAG, "started without search query ,will display all the events..");
+        } else {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+           query = intent.getStringExtra(SearchManager.QUERY);
+           Log.d(TAG, "Will search .." + query);
+         
+        }
+        }
+        
+        ListAdapter adapter = doMySearch(query);
+
+   
+      
   
-       Uri allEvents = Uri.parse(
-           "content://com.trident.android.tv.si.provider.EPG/events");
-       Cursor c = managedQuery(allEvents , null, null, null, null);
-        
-             
-       // Used to map notes entries from the database to views
-       // show only the event name
-       SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, c,
-               new String[] { "event_name" }, new int[] { android.R.id.text1 });
+       
+//       adapter.setFilterQueryProvider (new CountryFilterProvider ());
+//       adapter.setViewBinder (new FlagViewBinder ());
+
+//
+       //http://stackoverflow.com/questions/4571401/trying-to-filter-a-listview-with-runqueryonbackgroundthread-but-nothing-happens
+
        
        setListAdapter(adapter);
 
@@ -74,12 +95,7 @@ public class EPGProviderActivity extends ListActivity {
        lv.setOnItemClickListener(new OnItemClickListener() {
          public void onItemClick(AdapterView<?> parent, View view,
              int position, long id) {
-           // When clicked, show a toast with the TextView text
-           // TODO: when clicked , show the detail information of the events ,
-        	 
-           //start another activity......
-          // Toast.makeText(getApplicationContext(), ((TextView) view).getText(),
-          //     Toast.LENGTH_SHORT).show();
+ 
            
            Intent myIntent = new Intent(EPGProviderActivity.this, EventDetail.class);
            
@@ -94,6 +110,37 @@ public class EPGProviderActivity extends ListActivity {
         
     }
 	
+	
+	ListAdapter doMySearch(String constraint)
+	{
+	    
+		Cursor c = null;
+		if(constraint == null || constraint=="")
+		{
+		
+		 c = managedQuery(EPGProvider.CONTENT_URI_EVENTS , null, null, null, null);
+	        
+		} else {
+			
+			//TODO: use FTS instead of LIKE
+			c = managedQuery(EPGProvider.CONTENT_URI_EVENTS , 
+					null, 
+					"event_name LIKE " + "%" + constraint + "%", 
+					null, 
+					null);
+			
+		}
+         
+	       // Used to map notes entries from the database to views
+	       // show only the event name
+	       SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, 
+	    		   android.R.layout.simple_list_item_1, 
+	    		   c,
+	               new String[] { "event_name" }, 
+	               new int[] { android.R.id.text1 });
+	       
+	       return adapter;
+	}
 	
 	
 	void populate_the_database()
