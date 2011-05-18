@@ -52,7 +52,7 @@ public class EPGProviderActivity extends ListActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
- //     setContentView(R.layout.main);
+        setContentView(R.layout.main);
        
         Log.d(TAG, "onCreate");
 
@@ -75,10 +75,6 @@ public class EPGProviderActivity extends ListActivity {
         
         ListAdapter adapter = doMySearch(query);
 
-   
-      
-  
-       
 //       adapter.setFilterQueryProvider (new CountryFilterProvider ());
 //       adapter.setViewBinder (new FlagViewBinder ());
 
@@ -87,9 +83,9 @@ public class EPGProviderActivity extends ListActivity {
 
        
        setListAdapter(adapter);
-
+      
+       ListView lv = getListView(); // == findViewById(android.R.id.list)
        
-       ListView lv = getListView();
        lv.setTextFilterEnabled(true);
 
        lv.setOnItemClickListener(new OnItemClickListener() {

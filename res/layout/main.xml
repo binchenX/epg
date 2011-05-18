@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/epg"
-    />
-</LinearLayout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+    
+    <Button android:layout_width= "100px"
+            android:layout_height="wrap_content"
+        
+        android:id="@+id/searchbutton"
+        android:text="@string/search"  android:layout_alignParentTop="true" />
+        
+     <ListView android:layout_width="fill_parent"
+        android:layout_height="fill_parent" android:id="@id/android:list"
+        android:layout_below="@id/searchbutton"  />
+</RelativeLayout>
