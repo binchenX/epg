@@ -35,7 +35,8 @@ public class EPGProvider extends ContentProvider
 	public static final String PROVIDER_NAME = "com.trident.android.tv.si.provider.EPG";
 	public static final Uri CONTENT_URI_EVENTS = Uri.parse("content://" + PROVIDER_NAME + "/events");
 	public static final Uri CONTENT_URI_QUERY_EXTENED = Uri.parse("content://" + PROVIDER_NAME + "/extended/eguid");
-	
+	public static final Uri CONTENT_URI_EVENTS_MOVIE = Uri.parse("content://" + PROVIDER_NAME + "/movie");
+	public static final Uri CONTENT_URI_EVENTS_NEWS = Uri.parse("content://" + PROVIDER_NAME + "/news");
 	public static final String TAG = "EPGProvider";
 	
 	
@@ -68,6 +69,8 @@ public class EPGProvider extends ContentProvider
 	   private static final int EVENT_ID = 2;
 	   private static final int EXTENDED_QUERY_ID = 3;
 	   private static final int EXTENDED_QUERY_EGUID = 4;
+	   private static final int MOVIE = 5;
+	   private static final int NEWS = 6;
 	         		
 	   
 	   private static final UriMatcher uriMatcher;
@@ -80,7 +83,10 @@ public class EPGProvider extends ContentProvider
 	         //extended/eguid/3 , query the extended information whose eguid = 3
 	         //extended/id/3 , query the extended information whose _id = 3
 	         uriMatcher.addURI(PROVIDER_NAME, "extended/id/#", EXTENDED_QUERY_ID);
-	         uriMatcher.addURI(PROVIDER_NAME, "extended/eguid/#", EXTENDED_QUERY_EGUID);   
+	         uriMatcher.addURI(PROVIDER_NAME, "extended/eguid/#", EXTENDED_QUERY_EGUID);  
+	         
+	         uriMatcher.addURI(PROVIDER_NAME, "movie", MOVIE);   
+	         uriMatcher.addURI(PROVIDER_NAME, "news", NEWS);   
 	      }
 
 	   
@@ -180,6 +186,12 @@ public class EPGProvider extends ContentProvider
 			qb.appendWhere(ExtendedColumns.EVENG_GUID + " = ? ");
 
             break;
+            
+	   case MOVIE:
+		   break;
+		   
+	   case NEWS:
+		   break;
 	   
 	   default:
 	   

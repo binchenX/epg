@@ -3,13 +3,46 @@
     android:layout_width="fill_parent" android:layout_height="fill_parent">
 
     
-    <Button android:layout_width= "100px"
-            android:layout_height="wrap_content"
-        
+    <Button 
+        android:layout_width= "100px"
+        android:layout_height="wrap_content"
         android:id="@+id/searchbutton"
-        android:text="@string/search"  android:layout_alignParentTop="true" />
+        android:text="@string/search"  
+        android:layout_alignParentTop="true" 
+        />
+        
+    <Button 
+    	android:layout_width= "100px"
+    	android:layout_height="wrap_content"
+        android:id="@+id/bt_all"
+        android:text="@string/all"  
+       
+        android:layout_below="@id/searchbutton"
+         android:layout_alignParentLeft="true"
+          android:layout_alignParentBottom="true"
+         />
+        
+   <Button 
+    	android:layout_width= "100px"
+    	android:layout_height="wrap_content"
+        android:id="@+id/bt_movie"
+        android:text="@string/movie"  
+        android:layout_alignParentRight="true"
+         android:layout_alignParentBottom="true"
+        
+         />
+         <Button 
+    	android:layout_width= "100px"
+    	android:layout_height="wrap_content"
+        android:id="@+id/bt_news"
+        android:text="@string/news"  
+        android:layout_alignParentRight="true"
+        android:layout_alignLeft="@id/bt_movie"
+        
+         />
+        
         
      <ListView android:layout_width="fill_parent"
         android:layout_height="fill_parent" android:id="@id/android:list"
-        android:layout_below="@id/searchbutton"  />
+        android:layout_below="@id/bt_all"  />
 </RelativeLayout>

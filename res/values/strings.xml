@@ -6,5 +6,9 @@
     <string name="search_hint"> Type to search the events </string>
     <string name="search_app_label"> epgSearch </string>
     <string name="search"> search </string>
+    <string name="all"> all </string>
+    <string name="movie"> movie </string>
+    <string name="news">  news </string>
+    
     
 </resources>
