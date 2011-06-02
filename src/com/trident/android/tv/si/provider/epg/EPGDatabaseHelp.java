@@ -34,9 +34,8 @@ import android.util.Log;
 			   
 			   public static final String BASIC = "tblEvent_basic";
 			   public static final String EXTENDED = "tblEvent_extended";
+			   public static final String EXTENDED_FTS = "tblEvent_extDes";
 			   public static final String GROUP = "tblEvent_group";
-			   
-			   
 			   
 		   }
 		   
@@ -70,6 +69,21 @@ import android.util.Log;
 			   
 		   }
 		   
+           public interface ExtendedFTSColumns{
+			   
+			   public static final String _ID = "_id";
+			   //public static final String SECTION_GUID = "sguid";
+			   public static final String EVENG_GUID = "_id";
+			   public static final String ITEM_DES = "item_description";
+			   public static final String ITEM_CONTENT = "item";
+			   //public static final String SERVICE_ID = "service_id";
+			   //public static final String EVENT_ID = "event_id";
+			   //public static final String DESCRIPTOR_NUMBER = "descriptor_number";
+			   //public static final String LAST_DESCRIPTOER_NUMER = "last_descriptor_number";
+			   
+			   
+		   }
+		   
 		   public interface Clause{
 			   public static final String QUERY_BASIC_INFO_BY_EVENT_NAME = BasicColumns.NAME + " = ?";
 			   public static final String SEARCH_BY_TYPE = "_id IN (select eguid FROM tblEvent_content WHERE level1=? )";
@@ -84,6 +98,10 @@ import android.util.Log;
 	       this.myContext = context;
 	      }
 
+		   
+		   
+		   
+		   
 		   
 		   @Override
 		   public synchronized SQLiteDatabase getReadableDatabase ()

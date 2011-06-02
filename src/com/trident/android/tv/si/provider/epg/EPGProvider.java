@@ -20,6 +20,7 @@ import android.util.Log;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.BasicColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.Clause;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ExtendedColumns;
+import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ExtendedFTSColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.Table;
 
 
@@ -171,7 +172,7 @@ public class EPGProvider extends ContentProvider
 	      
 	   case EXTENDED_QUERY_EGUID:
 
-			qb.setTables(Table.EXTENDED);
+			qb.setTables(Table.EXTENDED_FTS);
 			if (sortOrder == null || sortOrder == "") {
 				sortOrder = BasicColumns._ID;
 			}
@@ -184,7 +185,7 @@ public class EPGProvider extends ContentProvider
 			
 			//the final where statement is:
 			//WHERE (<append chunk 1><append chunk2>) AND (<query() selection parameter>)
-			qb.appendWhere(ExtendedColumns.EVENG_GUID + " = ? ");
+			qb.appendWhere(ExtendedFTSColumns.EVENG_GUID + " = ? ");
 
             break;
             
