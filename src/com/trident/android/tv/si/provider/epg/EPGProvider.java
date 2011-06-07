@@ -14,6 +14,8 @@ import android.database.sqlite.SQLiteDatabase;
 //import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.provider.BaseColumns;
+import android.provider.SyncStateContract.Columns;
 //import android.provider.ContactsContract.Contacts;
 //import android.text.TextUtils;
 import android.util.Log;
@@ -46,6 +48,7 @@ public class EPGProvider extends ContentProvider
 	public static final String TAG = "EPGProvider";
 	
 	private static final HashMap<String,String> columnMap = buildColumnMap();
+	private static final HashMap<String,String> searchColumnMap =  buildSearchColumnMap();
 
 	
 	
@@ -120,6 +123,24 @@ public class EPGProvider extends ContentProvider
 	          map.put(ShortDesFTSColumns.SHORT_DESCRIPTION,     ShortDesFTSColumns.SHORT_DESCRIPTION);
 		       		         
 	    
+	          return map;
+	      }
+	     
+	     /*
+	      * 
+	      * Solve the ambiguity column name , "event_name" , "short_description" as both tblEvent_basic 
+	      * and tblEvent_shortDes have those column and Ambiguity raise when we join those two table.
+	      * */
+	     
+	     
+	     
+	     private static HashMap<String,String> buildSearchColumnMap() {
+	          HashMap<String,String> map = new HashMap<String,String>();
+	          
+	          map.put(BaseColumns._ID,                   Table.BASIC+ "." +  BaseColumns._ID);
+	          map.put(BasicColumns.NAME,                 Table.BASIC + "." + BasicColumns.NAME);
+	          map.put(BasicColumns.SHORT_DESCRIPTION,    Table.BASIC + "." + BasicColumns.SHORT_DESCRIPTION);
+	          
 	          return map;
 	      }
 
@@ -231,29 +252,29 @@ public class EPGProvider extends ContentProvider
 		   		   
 		   String keyWords = selectionArgs[0];
 		    
-		   Log.d(TAG, "fts search with" + keyWords);
+		   Log.d(TAG, "fts search:" + keyWords);
 		   //set table
-		   //qb.setTables("tblEvent_basic JOIN tblEvent_shortDes  ON tblEvent_basic.rowid = tblEvent_shortDes._id ");
+		   qb.setTables("tblEvent_basic JOIN tblEvent_shortDes  ON tblEvent_basic.rowid = tblEvent_shortDes._id ");
 		   
-		   qb.setTables("tblEvent_shortDes");
+		   //qb.setTables("tblEvent_shortDes");
 		   
 		   //setWhere
-		  // qb.appendWhere("tblEvent_shortDes.event_name MATCH ? " );
+		   qb.appendWhere("tblEvent_shortDes.event_name MATCH ? " );
 		   
-		   String w = " event_name MATCH ?";
-		   qb.appendWhere(w);
+		  // String w = " event_name MATCH ?";
+		  // qb.appendWhere(w);
 		   
 		   //rebuild the selectionArgs 
 		   selectionArgs = new String[] {keyWords + "*"};
 		   
 		   //override the projection
-		   projection = new String[] {  "_id",   //BaseColumns._ID. We need this for Adaptor to work
+		   projection = new String[] {  "_id",     //BaseColumns._ID. We need this for Adaptor to work
 				   						"event_name" 
 				                       
 				                     };
 		   
 		   
-		   qb.setProjectionMap(columnMap);
+		   qb.setProjectionMap(searchColumnMap);
 		   
            
 		   break;
