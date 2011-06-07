@@ -278,13 +278,25 @@ public class EPGProvider extends ContentProvider
 		   String sql_search_short_des =   " SELECT a._id, a.event_name " + 
                                            " FROM tblEvent_basic a JOIN tblEvent_shortDes b ON a.rowid = b._id " +  
                                            " WHERE b.short_des MATCH ? ";
-		   //String sql_search_ext_des =
+		   									//UNION ALL
+		   String sql_search_ext_des =  " SELECT a._id , a.event_name " + 
+		   " FROM tblEvent_basic a " +  
+		   " WHERE a._id IN ( " + 
+		   " Select a._id " + 
+		   " FROM " + 
+		   " tblEvent_basic a JOIN tblEvent_extDes c ON a._id = c._id " + 
+		   " WHERE c.item MATCH ?)";
 		   
-		   String sql_search_all = qb.buildUnionQuery(new String[] {sql_search_event_name, sql_search_short_des}, sortOrder, null);
+		   
+		   String sql_search_all = qb.buildUnionQuery(new String[] {sql_search_event_name, 
+				                                                    sql_search_short_des,
+				                                                    sql_search_ext_des}, 
+				                                      sortOrder, 
+				                                      null);
 
 		   Log.d(TAG, sql_search_all);
 	   
-		   return epgDB.rawQuery(sql_search_all, new String[] {keyWords ,keyWords });
+		   return epgDB.rawQuery(sql_search_all, new String[] {keyWords ,keyWords ,keyWords});
 		   
 		   //break;
             
