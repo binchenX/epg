@@ -82,7 +82,18 @@ import android.util.Log;
 			   //public static final String LAST_DESCRIPTOER_NUMER = "last_descriptor_number";
 			   
 			   
+			   
 		   }
+           
+        public interface ShortDesFTSColumns{
+			   
+			   public static final String _ID = "_id";
+			   public static final String EVENG_GUID = "_id";
+			   public static final String NAME = "event_name";
+			   public static final String SHORT_DESCRIPTION = "text";
+			   
+		   }
+ 
 		   
 		   public interface Clause{
 			   public static final String QUERY_BASIC_INFO_BY_EVENT_NAME = BasicColumns.NAME + " = ?";

@@ -185,9 +185,15 @@ public class EPGProviderActivity extends ListActivity {
 
 		} else {
 
-			// TODO: use FTS instead of LIKE
-			c = managedQuery(EPGProvider.CONTENT_URI_EVENTS, null,
-					"event_name LIKE " + "\"%" + constraint + "%\"", null, null);
+			// USE LIKE
+//			c = managedQuery(EPGProvider.CONTENT_URI_EVENTS, null,
+//					"event_name LIKE " + "\"%" + constraint + "%\"", null, null);
+
+			// use FTS
+			c = managedQuery(EPGProvider.CONTENT_URI_EVENTS_SEARCH, null,
+					null,
+					new String[] {constraint}, 
+					null);
 
 		}
 

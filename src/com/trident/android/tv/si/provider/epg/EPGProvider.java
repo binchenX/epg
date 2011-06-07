@@ -1,5 +1,7 @@
 package com.trident.android.tv.si.provider.epg;
 
+import java.util.HashMap;
+
 import android.content.ContentProvider;
 //import android.content.ContentUris;
 import android.content.ContentUris;
@@ -21,6 +23,7 @@ import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.BasicColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.Clause;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ExtendedColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ExtendedFTSColumns;
+import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ShortDesFTSColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.Table;
 
 
@@ -36,10 +39,14 @@ public class EPGProvider extends ContentProvider
 	
 	public static final String PROVIDER_NAME = "com.trident.android.tv.si.provider.EPG";
 	public static final Uri CONTENT_URI_EVENTS = Uri.parse("content://" + PROVIDER_NAME + "/events");
+	public static final Uri CONTENT_URI_EVENTS_SEARCH = Uri.parse("content://" + PROVIDER_NAME + "/events/search");
 	public static final Uri CONTENT_URI_QUERY_EXTENED = Uri.parse("content://" + PROVIDER_NAME + "/extended/eguid");
 	public static final Uri CONTENT_URI_EVENTS_MOVIE = Uri.parse("content://" + PROVIDER_NAME + "/movie");
 	public static final Uri CONTENT_URI_EVENTS_NEWS = Uri.parse("content://" + PROVIDER_NAME + "/news");
 	public static final String TAG = "EPGProvider";
+	
+	private static final HashMap<String,String> columnMap = buildColumnMap();
+
 	
 	
 
@@ -67,18 +74,20 @@ public class EPGProvider extends ContentProvider
 //	         " text VARCHAR(256)," +
 //	         " end_time  INT);";
 	   
-	   private static final int EVENTS = 1;
+	   private static final int EVENTS_ALL = 1;
 	   private static final int EVENT_ID = 2;
 	   private static final int EXTENDED_QUERY_ID = 3;
 	   private static final int EXTENDED_QUERY_EGUID = 4;
 	   private static final int MOVIE = 5;
 	   private static final int NEWS = 6;
+	   private static final int EVENTS_SEARCH = 7;
 	         		
 	   
 	   private static final UriMatcher uriMatcher;
 	      static{
 	         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-	         uriMatcher.addURI(PROVIDER_NAME, "events", EVENTS);
+	         uriMatcher.addURI(PROVIDER_NAME, "events", EVENTS_ALL);
+	         uriMatcher.addURI(PROVIDER_NAME, "events/search", EVENTS_SEARCH);
 	         uriMatcher.addURI(PROVIDER_NAME, "events/#", EVENT_ID);   
 	         
 	         //uriMatcher.addURI(PROVIDER_NAME, "extended", EVENTS);
@@ -91,7 +100,29 @@ public class EPGProvider extends ContentProvider
 	         uriMatcher.addURI(PROVIDER_NAME, "news", NEWS);   
 	      }
 
-	   
+	     private static HashMap<String,String> buildColumnMap() {
+	          HashMap<String,String> map = new HashMap<String,String>();
+	          
+	          
+	     /*     map.put(BasicColumns._ID,                Table.BASIC + "." + BasicColumns._ID);
+	          map.put(BasicColumns.NAME,               Table.BASIC + "." + BasicColumns.NAME);
+	          map.put(BasicColumns.SHORT_DESCRIPTION,  Table.BASIC + "." + BasicColumns.SHORT_DESCRIPTION);
+	     */     
+	
+	     /*     map.put(ExtendedFTSColumns._ID,         "rowid as _id");
+	          map.put(ExtendedFTSColumns.EVENG_GUID,   ExtendedFTSColumns.EVENG_GUID +  " AS eguid" );
+	          map.put(ExtendedFTSColumns.ITEM_CONTENT, ExtendedFTSColumns.ITEM_CONTENT);
+	          map.put(ExtendedFTSColumns.ITEM_DES,     ExtendedFTSColumns.ITEM_DES);*/
+	          
+	          map.put(ShortDesFTSColumns._ID,         "rowid as _id");
+	          map.put(ShortDesFTSColumns.EVENG_GUID,            ShortDesFTSColumns.EVENG_GUID );
+	          map.put(ShortDesFTSColumns.NAME,                  ShortDesFTSColumns.NAME);
+	          map.put(ShortDesFTSColumns.SHORT_DESCRIPTION,     ShortDesFTSColumns.SHORT_DESCRIPTION);
+		       		         
+	    
+	          return map;
+	      }
+
 	 
 	 
    @Override
@@ -104,7 +135,7 @@ public class EPGProvider extends ContentProvider
 	   
 	   switch (uriMatcher.match(uri)){
        //---get all books---
-       case EVENTS:
+       case EVENTS_ALL:
           return "vnd.android.cursor.dir/vnd.trident.tv.si.events ";
        //---get a particular book---
        case EVENT_ID:                
@@ -161,7 +192,7 @@ public class EPGProvider extends ContentProvider
 	   //1.construct the sqlbuild
 	   switch(uriMatcher.match(uri)) {
 	   
-	   case EVENTS:
+	   case EVENTS_ALL:
 	     
 	      qb.setTables(Table.BASIC);	       
 	       
@@ -186,8 +217,46 @@ public class EPGProvider extends ContentProvider
 			//the final where statement is:
 			//WHERE (<append chunk 1><append chunk2>) AND (<query() selection parameter>)
 			qb.appendWhere(ExtendedFTSColumns.EVENG_GUID + " = ? ");
+			
+			
 
             break;
+            
+	   case EVENTS_SEARCH:
+		 
+		   if (selectionArgs == null) {
+               throw new IllegalArgumentException(
+                   "selectionArgs must be provided for the Uri: " + uri);
+             }
+		   		   
+		   String keyWords = selectionArgs[0];
+		    
+		   Log.d(TAG, "fts search with" + keyWords);
+		   //set table
+		   //qb.setTables("tblEvent_basic JOIN tblEvent_shortDes  ON tblEvent_basic.rowid = tblEvent_shortDes._id ");
+		   
+		   qb.setTables("tblEvent_shortDes");
+		   
+		   //setWhere
+		  // qb.appendWhere("tblEvent_shortDes.event_name MATCH ? " );
+		   
+		   String w = " event_name MATCH ?";
+		   qb.appendWhere(w);
+		   
+		   //rebuild the selectionArgs 
+		   selectionArgs = new String[] {keyWords + "*"};
+		   
+		   //override the projection
+		   projection = new String[] {  "_id",   //BaseColumns._ID. We need this for Adaptor to work
+				   						"event_name" 
+				                       
+				                     };
+		   
+		   
+		   qb.setProjectionMap(columnMap);
+		   
+           
+		   break;
             
 	   case MOVIE:
 		   
@@ -236,6 +305,17 @@ public class EPGProvider extends ContentProvider
       return 0;
    }
    
+   /**
+    * Search using FTS 
+    * @param keywords
+    * @return
+    */
+   private Cursor search(String keywords)
+   {
+	   
+	   return null;
+	   
+   }
    
    /**
     * Inserts an argument at the beginning of the selection arg list.
