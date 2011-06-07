@@ -253,31 +253,40 @@ public class EPGProvider extends ContentProvider
 		   String keyWords = selectionArgs[0];
 		    
 		   Log.d(TAG, "fts search:" + keyWords);
-		   //set table
-		   qb.setTables("tblEvent_basic JOIN tblEvent_shortDes  ON tblEvent_basic.rowid = tblEvent_shortDes._id ");
 		   
-		   //qb.setTables("tblEvent_shortDes");
+//		   //set table
+//		   qb.setTables("tblEvent_basic JOIN tblEvent_shortDes  ON tblEvent_basic.rowid = tblEvent_shortDes._id ");
+//		   qb.appendWhere("tblEvent_shortDes.event_name MATCH ? " );
+//		  
+//		   //rebuild the selectionArgs 
+//		   selectionArgs = new String[] {keyWords + "*"};
+//		   
+//		   //override the projection
+//		   projection = new String[] {  "_id",     //BaseColumns._ID. We need this for Adaptor to work
+//				   						"event_name" 
+//				                     };
+//		   
+//		   
+//		   qb.setProjectionMap(searchColumnMap);
 		   
-		   //setWhere
-		   qb.appendWhere("tblEvent_shortDes.event_name MATCH ? " );
-		   
-		  // String w = " event_name MATCH ?";
-		  // qb.appendWhere(w);
-		   
-		   //rebuild the selectionArgs 
-		   selectionArgs = new String[] {keyWords + "*"};
-		   
-		   //override the projection
-		   projection = new String[] {  "_id",     //BaseColumns._ID. We need this for Adaptor to work
-				   						"event_name" 
-				                       
-				                     };
-		   
-		   
-		   qb.setProjectionMap(searchColumnMap);
-		   
+		   //have to use RawQuery as we need to Union two query
            
-		   break;
+		   String sql_search_event_name =  " SELECT a._id, a.event_name " + 
+                                           " FROM tblEvent_basic a JOIN tblEvent_shortDes b ON a.rowid = b._id " +  
+                                           " WHERE b.event_name MATCH ? " ;
+                                           //UNION ALL
+		   String sql_search_short_des =   " SELECT a._id, a.event_name " + 
+                                           " FROM tblEvent_basic a JOIN tblEvent_shortDes b ON a.rowid = b._id " +  
+                                           " WHERE b.short_des MATCH ? ";
+		   //String sql_search_ext_des =
+		   
+		   String sql_search_all = qb.buildUnionQuery(new String[] {sql_search_event_name, sql_search_short_des}, sortOrder, null);
+
+		   Log.d(TAG, sql_search_all);
+	   
+		   return epgDB.rawQuery(sql_search_all, new String[] {keyWords ,keyWords });
+		   
+		   //break;
             
 	   case MOVIE:
 		   
