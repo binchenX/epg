@@ -85,6 +85,14 @@ public class EPGProvider extends ContentProvider
 	   private static final int MOVIE = 5;
 	   private static final int NEWS = 6;
 	   private static final int EVENTS_SEARCH = 7;
+	   
+	   
+	   
+	   
+	   //For EventType
+	   
+	   private static final int TYPE_MOVIE = 1;
+	   private static final int TYPE_NEWS = 2;
 	         		
 	   
 	   private static final UriMatcher uriMatcher;
@@ -249,12 +257,34 @@ public class EPGProvider extends ContentProvider
 			
 			//the final selectionArgs is:
 			//even_guid , query()'s selectionArgs parameters
-			selectionArgs = insertSelectionArg(selectionArgs, String.valueOf(event_guid));
+			//selectionArgs = insertSelectionArg(selectionArgs, String.valueOf(event_guid));
 			
-			qb.appendWhere(ExtendedFTSColumns.EVENG_GUID + " = ? ");
+			//selectionArgs = new String[] {"196"};
+			
+			//I can not get the ? to work with selectionArgs, so use this workaround
+			//TODO:find the root cause
+			qb.appendWhere(ExtendedFTSColumns.EVENG_GUID + " =  " + String.valueOf(event_guid));
 			
 			qb.setProjectionMap(tblExtFTScolumnMap);
 
+			
+			//just for test
+			//String sql = "SELECT rowid as _id, item, item_description FROM tblEvent_extDes WHERE eguid = " + 
+			//			  String.valueOf(event_guid) + " ORDER by rowid";
+			
+			//String sql = "SELECT rowid as _id, item, item_description FROM tblEvent_extDes " +
+			//		     " WHERE eguid = ? ORDER by rowid";
+			
+//			c = epgDB.rawQuery(sql,  new String[] {"196"});
+//			
+//			 if (c == null) {
+//		            return null;
+//		        } else if (!c.moveToFirst()) {
+//		            c.close();
+//		            return null;
+//		        }
+//			 
+//			return c;
 			break;
             
 	   case EVENTS_SEARCH:
@@ -319,7 +349,7 @@ public class EPGProvider extends ContentProvider
 		   
 		   qb.setTables(Table.BASIC);
 		   //suppose 1 is MOVIE
-		   selectionArgs = insertSelectionArg(selectionArgs, String.valueOf(1));
+		   selectionArgs = insertSelectionArg(selectionArgs, String.valueOf(TYPE_MOVIE));
 		   qb.appendWhere(Clause.SEARCH_BY_TYPE);
 		   
 		   break;
@@ -328,7 +358,7 @@ public class EPGProvider extends ContentProvider
 		   
 		   qb.setTables(Table.BASIC);
 		   //suppose 2 is NEWS
-		   selectionArgs = insertSelectionArg(selectionArgs, String.valueOf(2));
+		   selectionArgs = insertSelectionArg(selectionArgs, String.valueOf(TYPE_NEWS));
 		   qb.appendWhere(Clause.SEARCH_BY_TYPE);
 		   
 		   break;
