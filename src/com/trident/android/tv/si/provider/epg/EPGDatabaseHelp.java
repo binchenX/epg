@@ -73,7 +73,7 @@ import android.util.Log;
 			   
 			   public static final String _ID = "_id";
 			   //public static final String SECTION_GUID = "sguid";
-			   public static final String EVENG_GUID = "_id";
+			   public static final String EVENG_GUID = "eguid";
 			   public static final String ITEM_DES = "item_description";
 			   public static final String ITEM_CONTENT = "item";
 			   //public static final String SERVICE_ID = "service_id";
@@ -88,9 +88,9 @@ import android.util.Log;
         public interface ShortDesFTSColumns{
 			   
 			   public static final String _ID = "_id";
-			   public static final String EVENG_GUID = "_id";
+			   public static final String EVENG_GUID = "eguid";
 			   public static final String NAME = "event_name";
-			   public static final String SHORT_DESCRIPTION = "text";
+			   public static final String SHORT_DESCRIPTION = "short_des";
 			   
 		   }
  

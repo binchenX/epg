@@ -50,6 +50,7 @@ public class EPGProvider extends ContentProvider
 	private static final HashMap<String,String> columnMap = buildColumnMap();
 	private static final HashMap<String,String> searchColumnMap =  buildSearchColumnMap();
 
+	private static final HashMap<String,String> tblExtFTScolumnMap = buildExtFTSColumnMap();
 	
 	
 
@@ -143,6 +144,18 @@ public class EPGProvider extends ContentProvider
 	          
 	          return map;
 	      }
+	     
+	     private static HashMap<String,String>  buildExtFTSColumnMap(){
+	          HashMap<String,String> map = new HashMap<String,String>();
+	          
+	          
+	          map.put(BaseColumns._ID  ,       "rowid as " + BaseColumns._ID);
+	          map.put(ExtendedFTSColumns.EVENG_GUID , ExtendedFTSColumns.EVENG_GUID);
+	          map.put(ExtendedFTSColumns.ITEM_DES, ExtendedFTSColumns.ITEM_DES);
+	          map.put(ExtendedFTSColumns.ITEM_CONTENT ,           ExtendedFTSColumns.ITEM_CONTENT);
+	          
+	          return map;
+	      }
 
 	 
 	 
@@ -226,22 +239,23 @@ public class EPGProvider extends ContentProvider
 
 			qb.setTables(Table.EXTENDED_FTS);
 			if (sortOrder == null || sortOrder == "") {
-				sortOrder = BasicColumns._ID;
+				sortOrder =  "rowid"; //ExtendedFTSColumns._ID;
 			}
+			
 			long event_guid = ContentUris.parseId(uri);
-			// setTablesAndProjectionMapForContacts(qb, uri, projection);
+			//setTablesAndProjectionMapForContacts(qb, uri, projection);
+			
+			Log.d(TAG, "query extended descriotors for eguid " + event_guid);
 			
 			//the final selectionArgs is:
 			//even_guid , query()'s selectionArgs parameters
 			selectionArgs = insertSelectionArg(selectionArgs, String.valueOf(event_guid));
 			
-			//the final where statement is:
-			//WHERE (<append chunk 1><append chunk2>) AND (<query() selection parameter>)
 			qb.appendWhere(ExtendedFTSColumns.EVENG_GUID + " = ? ");
 			
-			
+			qb.setProjectionMap(tblExtFTScolumnMap);
 
-            break;
+			break;
             
 	   case EVENTS_SEARCH:
 		 
@@ -249,8 +263,9 @@ public class EPGProvider extends ContentProvider
                throw new IllegalArgumentException(
                    "selectionArgs must be provided for the Uri: " + uri);
              }
-		   		   
-		   String keyWords = selectionArgs[0];
+		   
+		   //add the wildcard * so that when searching "play" , "playboy" will be considered as a match
+		   String keyWords = selectionArgs[0]+"*";
 		    
 		   Log.d(TAG, "fts search:" + keyWords);
 		   
@@ -269,22 +284,22 @@ public class EPGProvider extends ContentProvider
 //		   
 //		   qb.setProjectionMap(searchColumnMap);
 		   
-		   //have to use RawQuery as we need to Union two query
+		   //To Union queries, we have to use RawQuery.
            
 		   String sql_search_event_name =  " SELECT a._id, a.event_name " + 
-                                           " FROM tblEvent_basic a JOIN tblEvent_shortDes b ON a.rowid = b._id " +  
+                                           " FROM tblEvent_basic a JOIN tblEvent_shortDes b ON a.rowid = b.eguid " +  
                                            " WHERE b.event_name MATCH ? " ;
                                            //UNION ALL
 		   String sql_search_short_des =   " SELECT a._id, a.event_name " + 
-                                           " FROM tblEvent_basic a JOIN tblEvent_shortDes b ON a.rowid = b._id " +  
+                                           " FROM tblEvent_basic a JOIN tblEvent_shortDes b ON a.rowid = b.eguid " +  
                                            " WHERE b.short_des MATCH ? ";
-		   									//UNION ALL
+		   //UNION ALL
 		   String sql_search_ext_des =  " SELECT a._id , a.event_name " + 
 		   " FROM tblEvent_basic a " +  
 		   " WHERE a._id IN ( " + 
 		   " Select a._id " + 
 		   " FROM " + 
-		   " tblEvent_basic a JOIN tblEvent_extDes c ON a._id = c._id " + 
+		   " tblEvent_basic a JOIN tblEvent_extDes c ON a._id = c.eguid " + 
 		   " WHERE c.item MATCH ?)";
 		   
 		   
@@ -335,8 +350,17 @@ public class EPGProvider extends ContentProvider
 		         null, 
 		         sortOrder);
 		   
+	    if (c == null) {
+            return null;
+        } else if (!c.moveToFirst()) {
+            c.close();
+            return null;
+        }
 		      //---register to watch a content URI for changes---
 	    c.setNotificationUri(getContext().getContentResolver(), uri);
+	    
+	   
+
 		return c;
 	   
    }

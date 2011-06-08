@@ -9,6 +9,7 @@ import java.util.*; //For Date
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.BasicColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.Clause;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ExtendedColumns;
+import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ExtendedFTSColumns;
 
 //import android.content.ContentValues;
 import android.content.Context;
@@ -93,12 +94,15 @@ public class EventDetail extends Activity {
 		       
 	    	   
 	    	   String extended_description = "No extended description";
-	    	   c2.moveToFirst();
-		       
-	    	   extended_description = c2.getString(c2.getColumnIndexOrThrow(ExtendedColumns.ITEM_DES)) 
-	    	                        + " : " 
-	    	   	    	            + c2.getString(c2.getColumnIndexOrThrow(ExtendedColumns.ITEM_CONTENT));
 	    	   
+	    	   //c2.moveToFirst();
+	    	   
+	    	   if(c2 != null){
+		       
+	    	   extended_description = c2.getString(c2.getColumnIndexOrThrow(ExtendedFTSColumns.ITEM_DES)) 
+	    	                        + " : " 
+	    	   	    	            + c2.getString(c2.getColumnIndexOrThrow(ExtendedFTSColumns.ITEM_CONTENT));
+	    	   }
 	    	   //show the details
 		       
 	    	   ListView detailListView = (ListView)findViewById(R.id.event_detail_list);
