@@ -28,10 +28,11 @@ import android.view.View.OnClickListener;
  * 
  *         Feature list:
  * 
- *         1. Display the Basic Event list - only event name , might add more
- *         filed later in the first page 2. When press will show detail
- *         information 3. Be able to filter/search against the event name 4. Be
- *         able to search by event type
+ *         1. Display the Basic Event list  
+ *         2. When press will show detail information 
+ *         3. Be able to filter/search against the event name ,event short descriptor, event extended descriptors
+ *         4. Be able to search by event type
+ *         5. Be able to filter by event start/end time
  * 
  *         Others:
  * 
