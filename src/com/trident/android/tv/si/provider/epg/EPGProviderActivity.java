@@ -3,6 +3,8 @@ package com.trident.android.tv.si.provider.epg;
 //import android.R.*;
 
 //import android.content.ContentValues;
+import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.BasicColumns;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.database.*;
@@ -28,11 +30,10 @@ import android.view.View.OnClickListener;
  * 
  *         Feature list:
  * 
- *         1. Display the Basic Event list  
- *         2. When press will show detail information 
- *         3. Be able to filter/search against the event name ,event short descriptor, event extended descriptors
- *         4. Be able to search by event type
- *         5. Be able to filter by event start/end time
+ *         1. Display the Basic Event list 2. When press will show detail
+ *         information 3. Be able to filter/search against the event name ,event
+ *         short descriptor, event extended descriptors 4. Be able to search by
+ *         event type 5. Be able to filter by event start/end time
  * 
  *         Others:
  * 
@@ -61,14 +62,12 @@ public class EPGProviderActivity extends ListActivity {
 		Intent intent = getIntent();
 
 		String query = null;
-		
-		int query_type = 0 ;
 
-		
-		//it should not be nulll
+		int query_type = 0;
+
 		if (intent == null) {
 			// no search, display all the events.
-			Log.d(TAG, "started without search query ,will display all the events..");
+			Log.d(TAG,"started without search query ,will display all the events..");
 
 		} else {
 
@@ -79,36 +78,32 @@ public class EPGProviderActivity extends ListActivity {
 
 			} else {
 
-				
 				// intent from movie/news button
 				Bundle bd = getIntent().getExtras();
-				
+
 				String type;
-				if(bd != null){
-				
+				if (bd != null) {
+
 					type = bd.getString("TYPE");
-					
-					if(type.equals("movie") || type.equals("news"))
-					{
-					query_type = 1;
-					
-					Log.d(TAG, "try to get events belong to type " + type);
-					
-					}	
-					
-					
+
+					if (type.equals("movie") || type.equals("news")) {
+						query_type = 1;
+
+						Log.d(TAG, "try to get events belong to type " + type);
+
+					}
+
 				}
-				
 
 			}
 		}
 
 		ListAdapter adapter;
-		if(query_type == 1){
-			
+		if (query_type == 1) {
+
 			adapter = doMySearchByType(query);
 		} else {
-		 adapter = doMySearch(query);
+			adapter = doMySearch(query);
 		}
 		// adapter.setFilterQueryProvider (new CountryFilterProvider ());
 		// adapter.setViewBinder (new FlagViewBinder ());
@@ -148,8 +143,8 @@ public class EPGProviderActivity extends ListActivity {
 
 				// start an search
 				onSearchRequested();
-				//finish() should not be called
-						
+				// finish() should not be called
+
 			}
 		});
 
@@ -179,6 +174,10 @@ public class EPGProviderActivity extends ListActivity {
 	ListAdapter doMySearch(String constraint) {
 
 		Cursor c = null;
+		
+		//get all the events .. 
+		//TODO: we should only get limited events that is enough for display in current
+		//screen.
 		if (constraint == null || constraint == "") {
 
 			c = managedQuery(EPGProvider.CONTENT_URI_EVENTS, null, null, null,
@@ -187,45 +186,48 @@ public class EPGProviderActivity extends ListActivity {
 		} else {
 
 			// USE LIKE
-//			c = managedQuery(EPGProvider.CONTENT_URI_EVENTS, null,
-//					"event_name LIKE " + "\"%" + constraint + "%\"", null, null);
+			// c = managedQuery(EPGProvider.CONTENT_URI_EVENTS, null,
+			// "event_name LIKE " + "\"%" + constraint + "%\"", null, null);
 
 			// use FTS
-			c = managedQuery(EPGProvider.CONTENT_URI_EVENTS_SEARCH, null,
-					null,
-					new String[] {constraint}, 
-					null);
+			c = managedQuery(EPGProvider.CONTENT_URI_EVENTS_SEARCH, null, null,
+					new String[] { constraint }, null);
 
 		}
 
 		// Used to map notes entries from the database to views
 		// show only the event name
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
-				android.R.layout.simple_list_item_1, c,
-				new String[] { "event_name" }, new int[] { android.R.id.text1 });
 
+
+		
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
+				R.layout.list_item, c,
+				new String[] { BasicColumns.SERVICE_ID, BasicColumns.NAME }, 
+				new int[] { R.id.serviceID, R.id.eventName });
+
+		
+		
 		return adapter;
 	}
 
-	
-	ListAdapter doMySearchByType(String query)
-	{
+	ListAdapter doMySearchByType(String query) {
 		Cursor c = null;
 		// TODO: use FTS instead of LIKE
-		c = managedQuery(EPGProvider.CONTENT_URI_EVENTS_MOVIE, null,
-				null, null, null);
+		c = managedQuery(EPGProvider.CONTENT_URI_EVENTS_MOVIE, null, null,
+				null, null);
 
-	
-	// Used to map notes entries from the database to views
-	// show only the event name
-	SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
-			android.R.layout.simple_list_item_1, c,
-			new String[] { "event_name" }, new int[] { android.R.id.text1 });
+		// Used to map notes entries from the database to views
+		// show only the event name
+		//TOFIX.
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
+				R.layout.list_item, c,
+				new String[] { BasicColumns.SERVICE_ID, BasicColumns.NAME }, 
+				new int[] { R.id.serviceID, R.id.eventName });
+		
+		return adapter;
 
-	return adapter;
-		
-		
 	}
+
 	void populate_the_database() {
 		// add 2 EPG events after app starte
 		// ---add an event

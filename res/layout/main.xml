@@ -21,6 +21,8 @@
         android:text="@string/movie"  
         android:layout_alignParentBottom="true" 
         android:layout_alignParentLeft="true"
+        
+
                
         />
         
