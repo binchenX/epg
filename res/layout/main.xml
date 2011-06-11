@@ -34,6 +34,16 @@
                
         />
         
+        <Button 
+    	android:layout_width= "100px"
+    	android:layout_height="wrap_content"
+        android:id="@+id/bt_sports"
+        android:text="@string/sports"  
+        android:layout_alignParentBottom="true" 
+        android:layout_toRightOf="@id/bt_news"
+               
+        />
+        
      <ListView android:layout_width="fill_parent"
         android:layout_height="fill_parent" android:id="@id/android:list"
         android:layout_below="@id/searchbutton"
