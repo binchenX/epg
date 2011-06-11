@@ -107,7 +107,7 @@ public class EventDetail extends Activity {
 		       
 	    	   ListView detailListView = (ListView)findViewById(R.id.event_detail_list);
 		       String []info = new String[] {
-		    		   (new Date(startTime)).toLocaleString(),   //star_time
+		    		   (new Date(startTime * 1000)).toLocaleString(),   //Java need milliseconds, so x 1000
 		    		   Integer.toString(duration/60) + "minutes", //duration
 		    		   short_description,
 		    		   extended_description};
