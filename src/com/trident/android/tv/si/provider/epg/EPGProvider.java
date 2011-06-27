@@ -315,16 +315,18 @@ public class EPGProvider extends ContentProvider
 //		   qb.setProjectionMap(searchColumnMap);
 		   
 		   //To Union queries, we have to use RawQuery.
-           
-		   String sql_search_event_name =  " SELECT a._id, a.event_name " + 
+           //TODO: the projection should be set by the use. Otherwise, program will crash when user try to
+		   //get the column that has not been selected here.
+		   
+		   String sql_search_event_name =  " SELECT a._id, a.event_name ,a.service_id" + 
                                            " FROM tblEvent_basic a JOIN tblEvent_shortDes b ON a.rowid = b.eguid " +  
                                            " WHERE b.event_name MATCH ? " ;
                                            //UNION ALL
-		   String sql_search_short_des =   " SELECT a._id, a.event_name " + 
+		   String sql_search_short_des =   " SELECT a._id, a.event_name ,a.service_id" + 
                                            " FROM tblEvent_basic a JOIN tblEvent_shortDes b ON a.rowid = b.eguid " +  
                                            " WHERE b.short_des MATCH ? ";
 		   //UNION ALL
-		   String sql_search_ext_des =  " SELECT a._id , a.event_name " + 
+		   String sql_search_ext_des =  " SELECT a._id , a.event_name , a.service_id " + 
 		   " FROM tblEvent_basic a " +  
 		   " WHERE a._id IN ( " + 
 		   " Select a._id " + 

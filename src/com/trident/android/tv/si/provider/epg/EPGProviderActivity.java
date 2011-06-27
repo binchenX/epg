@@ -126,8 +126,12 @@ public class EPGProviderActivity extends ListActivity {
 
 				// The detailActivity will use this to query the detail
 				// information.
+				//need to get the TextView within this LinalLayoutView
+				//String event_name = ((TextView)((ViewGroup)view).getChildAt(1)).getText();
+				//The view object is actually a LinealLayout GroupView ,contaning 
+				//several TextViews..
+			    myIntent.putExtra("EVENT_NAME", ((TextView)((ViewGroup)view).getChildAt(1)).getText());
 
-				myIntent.putExtra("EVENT_NAME", ((TextView) view).getText());
 				startActivity(myIntent);
 				finish();
 
@@ -197,18 +201,22 @@ public class EPGProviderActivity extends ListActivity {
 
 		// Used to map notes entries from the database to views
 		// show only the event name
-
-
+		
+		return getAdaptor(c);
+	}
+	
+	SimpleCursorAdapter getAdaptor(Cursor c)
+	{
 		
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
 				R.layout.list_item, c,
 				new String[] { BasicColumns.SERVICE_ID, BasicColumns.NAME }, 
 				new int[] { R.id.serviceID, R.id.eventName });
-
-		
 		
 		return adapter;
+		
 	}
+	
 
 	ListAdapter doMySearchByType(String query) {
 		Cursor c = null;
@@ -216,15 +224,8 @@ public class EPGProviderActivity extends ListActivity {
 		c = managedQuery(EPGProvider.CONTENT_URI_EVENTS_MOVIE, null, null,
 				null, null);
 
-		// Used to map notes entries from the database to views
-		// show only the event name
-		//TOFIX.
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
-				R.layout.list_item, c,
-				new String[] { BasicColumns.SERVICE_ID, BasicColumns.NAME }, 
-				new int[] { R.id.serviceID, R.id.eventName });
-		
-		return adapter;
+
+		return getAdaptor(c);
 
 	}
 
