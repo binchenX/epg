@@ -191,7 +191,7 @@ public class EPGProviderActivity extends ListActivity {
 		if (constraint == null || constraint == "") {
 
 			c = managedQuery(EPGProvider.CONTENT_URI_EVENTS, 
-					new String[] {BasicColumns.SERVICE_ID, BasicColumns.NAME , ContentTypeColumns.LEVEL1}, //selections
+					new String[] {Events.SERVICE_ID, Events.NAME , Events.LEVEL1}, //selections
 					null, 
 					null,
 					null);
@@ -205,7 +205,7 @@ public class EPGProviderActivity extends ListActivity {
 			// use FTS
 			
 			c = managedQuery(EPGProvider.CONTENT_URI_EVENTS_SEARCH, 
-					new String[] {BasicColumns.SERVICE_ID, BasicColumns.NAME}, //selections
+					new String[] {Events.SERVICE_ID, Events.NAME}, //selections
 					null,                            //always be NULL 
 					new String[] { constraint },    //the keywords
 					null);
@@ -234,14 +234,14 @@ public class EPGProviderActivity extends ListActivity {
 		
 			adapter = new SimpleCursorAdapter(this,
 				R.layout.list_item, c,
-				new String[] { BasicColumns.SERVICE_ID, BasicColumns.NAME , ContentTypeColumns.LEVEL1}, 
+				new String[] { Events.SERVICE_ID, Events.NAME , Events.LEVEL1}, 
 				new int[] { R.id.serviceID, R.id.eventName ,R.id.eventType });
 		
 		} else {
 			
 			adapter = new SimpleCursorAdapter(this,
 					R.layout.list_item, c,
-					new String[] { BasicColumns.SERVICE_ID, BasicColumns.NAME }, 
+					new String[] { Events.SERVICE_ID, Events.NAME }, 
 					new int[] { R.id.serviceID, R.id.eventName });
 			
 		}
