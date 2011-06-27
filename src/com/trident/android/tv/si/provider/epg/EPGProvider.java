@@ -319,11 +319,11 @@ public class EPGProvider extends ContentProvider
 		   //get the column that has not been selected here.
 		   
 		   String sql_search_event_name =  " SELECT a._id, a.event_name ,a.service_id" + 
-                                           " FROM tblEvent_basic a JOIN tblEvent_shortDes b ON a.rowid = b.eguid " +  
+                                           " FROM tblEvent_basic a INNER JOIN tblEvent_shortDes b ON a.rowid = b.eguid " +  
                                            " WHERE b.event_name MATCH ? " ;
                                            //UNION ALL
 		   String sql_search_short_des =   " SELECT a._id, a.event_name ,a.service_id" + 
-                                           " FROM tblEvent_basic a JOIN tblEvent_shortDes b ON a.rowid = b.eguid " +  
+                                           " FROM tblEvent_basic a INNER JOIN tblEvent_shortDes b ON a.rowid = b.eguid " +  
                                            " WHERE b.short_des MATCH ? ";
 		   //UNION ALL
 		   String sql_search_ext_des =  " SELECT a._id , a.event_name , a.service_id " + 
