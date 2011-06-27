@@ -40,13 +40,20 @@ public class EPGProvider extends ContentProvider
 {
 	
 	public static final String PROVIDER_NAME = "com.trident.android.tv.si.provider.EPG";
+	
+	/**
+	 * Query all the events.
+	 */
 	public static final Uri CONTENT_URI_EVENTS = Uri.parse("content://" + PROVIDER_NAME + "/events");
 	
 	/**
 	 * 
 	 * 
-	 * 1. We will search following columns in respectively table,
+	 * Query the events by keywords.
+	 * <p>
 	 * 
+	 * 
+	 * 1. We will search following columns in respectively table,
 	 * BasicColumns.NAME , BasicColumns.SHORT_DESCRITPION and ExtendedFTSColumns.item
 	 * 
 	 * <p>
@@ -55,10 +62,59 @@ public class EPGProvider extends ContentProvider
 	 * 
 	 */
 	public static final Uri CONTENT_URI_EVENTS_SEARCH = Uri.parse("content://" + PROVIDER_NAME + "/events/search");
+	
+	/**
+	 * Query extended events by event_guid.
+	 * 
+	 * user case : get the basic event, use the id of that events to get the extended descriptors.
+	 * 
+	 * 
+	 */
 	public static final Uri CONTENT_URI_QUERY_EXTENED = Uri.parse("content://" + PROVIDER_NAME + "/extended/eguid");
+	
+	
+	/**
+	 * 
+	 * Query all the movie events.
+	 * 
+	 */
 	public static final Uri CONTENT_URI_EVENTS_MOVIE = Uri.parse("content://" + PROVIDER_NAME + "/movie");
+	
+	/**
+	 * 
+	 * Query all the news events. The projections are limited to the columns resides in BasicColumns.
+	 */
 	public static final Uri CONTENT_URI_EVENTS_NEWS = Uri.parse("content://" + PROVIDER_NAME + "/news");
-	public static final String TAG = "EPGProvider";
+	
+	/**
+	 * 
+	 * Query all the sports events.The projections are limited to the columns resides in BasicColumns.
+	 */
+	public static final Uri CONTENT_URI_EVENTS_SPORTS = Uri.parse("content://" + PROVIDER_NAME + "/sports");
+	
+	/**
+	 * 
+	 * Query all the music events.The projections are limited to the columns resides in BasicColumns.
+	 */
+	public static final Uri CONTENT_URI_EVENTS_MUSIC = Uri.parse("content://" + PROVIDER_NAME + "/music");
+	
+	/**
+	 * Query all the educations events. The projections are limited to the columns resides in BasicColumns.
+	 * 
+	 */
+	public static final Uri CONTENT_URI_EVENTS_EDUCATION = Uri.parse("content://" + PROVIDER_NAME + "/education");
+	
+	
+	
+	
+	
+	/**
+	 * 
+	 * private THINGS.....................
+	 * 
+	 */
+	
+	private static final String TAG = "EPGProvider";
 	
 	private static final HashMap<String,String> columnMap = buildColumnMap();
 	private static final HashMap<String,String> searchColumnMap =  buildSearchColumnMap();
@@ -79,50 +135,93 @@ public class EPGProvider extends ContentProvider
 	   
 	   
 	 
+	   private static final int QUERY_EVENTS_ALL = 1;
+	   private static final int QUERY_EVENT_ID = 2;
+	   private static final int QUERY_EXTENDED_QUERY_ID = 3;
+	   private static final int QUERY_EXTENDED_QUERY_EGUID = 4;
+	   private static final int QUERY_EVENTS_SEARCH = 7;
 	   
-	   //we don't create database. we use the one created by native code. 
-	   
-//	   private static final String DATABASE_CREATE =
-//	         "CREATE TABLE IF NOT EXISTS " + TABLE_BASIC + 
-//	         " (_id INTEGER PRIMARY KEY AUTOINCREMENT, "+
-//	         " sguid  INT,tsid  INT,onid  INT,service_id  INT," +
-//	         " event_id  INT, start_time  INT,duration  INT,running_status  INT,free_ca_mode  INT," +
-//	         " event_name  VARCHAR(256)," +
-//	         " text VARCHAR(256)," +
-//	         " end_time  INT);";
-	   
-	   private static final int EVENTS_ALL = 1;
-	   private static final int EVENT_ID = 2;
-	   private static final int EXTENDED_QUERY_ID = 3;
-	   private static final int EXTENDED_QUERY_EGUID = 4;
-	   private static final int MOVIE = 5;
-	   private static final int NEWS = 6;
-	   private static final int EVENTS_SEARCH = 7;
+	   //for Query by  genre
+	   private static final int QUERY_MOVIE = 0x1001;
+	   private static final int QUERY_NEWS  = 0x1002;
+	   private static final int QUERY_SPORTS  = 0x1003;
+	   private static final int QUERY_MUSIC  = 0x1004;
+	   private static final int QUERY_EDUCATION  = 0x1005;
 	   
 	   
 	   
 	   
 	   //For EventType
+	   //Different standards are using different classification system. That means we should use different value for
+	   //when searching in the database. However, for user, that will always use string to search ,e.g: CONTENT_URI_EVENTS_MOVIE 
+	   //ARIB : STD-B10 Annex H : Genre designation in content descriptor
+	   //DVB  : DVB SI Spec section 6.2.9 Content Descriptor
 	   
-	   private static final int TYPE_MOVIE = 1;
-	   private static final int TYPE_NEWS = 2;
+	   private static final int TYPE_MOVIE = 0x01;
+	   private static final int TYPE_NEWS = 0x02;
+	   private static final int TYPE_SPORTS = 0x02;
+	   private static final int TYPE_MUSIC = 0x02;
+	   private static final int TYPE_EDUCAITION = 0x02;
+
+	   private static final HashMap<Integer,String> dvbEventTypeMap = buildDvbEventTypeMap();
+	   
+	   private static HashMap<Integer,String> buildDvbEventTypeMap() {
+	          HashMap<Integer,String> map = new HashMap<Integer,String>();
+	          //the value should be in decimal , that means "0x01" is not correct
+	          map.put(new Integer(QUERY_MOVIE),     "1");
+	          map.put(new Integer(QUERY_NEWS),      "2");
+	          map.put(new Integer(QUERY_SPORTS),    "4");
+	          map.put(new Integer(QUERY_MUSIC),     "6");
+	          map.put(new Integer(QUERY_EDUCATION), "0");
+	          
+	          
+	          
+	          return map;
+	          
+	   }
+	   
+	   private static HashMap<Integer,String> buildARIBEventTypeMap() {
+	          HashMap<Integer,String> map = new HashMap<Integer,String>();
+	          
+	          map.put(new Integer(QUERY_MOVIE),     "6");
+	          map.put(new Integer(QUERY_NEWS),      "0");
+	          map.put(new Integer(QUERY_SPORTS),    "1");
+	          map.put(new Integer(QUERY_MUSIC),     "4");
+	          map.put(new Integer(QUERY_EDUCATION), "A");
+	          return map;
+	          
+	   }
+	   
+	   
+	   
+	   String getLevelValueAccordingToStandards(int type, String standards)
+	   {
+		   
+		   //default to DVB at this moment
+		   
+		   return dvbEventTypeMap.get(new Integer(type));
+		   
+	   }
 	         		
 	   
 	   private static final UriMatcher uriMatcher;
 	      static{
 	         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-	         uriMatcher.addURI(PROVIDER_NAME, "events", EVENTS_ALL);
-	         uriMatcher.addURI(PROVIDER_NAME, "events/search", EVENTS_SEARCH);
-	         uriMatcher.addURI(PROVIDER_NAME, "events/#", EVENT_ID);   
+	         uriMatcher.addURI(PROVIDER_NAME, "events", QUERY_EVENTS_ALL);
+	         uriMatcher.addURI(PROVIDER_NAME, "events/search", QUERY_EVENTS_SEARCH);
+	         uriMatcher.addURI(PROVIDER_NAME, "events/#", QUERY_EVENT_ID);   
 	         
 	         //uriMatcher.addURI(PROVIDER_NAME, "extended", EVENTS);
 	         //extended/eguid/3 , query the extended information whose eguid = 3
 	         //extended/id/3 , query the extended information whose _id = 3
-	         uriMatcher.addURI(PROVIDER_NAME, "extended/id/#", EXTENDED_QUERY_ID);
-	         uriMatcher.addURI(PROVIDER_NAME, "extended/eguid/#", EXTENDED_QUERY_EGUID);  
+	         uriMatcher.addURI(PROVIDER_NAME, "extended/id/#", QUERY_EXTENDED_QUERY_ID);
+	         uriMatcher.addURI(PROVIDER_NAME, "extended/eguid/#", QUERY_EXTENDED_QUERY_EGUID);  
 	         
-	         uriMatcher.addURI(PROVIDER_NAME, "movie", MOVIE);   
-	         uriMatcher.addURI(PROVIDER_NAME, "news", NEWS);   
+	         uriMatcher.addURI(PROVIDER_NAME, "movie",  QUERY_MOVIE);   
+	         uriMatcher.addURI(PROVIDER_NAME, "news",   QUERY_NEWS);  
+	         uriMatcher.addURI(PROVIDER_NAME, "sports", QUERY_SPORTS);  
+	         uriMatcher.addURI(PROVIDER_NAME, "music",  QUERY_MUSIC);  
+	         uriMatcher.addURI(PROVIDER_NAME, "education", QUERY_EDUCATION);  
 	      }
 
 	     private static HashMap<String,String> buildColumnMap() {
@@ -190,10 +289,10 @@ public class EPGProvider extends ContentProvider
 	   
 	   switch (uriMatcher.match(uri)){
        //---get all books---
-       case EVENTS_ALL:
+       case QUERY_EVENTS_ALL:
           return "vnd.android.cursor.dir/vnd.trident.tv.si.events ";
        //---get a particular book---
-       case EVENT_ID:                
+       case QUERY_EVENT_ID:                
           return "vnd.android.cursor.item/vnd.trident.tv.si.events ";
        default:
           throw new IllegalArgumentException("Unsupported URI: " + uri);        
@@ -243,11 +342,11 @@ public class EPGProvider extends ContentProvider
 	   SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 	   Cursor c = null;
 	   
-	   
+	   int query_type = uriMatcher.match(uri);
 	   //1.construct the sqlbuild
-	   switch(uriMatcher.match(uri)) {
+	   switch(query_type) {
 	   
-	   case EVENTS_ALL:
+	   case QUERY_EVENTS_ALL:
 	     
 	      qb.setTables(Table.BASIC);	       
 	       
@@ -256,7 +355,7 @@ public class EPGProvider extends ContentProvider
 	      break;
 	    
 	      
-	   case EXTENDED_QUERY_EGUID:
+	   case QUERY_EXTENDED_QUERY_EGUID:
 
 			qb.setTables(Table.EXTENDED_FTS);
 			if (sortOrder == null || sortOrder == "") {
@@ -300,7 +399,7 @@ public class EPGProvider extends ContentProvider
 //			return c;
 			break;
             
-	   case EVENTS_SEARCH:
+	   case QUERY_EVENTS_SEARCH:
 		 
 		   if (selectionArgs == null) {
                throw new IllegalArgumentException(
@@ -366,24 +465,21 @@ public class EPGProvider extends ContentProvider
 		   
 		   //break;
             
-	   case MOVIE:
+	   case QUERY_MOVIE:   //fall through
+	   case QUERY_NEWS:    //fall through
+	   case QUERY_SPORTS:  //fall through
+	   case QUERY_MUSIC:   //fall through
+	   case QUERY_EDUCATION:  
 		   
 		   qb.setTables(Table.BASIC);
-		   //suppose 1 is MOVIE
-		   selectionArgs = insertSelectionArg(selectionArgs, String.valueOf(TYPE_MOVIE));
+		   String level = getLevelValueAccordingToStandards(query_type, "DVB");
+		   Log.d(TAG, "trying to search type with value " + level);
+		   selectionArgs = insertSelectionArg(selectionArgs, level);
 		   qb.appendWhere(Clause.SEARCH_BY_TYPE);
 		   
 		   break;
 		   
-	   case NEWS:
-		   
-		   qb.setTables(Table.BASIC);
-		   //suppose 2 is NEWS
-		   selectionArgs = insertSelectionArg(selectionArgs, String.valueOf(TYPE_NEWS));
-		   qb.appendWhere(Clause.SEARCH_BY_TYPE);
-		   
-		   break;
-	   
+	  
 	   default:
 	   
 		   throw new IllegalArgumentException("unknown Content Uri");
