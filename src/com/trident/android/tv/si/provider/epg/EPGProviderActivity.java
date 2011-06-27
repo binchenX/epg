@@ -130,8 +130,13 @@ public class EPGProviderActivity extends ListActivity {
 				//String event_name = ((TextView)((ViewGroup)view).getChildAt(1)).getText();
 				//The view object is actually a LinealLayout GroupView ,contaning 
 				//several TextViews..
-			    myIntent.putExtra("EVENT_NAME", ((TextView)((ViewGroup)view).getChildAt(1)).getText());
-
+				
+				//TODO:This is highly coupled with the View...
+				//get the view by name???? instead of use magic index number 
+				TextView nameView =  (TextView)((ViewGroup)view).getChildAt(2);
+				
+			    myIntent.putExtra("EVENT_NAME", nameView.getText());
+				
 				startActivity(myIntent);
 				finish();
 
@@ -184,7 +189,10 @@ public class EPGProviderActivity extends ListActivity {
 		//screen.
 		if (constraint == null || constraint == "") {
 
-			c = managedQuery(EPGProvider.CONTENT_URI_EVENTS, null, null, null,
+			c = managedQuery(EPGProvider.CONTENT_URI_EVENTS, 
+					new String[] {BasicColumns.SERVICE_ID, BasicColumns.NAME}, //selections
+					null, 
+					null,
 					null);
 
 		} else {

@@ -348,7 +348,9 @@ public class EPGProvider extends ContentProvider
 	   
 	   case QUERY_EVENTS_ALL:
 	     
-	      qb.setTables(Table.BASIC);	       
+	      qb.setTables(Table.BASIC);	      
+	      //should always select _id, otherwise, cursor won't working complaining : column '_id' does not exist
+	      projection = prePendProjectionArg(projection,"_id");
 	       
 	      if (sortOrder==null || sortOrder=="")
 	         sortOrder = BasicColumns._ID;
@@ -555,6 +557,20 @@ public class EPGProvider extends ContentProvider
        newProjection[length] = arg;
        return newProjection;
    }
+   
+   
+   private String[] prePendProjectionArg(String[] projection, String arg) {
+       if (projection == null) {
+           return null;
+       }
+       final int length = projection.length;
+       String[] newProjection = new String[length + 1];
+       newProjection[0] = arg;
+       System.arraycopy(projection, 0, newProjection, 1, length);
+       
+       return newProjection;
+   }
+   
    
    
    /**
