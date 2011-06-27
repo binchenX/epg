@@ -36,6 +36,7 @@ import android.util.Log;
 			   public static final String EXTENDED = "tblEvent_extended";
 			   public static final String EXTENDED_FTS = "tblEvent_extDes";
 			   public static final String GROUP = "tblEvent_group";
+			   public static final String TYPE = "tblEvent_content";
 			   
 		   }
 		   
@@ -93,6 +94,13 @@ import android.util.Log;
 			   public static final String SHORT_DESCRIPTION = "short_des";
 			   
 		   }
+        
+        public interface ContentTypeColumns{
+        	public static final String _ID = "_id";
+        	public static final String LEVEL1 = "level1";
+        	public static final String LEVEL2 = "level2";
+        	
+        }
  
 		   
 		   public interface Clause{

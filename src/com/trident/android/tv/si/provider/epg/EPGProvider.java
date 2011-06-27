@@ -23,6 +23,7 @@ import android.util.Log;
 
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.BasicColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.Clause;
+import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ContentTypeColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ExtendedColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ExtendedFTSColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ShortDesFTSColumns;
@@ -333,6 +334,35 @@ public class EPGProvider extends ContentProvider
 	      return (epgDB == null)? false:true;
    }
 
+   
+   /**
+    * Test if any of the columns appear in the given projection.
+    */
+   public boolean isInProjection(String[] projection, String... columns) {
+       if (projection == null) {
+           return true;
+       }
+
+       // Optimized for a single-column test
+       if (columns.length == 1) {
+           String column = columns[0];
+           for (String test : projection) {
+               if (column.equals(test)) {
+                   return true;
+               }
+           }
+       } else {
+           for (String test : projection) {
+               for (String column : columns) {
+                   if (column.equals(test)) {
+                       return true;
+                   }
+               }
+           }
+       }
+       return false;
+   }
+   
    @Override
    public Cursor query(Uri uri, String[] projection, String selection,
          String[] selectionArgs, String sortOrder) {
@@ -347,13 +377,28 @@ public class EPGProvider extends ContentProvider
 	   switch(query_type) {
 	   
 	   case QUERY_EVENTS_ALL:
-	     
-	      qb.setTables(Table.BASIC);	      
+		   
+		  //if it the project contains columns on ContentTypeColumn, need JOIN
+		  //otherwise,simply setTable to Table.BASIC
+		   
+		  if(isInProjection(projection, 
+				  ContentTypeColumns.LEVEL1,
+				  ContentTypeColumns.LEVEL2))
+		  {
+			  qb.setTables(Table.BASIC + " LEFT OUTER JOIN " + Table.TYPE + 
+			      " ON tblEvent_basic._id = tblEvent_content.eguid ");
+			 
+		  } else {
+			  qb.setTables(Table.BASIC); 
+		  }
+		  
+	     	      
 	      //should always select _id, otherwise, cursor won't working complaining : column '_id' does not exist
-	      projection = prePendProjectionArg(projection,"_id");
+	      //_id will become ambiguous when join with tblEvent_content
+		  projection = prePendProjectionArg(projection,"tblEvent_basic._id");
 	       
 	      if (sortOrder==null || sortOrder=="")
-	         sortOrder = BasicColumns._ID;
+	         sortOrder = "tblEvent_basic._id";//BasicColumns._ID;
 	      break;
 	    
 	      

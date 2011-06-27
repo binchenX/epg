@@ -4,6 +4,7 @@ package com.trident.android.tv.si.provider.epg;
 
 //import android.content.ContentValues;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.BasicColumns;
+import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ContentTypeColumns;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -190,7 +191,7 @@ public class EPGProviderActivity extends ListActivity {
 		if (constraint == null || constraint == "") {
 
 			c = managedQuery(EPGProvider.CONTENT_URI_EVENTS, 
-					new String[] {BasicColumns.SERVICE_ID, BasicColumns.NAME}, //selections
+					new String[] {BasicColumns.SERVICE_ID, BasicColumns.NAME , ContentTypeColumns.LEVEL1}, //selections
 					null, 
 					null,
 					null);
@@ -224,8 +225,8 @@ public class EPGProviderActivity extends ListActivity {
 		
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
 				R.layout.list_item, c,
-				new String[] { BasicColumns.SERVICE_ID, BasicColumns.NAME }, 
-				new int[] { R.id.serviceID, R.id.eventName });
+				new String[] { BasicColumns.SERVICE_ID, BasicColumns.NAME , ContentTypeColumns.LEVEL1}, 
+				new int[] { R.id.serviceID, R.id.eventName ,R.id.eventType });
 		
 		return adapter;
 		
