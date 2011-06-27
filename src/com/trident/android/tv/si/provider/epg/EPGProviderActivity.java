@@ -203,6 +203,7 @@ public class EPGProviderActivity extends ListActivity {
 			// "event_name LIKE " + "\"%" + constraint + "%\"", null, null);
 
 			// use FTS
+			
 			c = managedQuery(EPGProvider.CONTENT_URI_EVENTS_SEARCH, 
 					new String[] {BasicColumns.SERVICE_ID, BasicColumns.NAME}, //selections
 					null,                            //always be NULL 
@@ -223,10 +224,27 @@ public class EPGProviderActivity extends ListActivity {
 		//The Cursor should include all the entries specified in "from"
 		//TODO: add check??
 		
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
+		SimpleCursorAdapter adapter = null;
+		
+		//if the c did not contains "LEVEL1"
+		//When using FTS, the returned Cursor won't contain level column
+		
+		if(c.getColumnIndex(ContentTypeColumns.LEVEL1) != -1)
+		{
+		
+			adapter = new SimpleCursorAdapter(this,
 				R.layout.list_item, c,
 				new String[] { BasicColumns.SERVICE_ID, BasicColumns.NAME , ContentTypeColumns.LEVEL1}, 
 				new int[] { R.id.serviceID, R.id.eventName ,R.id.eventType });
+		
+		} else {
+			
+			adapter = new SimpleCursorAdapter(this,
+					R.layout.list_item, c,
+					new String[] { BasicColumns.SERVICE_ID, BasicColumns.NAME }, 
+					new int[] { R.id.serviceID, R.id.eventName });
+			
+		}
 		
 		return adapter;
 		
