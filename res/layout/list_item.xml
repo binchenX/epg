@@ -7,17 +7,19 @@
 
 
 	<TextView 
-	android:layout_width="100px" 
+	android:layout_width="300px" 
 	android:layout_height="wrap_content"
+	android:layout_margin="2px"
 	android:id="@+id/serviceID" 
 	/>
 
 
 
 	<TextView 
-	android:layout_width="100px" 
+	android:layout_width="300px" 
 	android:layout_height="wrap_content"
-     android:id="@+id/eventName" 
+	android:layout_margin="2px"
+    android:id="@+id/eventName" 
 	/>
 
 
