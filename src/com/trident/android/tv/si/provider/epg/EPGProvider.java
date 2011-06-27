@@ -331,7 +331,11 @@ public class EPGProvider extends ContentProvider
            //TODO: the projection should be set by the use. Otherwise, program will crash when user try to
 		   //get the column that has not been selected here.
 		   
-		   String search_projections = "a._id, a.event_name ,a.service_id";
+		   //The projections are limited to be the rows in Table.Basic
+		   
+		   //Check the comments of CONTENT_URI_EVENTS_SEARCH.
+		   
+		   String search_projections = join(projection, " , ");
 		   
 		   String sql_search_event_name =  " SELECT " +  search_projections + 
                                            " FROM tblEvent_basic a INNER JOIN tblEvent_shortDes b ON a.rowid = b.eguid " +  
@@ -455,5 +459,34 @@ public class EPGProvider extends ContentProvider
        newProjection[length] = arg;
        return newProjection;
    }
+   
+   
+   /**
+    * 
+    * It is equivalent to 
+    * s.unshift("_id").map{|s| "a."+s}.join(sep)
+    * 
+    * a is the alias used for Table.BASIC in following sql statement
+    * 
+    * @param s
+    * @param sep
+    * @return
+    */
+   
+   private String join(String[] s, String sep)
+   {
+     int k=s.length;
+     if (k==0) {
+       return null;
+     }
+     StringBuilder out=new StringBuilder();
+     out.append("a._id , ");
+     out.append("a."+s[0]);
+     for (int x=1;x<k;++x){
+       out.append(sep).append("a."+s[x]);
+     }
+     return out.toString();
+   }
+
 }
 
