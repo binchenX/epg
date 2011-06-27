@@ -41,6 +41,19 @@ public class EPGProvider extends ContentProvider
 	
 	public static final String PROVIDER_NAME = "com.trident.android.tv.si.provider.EPG";
 	public static final Uri CONTENT_URI_EVENTS = Uri.parse("content://" + PROVIDER_NAME + "/events");
+	
+	/**
+	 * 
+	 * 
+	 * 1. We will search following columns in respectively table,
+	 * 
+	 * BasicColumns.NAME , BasicColumns.SHORT_DESCRITPION and ExtendedFTSColumns.item
+	 * 
+	 * <p>
+	 * 2. It is important to note that CONTENT_URI_EVENTS_SEARCH will only return projections exsits in BasicColumns ;
+	 * to get the Columns in ExtendedFTSColumns, the user should issue another query using CONTENT_URI_QUERY_EXTENED
+	 * 
+	 */
 	public static final Uri CONTENT_URI_EVENTS_SEARCH = Uri.parse("content://" + PROVIDER_NAME + "/events/search");
 	public static final Uri CONTENT_URI_QUERY_EXTENED = Uri.parse("content://" + PROVIDER_NAME + "/extended/eguid");
 	public static final Uri CONTENT_URI_EVENTS_MOVIE = Uri.parse("content://" + PROVIDER_NAME + "/movie");
@@ -318,15 +331,17 @@ public class EPGProvider extends ContentProvider
            //TODO: the projection should be set by the use. Otherwise, program will crash when user try to
 		   //get the column that has not been selected here.
 		   
-		   String sql_search_event_name =  " SELECT a._id, a.event_name ,a.service_id" + 
+		   String search_projections = "a._id, a.event_name ,a.service_id";
+		   
+		   String sql_search_event_name =  " SELECT " +  search_projections + 
                                            " FROM tblEvent_basic a INNER JOIN tblEvent_shortDes b ON a.rowid = b.eguid " +  
                                            " WHERE b.event_name MATCH ? " ;
                                            //UNION ALL
-		   String sql_search_short_des =   " SELECT a._id, a.event_name ,a.service_id" + 
+		   String sql_search_short_des =   " SELECT " +  search_projections + 
                                            " FROM tblEvent_basic a INNER JOIN tblEvent_shortDes b ON a.rowid = b.eguid " +  
                                            " WHERE b.short_des MATCH ? ";
 		   //UNION ALL
-		   String sql_search_ext_des =  " SELECT a._id , a.event_name , a.service_id " + 
+		   String sql_search_ext_des =  " SELECT " +  search_projections + 
 		   " FROM tblEvent_basic a " +  
 		   " WHERE a._id IN ( " + 
 		   " Select a._id " + 
