@@ -52,63 +52,65 @@ import android.view.View.OnClickListener;
 public class EPGProviderActivity extends ListActivity {
 
 	private static final String TAG = "EPGProviderActivity";
-	
-	 private TextView mStarTimeTextView;
-	 private TextView mEndTimeTextView;
-	 //private Button mPickDate;
-	 private int mStartYear;
-	 private int mMonth;
-	 private int mDay;
-	 
-	 
-	 private int mEndYear;
-	 private int mEndMonth;
-	 private int mEndDay;
 
-	 static final int DATE_DIALOG_ID = 0;
-	 static final int END_DATE_DIALOG_ID = 1;
-	 
-	 private DatePickerDialog.OnDateSetListener mDateSetListener =
-         new DatePickerDialog.OnDateSetListener() {
+	private TextView mStarTimeTextView;
+	private TextView mEndTimeTextView;
+	// private Button mPickDate;
+	private int mStartYear;
+	private int mStartMonth;
+	private int mStartDay;
 
-             public void onDateSet(DatePicker view, int year, 
-                                   int monthOfYear, int dayOfMonth) {
-                 mStartYear = year;
-                 mMonth = monthOfYear;
-                 mDay = dayOfMonth;
-                 updateDisplay();
-             }
-         };
-         
-         private DatePickerDialog.OnDateSetListener mEndDateSetListener =
-             new DatePickerDialog.OnDateSetListener() {
+	private int mEndYear;
+	private int mEndMonth;
+	private int mEndDay;
 
-                 public void onDateSet(DatePicker view, int year, 
-                                       int monthOfYear, int dayOfMonth) {
-                     mEndYear = year;
-                     mEndMonth = monthOfYear;
-                     mEndDay = dayOfMonth;
-                     updateDisplay();
-                 }
-             };
+	static final int DATE_DIALOG_ID = 0;
+	static final int END_DATE_DIALOG_ID = 1;
 
-         
-        @Override
-         protected Dialog onCreateDialog(int id) {
-             switch (id) {
-             case DATE_DIALOG_ID:
-                 return new DatePickerDialog(this,
-                             mDateSetListener,
-                             mStartYear, mMonth, mDay);
-             case END_DATE_DIALOG_ID:
-                 return new DatePickerDialog(this,
-                             mEndDateSetListener,
-                             mEndYear, mEndMonth, mEndDay);
-             }
-             return null;
-         }
-         
-         
+	private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+
+		public void onDateSet(DatePicker view, int year, int monthOfYear,
+				int dayOfMonth) {
+			mStartYear = year;
+			mStartMonth = monthOfYear;
+			mStartDay = dayOfMonth;
+			updateTimeViewDisplay();
+			filterTheEventByTime();
+		}
+	};
+
+	private DatePickerDialog.OnDateSetListener mEndDateSetListener = new DatePickerDialog.OnDateSetListener() {
+
+		public void onDateSet(DatePicker view, int year, int monthOfYear,
+				int dayOfMonth) {
+			mEndYear = year;
+			mEndMonth = monthOfYear;
+			mEndDay = dayOfMonth;
+			updateTimeViewDisplay();
+		}
+	};
+
+	// use current startTime and endTime to filter the result
+	void filterTheEventByTime() {
+		
+		
+		
+
+	}
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+		case DATE_DIALOG_ID:
+			return new DatePickerDialog(this, mDateSetListener, mStartYear,
+					mStartMonth, mStartDay);
+		case END_DATE_DIALOG_ID:
+			return new DatePickerDialog(this, mEndDateSetListener, mEndYear,
+					mEndMonth, mEndDay);
+		}
+		return null;
+	}
+
 	/** Called when the activity is first created. */
 
 	@Override
@@ -119,98 +121,49 @@ public class EPGProviderActivity extends ListActivity {
 		Log.d(TAG, "onCreate");
 
 		
-		 // capture our View elements
-        mStarTimeTextView = (TextView) findViewById(R.id.startDateDisplay);
-        mEndTimeTextView = (TextView) findViewById(R.id.endDateDisplay);
-        //mPickDate = (Button) findViewById(R.id.pickDateButton);
-
-        // add a click listener to the button
-        mStarTimeTextView.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                showDialog(DATE_DIALOG_ID);
-            }
-        });
-        
-        // add a click listener to the button
-        mEndTimeTextView.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                showDialog(END_DATE_DIALOG_ID);
-            }
-        });
-
-        // get the current date
-        final Calendar c = Calendar.getInstance();
-        mStartYear = c.get(Calendar.YEAR);
-        mMonth = c.get(Calendar.MONTH);
-        mDay = c.get(Calendar.DAY_OF_MONTH);
-        
-        
-        mEndYear = c.get(Calendar.YEAR);
-        mEndMonth = c.get(Calendar.MONTH);
-        mEndDay = c.get(Calendar.DAY_OF_MONTH) + 1;
-
-        // display the current date (this method is below)
-        updateDisplay();
-
-        
-        
+		mStarTimeTextView = (TextView) findViewById(R.id.startDateDisplay);
+		mEndTimeTextView = (TextView) findViewById(R.id.endDateDisplay);
 		
 		
+		mStarTimeTextView.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				showDialog(DATE_DIALOG_ID);
+			}
+		});
+
+
+		mEndTimeTextView.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				showDialog(END_DATE_DIALOG_ID);
+			}
+		});
+
+		// get the current date and init the start_time and end_time
 		
+		final Calendar c = Calendar.getInstance();
+		mStartYear = c.get(Calendar.YEAR);
+		mStartMonth = c.get(Calendar.MONTH);
+		mStartDay = c.get(Calendar.DAY_OF_MONTH);
+
+		mEndYear = c.get(Calendar.YEAR);
+		mEndMonth = c.get(Calendar.MONTH);
+		mEndDay = c.get(Calendar.DAY_OF_MONTH) + 1;
+
+		// display the current date, which will be used as the search constraint
+		updateTimeViewDisplay();
+
 		// This is activity could also started by an intent from the search
 		// dialog..
-		Intent intent = getIntent();
-
-		String query = null;
-
-		int query_type = 0;
-
-		if (intent == null) {
-			// no search, display all the events.
-			Log.d(TAG,"started without search query ,will display all the events..");
-
-		} else {
-
-			// intent from Search bar
-			if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-				query = intent.getStringExtra(SearchManager.QUERY);
-				Log.d(TAG, "Will search .." + query);
-
-			} else {
-
-				// intent from movie/news button
-				Bundle bd = getIntent().getExtras();
-
-				String type;
-				if (bd != null) {
-
-					type = bd.getString("TYPE");
-
-					if (type.equals("movie") || type.equals("news")) {
-						query_type = 1;
-
-						Log.d(TAG, "try to get events belong to type " + type);
-
-					}
-
-				}
-
-			}
-		}
+		String[] query = getQueryType();
 
 		ListAdapter adapter;
-		if (query_type == 1) {
+		if (query[0].equals("3")) {
 
-			adapter = doMySearchByType(query);
+			adapter = doMySearchByType(query[1]);
 		} else {
-			adapter = doMySearch(query);
+			adapter = doMySearch(query[1]);
 		}
-		// adapter.setFilterQueryProvider (new CountryFilterProvider ());
-		// adapter.setViewBinder (new FlagViewBinder ());
-
-		//
-		// http://stackoverflow.com/questions/4571401/trying-to-filter-a-listview-with-runqueryonbackgroundthread-but-nothing-happens
-
+	
 		setListAdapter(adapter);
 
 		ListView lv = getListView(); // == findViewById(android.R.id.list)
@@ -226,18 +179,22 @@ public class EPGProviderActivity extends ListActivity {
 
 				// The detailActivity will use this to query the detail
 				// information.
-				//need to get the TextView within this LinalLayoutView
-				//String event_name = ((TextView)((ViewGroup)view).getChildAt(1)).getText();
-				//The view object is actually a LinealLayout GroupView ,contaning 
-				//several TextViews..
-				
-				//TODO:This is highly coupled with the View...
-				//get the view by name???? instead of use magic index number 
-				//TextView nameView =  (TextView)((ViewGroup)view).getChildAt(2);
-				TextView nameView =  (TextView)view.findViewById(R.id.eventName);
-				
-			    myIntent.putExtra("EVENT_NAME", nameView.getText());
-				
+				// need to get the TextView within this LinalLayoutView
+				// String event_name =
+				// ((TextView)((ViewGroup)view).getChildAt(1)).getText();
+				// The view object is actually a LinealLayout GroupView
+				// ,contaning
+				// several TextViews..
+
+				// TODO:This is highly coupled with the View...
+				// get the view by name???? instead of use magic index number
+				// TextView nameView =
+				// (TextView)((ViewGroup)view).getChildAt(2);
+				TextView nameView = (TextView) view
+						.findViewById(R.id.eventName);
+
+				myIntent.putExtra("EVENT_NAME", nameView.getText());
+
 				startActivity(myIntent);
 				finish();
 
@@ -280,20 +237,88 @@ public class EPGProviderActivity extends ListActivity {
 		});
 
 	}
+	
+	
+	/**
+	 * 
+	 * case 1. Enter the main page ,displaying all the events
+	 * case 2. User press "Search"
+	 * case 3. User press "Movie", "Sports"
+	 * case 4. User change the star_time and/or end_time
+	 * @return
+	 */
+	
+	private String[] getQueryType()
+	{
+		Intent intent = getIntent();
+
+		String query = null;
+
+		int query_type = 0;
+
+		
+		//case 1:
+		if (intent == null) {
+			
+			Log.d(TAG, "started without search query ,will display all the events..");
+
+			return new String[] {"1", ""};
+
+		} else {
+
+			// case 2 :intent from Search bar
+			if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+				query = intent.getStringExtra(SearchManager.QUERY);
+				Log.d(TAG, "Will search .." + query);
+				
+				return new String[] {"2", query};
+
+			} else {
+
+				//case 3:intent from movie/news button
+				Bundle bd = getIntent().getExtras();
+
+				String type;
+				if (bd != null) {
+
+					type = bd.getString("TYPE");
+
+					if (type.equals("movie") || type.equals("news")) {
+						
+
+						Log.d(TAG, "try to get events belong to type " + type);
+						query_type = 3;
+						return new String[] {"3", type};
+					}
+
+				}
+
+			}
+		}
+		
+	
+		//default to case 1:
+		return new String[] {"1", ""};
+
+		
+	}
+	
 
 	ListAdapter doMySearch(String constraint) {
 
 		Cursor c = null;
-		
-		//get all the events .. 
-		//TODO: we should only get limited events that is enough for display in current
-		//screen.
+
+		// get all the events ..
+		// TODO: we should only get limited events that is enough for display in
+		// current
+		// screen.
 		if (constraint == null || constraint == "") {
 
-			c = managedQuery(EPGProvider.CONTENT_URI_EVENTS, 
-					new String[] {Events.SERVICE_ID, Events.NAME , Events.LEVEL1 , Events.START_TIME}, //selections
-					null, 
+			c = managedQuery(EPGProvider.CONTENT_URI_EVENTS, new String[] {
+					Events.SERVICE_ID, Events.NAME, Events.LEVEL1,
+					Events.START_TIME }, // selections
 					null,
+					null, 
 					null);
 
 		} else {
@@ -303,53 +328,50 @@ public class EPGProviderActivity extends ListActivity {
 			// "event_name LIKE " + "\"%" + constraint + "%\"", null, null);
 
 			// use FTS
-			
-			c = managedQuery(EPGProvider.CONTENT_URI_EVENTS_SEARCH, 
-					new String[] {Events.SERVICE_ID, Events.NAME}, //selections
-					null,                            //always be NULL 
-					new String[] { constraint },    //the keywords
+
+			c = managedQuery(EPGProvider.CONTENT_URI_EVENTS_SEARCH,
+					new String[] { Events.SERVICE_ID, Events.NAME }, // selections
+					null, // always be NULL
+					new String[] { constraint }, // the keywords
 					null);
 
 		}
 
 		// Used to map notes entries from the database to views
 		// show only the event name
-		
+
 		return getAdaptor(c);
 	}
-	
-	SimpleCursorAdapter getAdaptor(Cursor c)
-	{
-		
-		//The Cursor should include all the entries specified in "from"
-		//TODO: add check??
-		
+
+	SimpleCursorAdapter getAdaptor(Cursor c) {
+
+		// The Cursor should include all the entries specified in "from"
+		// TODO: add check??
+
 		SimpleCursorAdapter adapter = null;
-		
-		//if the c did not contains "LEVEL1"
-		//When using FTS, the returned Cursor won't contain level column
-		
-		if(c.getColumnIndex(ContentTypeColumns.LEVEL1) != -1)
-		{
-		
-			adapter = new EventCursorAdaptor(this,
-				R.layout.list_item, c,
-				new String[] { Events.SERVICE_ID, Events.NAME , Events.LEVEL1 ,Events.START_TIME}, 
-				new int[] { R.id.serviceID, R.id.eventName ,R.id.eventType ,R.id.startTime});
-		
+
+		// if the c did not contains "LEVEL1"
+		// When using FTS, the returned Cursor won't contain level column
+
+		if (c.getColumnIndex(ContentTypeColumns.LEVEL1) != -1) {
+
+			adapter = new EventCursorAdaptor(this, R.layout.list_item, c,
+					new String[] { Events.SERVICE_ID, Events.NAME,
+							Events.LEVEL1, Events.START_TIME }, new int[] {
+							R.id.serviceID, R.id.eventName, R.id.eventType,
+							R.id.startTime });
+
 		} else {
-			
-			adapter = new EventCursorAdaptor(this,
-					R.layout.list_item, c,
-					new String[] { Events.SERVICE_ID, Events.NAME }, 
-					new int[] { R.id.serviceID, R.id.eventName });
-			
+
+			adapter = new EventCursorAdaptor(this, R.layout.list_item, c,
+					new String[] { Events.SERVICE_ID, Events.NAME }, new int[] {
+							R.id.serviceID, R.id.eventName });
+
 		}
-		
+
 		return adapter;
-		
+
 	}
-	
 
 	ListAdapter doMySearchByType(String query) {
 		Cursor c = null;
@@ -357,28 +379,22 @@ public class EPGProviderActivity extends ListActivity {
 		c = managedQuery(EPGProvider.CONTENT_URI_EVENTS_MOVIE, null, null,
 				null, null);
 
-
 		return getAdaptor(c);
 
 	}
-	
-	 // updates the date in the TextView
-    private void updateDisplay() {
-        mStarTimeTextView.setText(
-            new StringBuilder()
-                    // Month is 0 based so add 1
-                    .append(mMonth + 1).append("-")
-                    .append(mDay).append("-")
-                    .append(mStartYear).append(" "));
-        
-        mEndTimeTextView.setText(
-                new StringBuilder()
-                        // Month is 0 based so add 1
-                        .append(mEndMonth + 1).append("-")
-                        .append(mEndDay).append("-")
-                        .append(mEndYear).append(" "));
-    }
-    
+
+	// updates the date in the TextView
+	private void updateTimeViewDisplay() {
+		mStarTimeTextView.setText(new StringBuilder()
+		// Month is 0 based so add 1
+				.append(mStartMonth + 1).append("-").append(mStartDay).append(
+						"-").append(mStartYear).append(" "));
+
+		mEndTimeTextView.setText(new StringBuilder()
+				// Month is 0 based so add 1
+				.append(mEndMonth + 1).append("-").append(mEndDay).append("-")
+				.append(mEndYear).append(" "));
+	}
 
 	void populate_the_database() {
 		// add 2 EPG events after app starte
