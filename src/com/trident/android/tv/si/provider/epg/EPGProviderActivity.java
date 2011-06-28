@@ -161,10 +161,10 @@ public class EPGProviderActivity extends ListActivity {
 		switch(Integer.valueOf(query[0]))
 		{
 			
-			case 2:adapter = keyWordSearch(query[1]);break;
-			case 3:adapter = doMySearchByType(query[1]);break;
+			case 2:adapter = searchByKeywords(query[1]);break;
+			case 3:adapter = searchByEventType(query[1]);break;
 			case 4:  //fall through
-			case 1:adapter = doMySearch(query[1]);break;
+			case 1:adapter = normalSearch(null,null);break;
 			default:
 			{
 				Log.d(TAG, "unexpect query type,  return ...");
@@ -262,8 +262,6 @@ public class EPGProviderActivity extends ListActivity {
 
 		String query = null;
 
-		int query_type = 0;
-
 		
 		//case 1:
 		if (intent == null) {
@@ -295,7 +293,7 @@ public class EPGProviderActivity extends ListActivity {
 						
 
 						Log.d(TAG, "try to get events belong to type " + type);
-						query_type = 3;
+						
 						return new String[] {"3", type};
 					}
 
@@ -312,7 +310,7 @@ public class EPGProviderActivity extends ListActivity {
 	}
 	
 	
-	ListAdapter keyWordSearch(String keyWords) {
+	ListAdapter searchByKeywords(String keyWords) {
 		
 		Cursor c = null;
 		
@@ -332,20 +330,18 @@ public class EPGProviderActivity extends ListActivity {
 	
 	}
 
-	ListAdapter doMySearch(String constraint) {
+	ListAdapter normalSearch(String selection, String[] selectionArgs) {
 
 		Cursor c = null;
 
-		if (constraint == null || constraint == "") {
 
-			c = managedQuery(EPGProvider.CONTENT_URI_EVENTS, new String[] {
+		c = managedQuery(EPGProvider.CONTENT_URI_EVENTS, new String[] {
 					Events.SERVICE_ID, Events.NAME, Events.LEVEL1,
 					Events.START_TIME }, // selections
-					null,
-					null, 
+					selection,
+					selectionArgs, 
 					null);
 
-		} 
 
 		// Used to map notes entries from the database to views
 		// show only the event name
@@ -383,7 +379,7 @@ public class EPGProviderActivity extends ListActivity {
 
 	}
 
-	ListAdapter doMySearchByType(String query) {
+	ListAdapter searchByEventType(String query) {
 		Cursor c = null;
 		// TODO: use FTS instead of LIKE
 		c = managedQuery(EPGProvider.CONTENT_URI_EVENTS_MOVIE, null, null,
