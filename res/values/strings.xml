@@ -10,6 +10,7 @@
     <string name="movie"> Movie </string>
     <string name="news">  News </string>
     <string name="sports">  Sports </string>
+     <string name="pickDate"> Pick start time </string>
     
     
 

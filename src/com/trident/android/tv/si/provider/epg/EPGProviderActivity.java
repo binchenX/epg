@@ -4,6 +4,8 @@ package com.trident.android.tv.si.provider.epg;
 
 //import android.content.ContentValues;
 //import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.BasicColumns;
+import java.util.Calendar;
+
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ContentTypeColumns;
 
 import android.content.Intent;
@@ -11,6 +13,8 @@ import android.net.Uri;
 import android.database.*;
 import android.widget.*;
 import android.util.Log;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.SearchManager;
 
@@ -48,7 +52,40 @@ import android.view.View.OnClickListener;
 public class EPGProviderActivity extends ListActivity {
 
 	private static final String TAG = "EPGProviderActivity";
+	
+	 private TextView mDateDisplay;
+	 private Button mPickDate;
+	 private int mYear;
+	 private int mMonth;
+	 private int mDay;
 
+	 static final int DATE_DIALOG_ID = 0;
+	 
+	 private DatePickerDialog.OnDateSetListener mDateSetListener =
+         new DatePickerDialog.OnDateSetListener() {
+
+             public void onDateSet(DatePicker view, int year, 
+                                   int monthOfYear, int dayOfMonth) {
+                 mYear = year;
+                 mMonth = monthOfYear;
+                 mDay = dayOfMonth;
+                 updateDisplay();
+             }
+         };
+
+         
+        @Override
+         protected Dialog onCreateDialog(int id) {
+             switch (id) {
+             case DATE_DIALOG_ID:
+                 return new DatePickerDialog(this,
+                             mDateSetListener,
+                             mYear, mMonth, mDay);
+             }
+             return null;
+         }
+         
+         
 	/** Called when the activity is first created. */
 
 	@Override
@@ -58,6 +95,32 @@ public class EPGProviderActivity extends ListActivity {
 
 		Log.d(TAG, "onCreate");
 
+		
+		 // capture our View elements
+        mDateDisplay = (TextView) findViewById(R.id.dateDisplay);
+        mPickDate = (Button) findViewById(R.id.pickDateButton);
+
+        // add a click listener to the button
+        mPickDate.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                showDialog(DATE_DIALOG_ID);
+            }
+        });
+
+        // get the current date
+        final Calendar c = Calendar.getInstance();
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+
+        // display the current date (this method is below)
+        updateDisplay();
+
+        
+        
+		
+		
+		
 		// This is activity could also started by an intent from the search
 		// dialog..
 		Intent intent = getIntent();
@@ -262,6 +325,17 @@ public class EPGProviderActivity extends ListActivity {
 		return getAdaptor(c);
 
 	}
+	
+	 // updates the date in the TextView
+    private void updateDisplay() {
+        mDateDisplay.setText(
+            new StringBuilder()
+                    // Month is 0 based so add 1
+                    .append(mMonth + 1).append("-")
+                    .append(mDay).append("-")
+                    .append(mYear).append(" "));
+    }
+    
 
 	void populate_the_database() {
 		// add 2 EPG events after app starte

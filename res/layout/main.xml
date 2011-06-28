@@ -12,6 +12,24 @@
         android:layout_alignParentLeft="true"
         />
         
+        <Button 
+        android:layout_width= "100px"
+        android:layout_height="wrap_content"
+        android:id="@+id/pickDateButton"
+        android:text="@string/pickDate"  
+        android:layout_alignParentTop="true" 
+        android:layout_toRightOf="@id/searchbutton"
+        />
+        <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dateDisplay"
+    	android:text=""
+    	android:layout_alignParentTop="true" 
+        android:layout_toRightOf="@id/pickDateButton"
+        />
+        
+        
      
         
         <Button 
