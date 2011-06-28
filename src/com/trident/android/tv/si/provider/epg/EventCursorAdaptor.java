@@ -1,5 +1,7 @@
 package com.trident.android.tv.si.provider.epg;
 
+import java.util.Date;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.view.View;
@@ -12,6 +14,7 @@ public class EventCursorAdaptor extends SimpleCursorAdapter {
 	private int[] mFrom;
 	private int[] mTo;
 	private Cursor mCursor;
+	private int start_time_index = -1;
 	
 	public EventCursorAdaptor(Context context, int layout, Cursor c,
 			String[] from, int[] to) {
@@ -38,7 +41,24 @@ public class EventCursorAdaptor extends SimpleCursorAdapter {
 				}
 
 				if (!bound) {
-					String text = cursor.getString(from[i]);
+				
+					//convert the UTC time to a human readable Time LocalTime
+					String text;
+					
+					
+					
+					if(i == start_time_index)
+					{
+						
+						//Note that start_time * 1000 will be overflow the int
+						long start_time = cursor.getInt(from[i]);
+					    text = (new Date(start_time * 1000 )).toString();
+						
+					} else {
+						text = cursor.getString(from[i]);
+						
+					}
+					
 					if (text == null) {
 						text = "";
 					}
@@ -73,6 +93,11 @@ public class EventCursorAdaptor extends SimpleCursorAdapter {
             }
             for (i = 0; i < count; i++) {
                 mFrom[i] = mCursor.getColumnIndexOrThrow(from[i]);
+                //System.out.println("i:" + i + " mFrom[i] " + mFrom[i] + " col " + from[i]);
+                if(from[i].equals(Events.START_TIME))
+                {
+                	start_time_index = i;
+                }
             }
         } else {
             mFrom = null;

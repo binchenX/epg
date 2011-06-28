@@ -83,7 +83,7 @@ public class EventDetail extends Activity {
 	    	   
 	    	  String eguid = c.getString(c.getColumnIndexOrThrow(BasicColumns._ID));
 	    	
-	    	  Log.d(TAG, "get extended information.....................");
+	    	  Log.d(TAG, "get extended information........star_time:" + startTime );
 			  	    	  
 		      Cursor c2 = managedQuery(Uri.parse(EPGProvider.CONTENT_URI_QUERY_EXTENED + "/" + eguid),
 		    		   null, 
@@ -107,7 +107,7 @@ public class EventDetail extends Activity {
 		       
 	    	   ListView detailListView = (ListView)findViewById(R.id.event_detail_list);
 		       String []info = new String[] {
-		    		   (new Date(startTime * 1000)).toLocaleString(),   //Java need milliseconds, so x 1000
+		    		   (new Date(startTime * 1000)).toString(),   //Java need milliseconds, so x 1000
 		    		   Integer.toString(duration/60) + "minutes", //duration
 		    		   short_description,
 		    		   extended_description};
