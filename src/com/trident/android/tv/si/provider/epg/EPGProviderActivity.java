@@ -5,6 +5,9 @@ package com.trident.android.tv.si.provider.epg;
 //import android.content.ContentValues;
 //import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.BasicColumns;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ContentTypeColumns;
 
@@ -55,14 +58,20 @@ public class EPGProviderActivity extends ListActivity {
 
 	private TextView mStarTimeTextView;
 	private TextView mEndTimeTextView;
-	// private Button mPickDate;
-	private int mStartYear;
-	private int mStartMonth;
-	private int mStartDay;
 
-	private int mEndYear;
-	private int mEndMonth;
-	private int mEndDay;
+	
+	private int mStartYear = 2011;
+	private int mStartMonth = 6;
+	private int mStartDay = 1;
+
+	private long start_time_utc = getUTCTime(mStartYear, mStartMonth, mStartDay);
+	
+	private int mEndYear = 2011;
+	private int mEndMonth = 6;
+	private int mEndDay = 2;
+	
+	private long end_time_utc = getUTCTime(mEndYear,mEndMonth,mEndDay);
+	
 
 	static final int DATE_DIALOG_ID = 0;
 	static final int END_DATE_DIALOG_ID = 1;
@@ -74,6 +83,7 @@ public class EPGProviderActivity extends ListActivity {
 			mStartYear = year;
 			mStartMonth = monthOfYear;
 			mStartDay = dayOfMonth;
+			start_time_utc = getUTCTime(mStartYear, mStartMonth, mStartDay);
 			updateTimeViewDisplay();
 			filterTheEventByTime();
 		}
@@ -86,9 +96,24 @@ public class EPGProviderActivity extends ListActivity {
 			mEndYear = year;
 			mEndMonth = monthOfYear;
 			mEndDay = dayOfMonth;
+			end_time_utc = getUTCTime(mEndYear,mEndMonth,mEndDay);
 			updateTimeViewDisplay();
+			filterTheEventByTime();
 		}
 	};
+	
+	
+	private long getUTCTime(int y, int m ,int d)
+	{
+		
+		GregorianCalendar calendar = new GregorianCalendar(y,m-1,d);
+		// set time zone
+		TimeZone zone = TimeZone.getTimeZone("UTC");
+		calendar.setTimeZone(zone);
+		return calendar.getTime().getTime()/1000;
+		
+		
+	}
 
 	// use current startTime and endTime to filter the result
 	void filterTheEventByTime() {
@@ -119,12 +144,13 @@ public class EPGProviderActivity extends ListActivity {
 		setContentView(R.layout.main);
 
 		Log.d(TAG, "onCreate");
-
 		
 		mStarTimeTextView = (TextView) findViewById(R.id.startDateDisplay);
 		mEndTimeTextView = (TextView) findViewById(R.id.endDateDisplay);
 		
 		
+		
+	
 		mStarTimeTextView.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				showDialog(DATE_DIALOG_ID);
@@ -140,43 +166,25 @@ public class EPGProviderActivity extends ListActivity {
 
 		// get the current date and init the start_time and end_time
 		
-		final Calendar c = Calendar.getInstance();
-		mStartYear = c.get(Calendar.YEAR);
-		mStartMonth = c.get(Calendar.MONTH);
-		mStartDay = c.get(Calendar.DAY_OF_MONTH);
+//		final Calendar c = Calendar.getInstance();
+//		mStartYear = c.get(Calendar.YEAR);
+//		mStartMonth = c.get(Calendar.MONTH);
+//		mStartDay = c.get(Calendar.DAY_OF_MONTH);
+//
+//		mEndYear = c.get(Calendar.YEAR);
+//		mEndMonth = c.get(Calendar.MONTH);
+//		mEndDay = c.get(Calendar.DAY_OF_MONTH) + 1;
 
-		mEndYear = c.get(Calendar.YEAR);
-		mEndMonth = c.get(Calendar.MONTH);
-		mEndDay = c.get(Calendar.DAY_OF_MONTH) + 1;
-
+		
 		// display the current date, which will be used as the search constraint
 		updateTimeViewDisplay();
 
-
-		String[] query = getQueryType();
-
-		ListAdapter adapter = null;
-	
-	
-		switch(Integer.valueOf(query[0]))
-		{
-			
-			case 2:adapter = searchByKeywords(query[1]);break;
-			case 3:adapter = searchByEventType(query[1]);break;
-			case 4:  //fall through
-			case 1:adapter = normalSearch(null,null);break;
-			default:
-			{
-				Log.d(TAG, "unexpect query type,  return ...");
-				return;
-			}
-				
-		}
-		setListAdapter(adapter);
-
+		
 		ListView lv = getListView(); // == findViewById(android.R.id.list)
 
 		lv.setTextFilterEnabled(true);
+				
+		//show detail information when item was clicked..
 
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -185,19 +193,6 @@ public class EPGProviderActivity extends ListActivity {
 				Intent myIntent = new Intent(EPGProviderActivity.this,
 						EventDetail.class);
 
-				// The detailActivity will use this to query the detail
-				// information.
-				// need to get the TextView within this LinalLayoutView
-				// String event_name =
-				// ((TextView)((ViewGroup)view).getChildAt(1)).getText();
-				// The view object is actually a LinealLayout GroupView
-				// ,contaning
-				// several TextViews..
-
-				// TODO:This is highly coupled with the View...
-				// get the view by name???? instead of use magic index number
-				// TextView nameView =
-				// (TextView)((ViewGroup)view).getChildAt(2);
 				TextView nameView = (TextView) view
 						.findViewById(R.id.eventName);
 
@@ -243,6 +238,47 @@ public class EPGProviderActivity extends ListActivity {
 				finish();
 			}
 		});
+		
+		
+		//Handle the query ------->>>>>
+		
+		String[] query = getQueryType();
+
+		ListAdapter adapter = null;
+	
+	
+		switch(Integer.valueOf(query[0]))
+		{
+			
+			case 2:adapter = searchByKeywords(query[1]);break;
+			case 3:adapter = searchByEventType(query[1]);break;
+			case 4:  //fall through
+			case 1: 
+			{
+				String selection = " start_time > ? AND start_time < ? ";
+				Log.d(TAG, "search events between " + start_time_utc + "," + end_time_utc);
+				
+				String[] selectionArgs = {String.valueOf(start_time_utc), String.valueOf(end_time_utc)};
+				adapter = normalSearch( selection, selectionArgs);
+				
+				break;
+				}
+			default:
+			{
+				Log.d(TAG, "unexpect query type,  return ...");
+				return;
+			}
+				
+		}
+		
+		if(adapter == null)
+		{
+			Log.d(TAG, "Opooos. Find nothing....");
+			return; 
+		}
+		setListAdapter(adapter);
+
+
 
 	}
 	
@@ -337,10 +373,15 @@ public class EPGProviderActivity extends ListActivity {
 
 		c = managedQuery(EPGProvider.CONTENT_URI_EVENTS, new String[] {
 					Events.SERVICE_ID, Events.NAME, Events.LEVEL1,
-					Events.START_TIME }, // selections
+					Events.START_TIME }, // projections
 					selection,
 					selectionArgs, 
 					null);
+		
+		if(c == null)
+		{
+			return null;
+		}
 
 
 		// Used to map notes entries from the database to views
