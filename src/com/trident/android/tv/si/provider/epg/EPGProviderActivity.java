@@ -53,25 +53,44 @@ public class EPGProviderActivity extends ListActivity {
 
 	private static final String TAG = "EPGProviderActivity";
 	
-	 private TextView mDateDisplay;
-	 private Button mPickDate;
-	 private int mYear;
+	 private TextView mStarTimeTextView;
+	 private TextView mEndTimeTextView;
+	 //private Button mPickDate;
+	 private int mStartYear;
 	 private int mMonth;
 	 private int mDay;
+	 
+	 
+	 private int mEndYear;
+	 private int mEndMonth;
+	 private int mEndDay;
 
 	 static final int DATE_DIALOG_ID = 0;
+	 static final int END_DATE_DIALOG_ID = 1;
 	 
 	 private DatePickerDialog.OnDateSetListener mDateSetListener =
          new DatePickerDialog.OnDateSetListener() {
 
              public void onDateSet(DatePicker view, int year, 
                                    int monthOfYear, int dayOfMonth) {
-                 mYear = year;
+                 mStartYear = year;
                  mMonth = monthOfYear;
                  mDay = dayOfMonth;
                  updateDisplay();
              }
          };
+         
+         private DatePickerDialog.OnDateSetListener mEndDateSetListener =
+             new DatePickerDialog.OnDateSetListener() {
+
+                 public void onDateSet(DatePicker view, int year, 
+                                       int monthOfYear, int dayOfMonth) {
+                     mEndYear = year;
+                     mEndMonth = monthOfYear;
+                     mEndDay = dayOfMonth;
+                     updateDisplay();
+                 }
+             };
 
          
         @Override
@@ -80,7 +99,11 @@ public class EPGProviderActivity extends ListActivity {
              case DATE_DIALOG_ID:
                  return new DatePickerDialog(this,
                              mDateSetListener,
-                             mYear, mMonth, mDay);
+                             mStartYear, mMonth, mDay);
+             case END_DATE_DIALOG_ID:
+                 return new DatePickerDialog(this,
+                             mEndDateSetListener,
+                             mEndYear, mEndMonth, mEndDay);
              }
              return null;
          }
@@ -97,21 +120,34 @@ public class EPGProviderActivity extends ListActivity {
 
 		
 		 // capture our View elements
-        mDateDisplay = (TextView) findViewById(R.id.dateDisplay);
-        mPickDate = (Button) findViewById(R.id.pickDateButton);
+        mStarTimeTextView = (TextView) findViewById(R.id.startDateDisplay);
+        mEndTimeTextView = (TextView) findViewById(R.id.endDateDisplay);
+        //mPickDate = (Button) findViewById(R.id.pickDateButton);
 
         // add a click listener to the button
-        mPickDate.setOnClickListener(new View.OnClickListener() {
+        mStarTimeTextView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 showDialog(DATE_DIALOG_ID);
+            }
+        });
+        
+        // add a click listener to the button
+        mEndTimeTextView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                showDialog(END_DATE_DIALOG_ID);
             }
         });
 
         // get the current date
         final Calendar c = Calendar.getInstance();
-        mYear = c.get(Calendar.YEAR);
+        mStartYear = c.get(Calendar.YEAR);
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
+        
+        
+        mEndYear = c.get(Calendar.YEAR);
+        mEndMonth = c.get(Calendar.MONTH);
+        mEndDay = c.get(Calendar.DAY_OF_MONTH) + 1;
 
         // display the current date (this method is below)
         updateDisplay();
@@ -328,12 +364,19 @@ public class EPGProviderActivity extends ListActivity {
 	
 	 // updates the date in the TextView
     private void updateDisplay() {
-        mDateDisplay.setText(
+        mStarTimeTextView.setText(
             new StringBuilder()
                     // Month is 0 based so add 1
                     .append(mMonth + 1).append("-")
                     .append(mDay).append("-")
-                    .append(mYear).append(" "));
+                    .append(mStartYear).append(" "));
+        
+        mEndTimeTextView.setText(
+                new StringBuilder()
+                        // Month is 0 based so add 1
+                        .append(mEndMonth + 1).append("-")
+                        .append(mEndDay).append("-")
+                        .append(mEndYear).append(" "));
     }
     
 
