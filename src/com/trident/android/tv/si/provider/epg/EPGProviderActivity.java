@@ -152,18 +152,26 @@ public class EPGProviderActivity extends ListActivity {
 		// display the current date, which will be used as the search constraint
 		updateTimeViewDisplay();
 
-		// This is activity could also started by an intent from the search
-		// dialog..
+
 		String[] query = getQueryType();
 
-		ListAdapter adapter;
-		if (query[0].equals("3")) {
-
-			adapter = doMySearchByType(query[1]);
-		} else {
-			adapter = doMySearch(query[1]);
-		}
+		ListAdapter adapter = null;
 	
+	
+		switch(Integer.valueOf(query[0]))
+		{
+			
+			case 2:adapter = keyWordSearch(query[1]);break;
+			case 3:adapter = doMySearchByType(query[1]);break;
+			case 4:  //fall through
+			case 1:adapter = doMySearch(query[1]);break;
+			default:
+			{
+				Log.d(TAG, "unexpect query type,  return ...");
+				return;
+			}
+				
+		}
 		setListAdapter(adapter);
 
 		ListView lv = getListView(); // == findViewById(android.R.id.list)
@@ -303,15 +311,31 @@ public class EPGProviderActivity extends ListActivity {
 		
 	}
 	
+	
+	ListAdapter keyWordSearch(String keyWords) {
+		
+		Cursor c = null;
+		
+		c = managedQuery(EPGProvider.CONTENT_URI_EVENTS_SEARCH,
+				new String[] { Events.SERVICE_ID, Events.NAME }, // selections
+				null, // always be NULL
+				new String[] { keyWords }, // the keywords
+				null);
+
+	
+	// Used to map notes entries from the database to views
+	// show only the event name
+
+	return getAdaptor(c);
+		
+		
+	
+	}
 
 	ListAdapter doMySearch(String constraint) {
 
 		Cursor c = null;
 
-		// get all the events ..
-		// TODO: we should only get limited events that is enough for display in
-		// current
-		// screen.
 		if (constraint == null || constraint == "") {
 
 			c = managedQuery(EPGProvider.CONTENT_URI_EVENTS, new String[] {
@@ -321,21 +345,7 @@ public class EPGProviderActivity extends ListActivity {
 					null, 
 					null);
 
-		} else {
-
-			// USE LIKE
-			// c = managedQuery(EPGProvider.CONTENT_URI_EVENTS, null,
-			// "event_name LIKE " + "\"%" + constraint + "%\"", null, null);
-
-			// use FTS
-
-			c = managedQuery(EPGProvider.CONTENT_URI_EVENTS_SEARCH,
-					new String[] { Events.SERVICE_ID, Events.NAME }, // selections
-					null, // always be NULL
-					new String[] { constraint }, // the keywords
-					null);
-
-		}
+		} 
 
 		// Used to map notes entries from the database to views
 		// show only the event name
