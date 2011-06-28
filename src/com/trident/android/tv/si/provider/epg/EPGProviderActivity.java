@@ -3,7 +3,7 @@ package com.trident.android.tv.si.provider.epg;
 //import android.R.*;
 
 //import android.content.ContentValues;
-import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.BasicColumns;
+//import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.BasicColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ContentTypeColumns;
 
 import android.content.Intent;
@@ -232,14 +232,14 @@ public class EPGProviderActivity extends ListActivity {
 		if(c.getColumnIndex(ContentTypeColumns.LEVEL1) != -1)
 		{
 		
-			adapter = new SimpleCursorAdapter(this,
+			adapter = new EventCursorAdaptor(this,
 				R.layout.list_item, c,
 				new String[] { Events.SERVICE_ID, Events.NAME , Events.LEVEL1}, 
 				new int[] { R.id.serviceID, R.id.eventName ,R.id.eventType });
 		
 		} else {
 			
-			adapter = new SimpleCursorAdapter(this,
+			adapter = new EventCursorAdaptor(this,
 					R.layout.list_item, c,
 					new String[] { Events.SERVICE_ID, Events.NAME }, 
 					new int[] { R.id.serviceID, R.id.eventName });
