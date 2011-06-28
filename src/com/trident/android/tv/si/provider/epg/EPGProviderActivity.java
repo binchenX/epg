@@ -134,7 +134,8 @@ public class EPGProviderActivity extends ListActivity {
 				
 				//TODO:This is highly coupled with the View...
 				//get the view by name???? instead of use magic index number 
-				TextView nameView =  (TextView)((ViewGroup)view).getChildAt(2);
+				//TextView nameView =  (TextView)((ViewGroup)view).getChildAt(2);
+				TextView nameView =  (TextView)view.findViewById(R.id.eventName);
 				
 			    myIntent.putExtra("EVENT_NAME", nameView.getText());
 				
@@ -191,7 +192,7 @@ public class EPGProviderActivity extends ListActivity {
 		if (constraint == null || constraint == "") {
 
 			c = managedQuery(EPGProvider.CONTENT_URI_EVENTS, 
-					new String[] {Events.SERVICE_ID, Events.NAME , Events.LEVEL1}, //selections
+					new String[] {Events.SERVICE_ID, Events.NAME , Events.LEVEL1 , Events.START_TIME}, //selections
 					null, 
 					null,
 					null);
@@ -234,8 +235,8 @@ public class EPGProviderActivity extends ListActivity {
 		
 			adapter = new EventCursorAdaptor(this,
 				R.layout.list_item, c,
-				new String[] { Events.SERVICE_ID, Events.NAME , Events.LEVEL1}, 
-				new int[] { R.id.serviceID, R.id.eventName ,R.id.eventType });
+				new String[] { Events.SERVICE_ID, Events.NAME , Events.LEVEL1 ,Events.START_TIME}, 
+				new int[] { R.id.serviceID, R.id.eventName ,R.id.eventType ,R.id.startTime});
 		
 		} else {
 			

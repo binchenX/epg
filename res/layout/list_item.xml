@@ -13,11 +13,20 @@
 	android:id="@+id/serviceID" 
 	/>
 	
+
+	
 	<TextView 
 	android:layout_width="50px" 
 	android:layout_height="wrap_content"
 	android:layout_margin="2px"
 	android:id="@+id/eventType" 
+	/>
+	
+  <TextView 
+	android:layout_width="100px" 
+	android:layout_height="wrap_content"
+	android:layout_margin="2px"
+	android:id="@+id/startTime" 
 	/>
 
 	<TextView 
