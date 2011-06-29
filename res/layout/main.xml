@@ -12,13 +12,25 @@
         android:layout_alignParentLeft="true"
         />
         
+         <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/hint"
+    	android:text="@string/hint"  
+    	android:layout_alignParentTop="true" 	
+    	android:layout_marginLeft="10px" 
+        android:layout_toRightOf="@id/searchbutton"
+     
+        />
+        
       
         <TextView 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/startDateDisplay"
     	android:text=""  	
-    	android:layout_alignParentTop="true" 
+    	android:layout_marginLeft="10px" 
+    	android:layout_alignBottom="@id/searchbutton"
         android:layout_toRightOf="@id/searchbutton"
      
         />
@@ -28,9 +40,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/endDateDisplay"
     	android:text=""  	
-    	android:layout_alignParentTop="true" 
     	android:layout_marginLeft="20px"
         android:layout_toRightOf="@id/startDateDisplay"
+        android:layout_alignBottom="@id/startDateDisplay"
      
         />
         

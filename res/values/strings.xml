@@ -10,7 +10,8 @@
     <string name="movie"> Movie </string>
     <string name="news">  News </string>
     <string name="sports">  Sports </string>
-     <string name="pickDate">start_time </string>
+    <string name="pickDate">start_time </string>
+    <string name="hint"> select date to filter... </string>
     
     
 

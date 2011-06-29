@@ -47,18 +47,20 @@ public class EPGProvider extends ContentProvider
 	 * 
 	 * <p>
 	 * 
-	 * 	Events.SECTION_GUID
-	 *  Events.TSID 
-	 *	Events.ONID 
-	 *	Events.SERVICE_ID
-	 *  Events.START_TIME 
-	 *  Events.DURATION 
-	 *  Events.RUNNING_STATUS 
-	 *  Events.CA_MODE 
-	 *	Events.NAME 
-	 *	Events.SHORT_DESCRIPTION
-	 *  Events.level1 *
-	 *  Events.level2
+     * <ul>
+	 * <li>Events.SECTION_GUID
+	 * <li> Events.TSID 
+	 * <li>	Events.ONID 
+	 * <li> Events.SERVICE_ID
+	 * <li> Events.START_TIME 
+	 * <li> Events.DURATION 
+	 * <li> Events.RUNNING_STATUS 
+	 * <li> Events.CA_MODE 
+	 * <li> Events.NAME 
+	 * <li>	Events.SHORT_DESCRIPTION
+	 * <li> Events.level1 *
+	 * <li> Events.level2
+	 * </ul>
 	 *  <p>
 	 *  @see Events
 	 * 
@@ -79,17 +81,18 @@ public class EPGProvider extends ContentProvider
 	 * <p>
 	 * 2. It is important to note that CONTENT_URI_EVENTS_SEARCH the projects are limited to :
 	 * <p>
-	 *  Events.SECTION_GUID
-	 *  Events.TSID 
-	 *	Events.ONID 
-	 *	Events.SERVICE_ID
-	 *  Events.START_TIME 
-	 *  Events.DURATION 
-	 *  Events.RUNNING_STATUS 
-	 *  Events.CA_MODE 
-	 *	Events.NAME 
-	 *	Events.SHORT_DESCRIPTION
-	 *
+	 * <ul>
+	 * <li>Events.SECTION_GUID
+	 * <li> Events.TSID 
+	 * <li>	Events.ONID 
+	 * <li> Events.SERVICE_ID
+	 * <li> Events.START_TIME 
+	 * <li> Events.DURATION 
+	 * <li> Events.RUNNING_STATUS 
+	 * <li> Events.CA_MODE 
+	 * <li> Events.NAME 
+	 * <li>	Events.SHORT_DESCRIPTION
+	 * </ul>
 	 * To get the projections Events.item, Events.item_descriptions the user should issue another query 
 	 * using CONTENT_URI_QUERY_EXTENED
 	 * 
@@ -391,9 +394,11 @@ public class EPGProvider extends ContentProvider
    
    /**
     * 
-    * The MAIN thing.
+    * THE ENTRY point for query. For details see following URL.
     * 
-    * see http://developer.android.com/reference/android/content/ContentResolver.html#query%28android.net.Uri,%20java.lang.String[],%20java.lang.String,%20java.lang.String[],%20java.lang.String%29
+    * <p>
+    * 
+    * http://developer.android.com/reference/android/content/ContentResolver.html#query%28android.net.Uri,%20java.lang.String[],%20java.lang.String,%20java.lang.String[],%20java.lang.String%29
     * 
     */
    @Override
