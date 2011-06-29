@@ -131,7 +131,7 @@ public class EPGProviderActivity extends ListActivity {
 		Log.d(TAG, "search events between " + start_time_utc + "," + end_time_utc);
 		
 		String[] selectionArgs = {String.valueOf(start_time_utc), String.valueOf(end_time_utc)};
-		ListAdapter adapter = normalSearch( selection, selectionArgs);
+		ListAdapter adapter = normalSearch( selection, selectionArgs, null);
 		setListAdapter(adapter);
 		
 		
@@ -277,7 +277,8 @@ public class EPGProviderActivity extends ListActivity {
 				Log.d(TAG, "search events between " + start_time_utc + "," + end_time_utc);
 				
 				String[] selectionArgs = {String.valueOf(start_time_utc), String.valueOf(end_time_utc)};
-				adapter = normalSearch( selection, selectionArgs);
+				
+				adapter = normalSearch( selection, selectionArgs,null);
 				
 				break;
 				}
@@ -384,17 +385,24 @@ public class EPGProviderActivity extends ListActivity {
 	
 	}
 
-	ListAdapter normalSearch(String selection, String[] selectionArgs) {
+	ListAdapter normalSearch(String selection, String[] selectionArgs, String orderBy) {
 
 		Cursor c = null;
 
+		
+		//default sort order
+		if(orderBy == null)
+		{
+			
+			orderBy = Events.SERVICE_ID + " ASC " + " , " +  Events.START_TIME + " ASC ";
+		}
 
 		c = managedQuery(EPGProvider.CONTENT_URI_EVENTS, new String[] {
 					Events.SERVICE_ID, Events.NAME, Events.LEVEL1,
 					Events.START_TIME }, // projections
 					selection,
 					selectionArgs, 
-					null);
+					orderBy);
 		
 		if(c == null)
 		{
@@ -419,6 +427,8 @@ public class EPGProviderActivity extends ListActivity {
 		
 		if (c.getColumnIndex(ContentTypeColumns.LEVEL1) != -1) {
 
+			//TODO:we can use setTag/getTag to associate a tag, the _id of the event in our case, to
+			//the view ,and in the listener we can get the tag.
 			adapter = new EventCursorAdaptor(this, 
 					R.layout.list_item, 
 					c,

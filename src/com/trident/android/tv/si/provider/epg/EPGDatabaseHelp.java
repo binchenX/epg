@@ -25,7 +25,10 @@ import android.util.Log;
 		   //the ContentProviderEPG.apk should be able to read it..
 		   //Currently, plfApp are using this directory to save data, so it make sense to put it here.
 		   
+		   //on simulator 
 		   private static final String DATABASE_PATH = "/data/system/";
+		   //for SX5
+		   //private static final String DATABASE_PATH = "/system/app/";
 		   
 		   private String dbName;	
 		   private static final String DATABASE_NAME =  "epg.db";
