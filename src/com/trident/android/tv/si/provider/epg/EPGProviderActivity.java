@@ -61,13 +61,13 @@ public class EPGProviderActivity extends ListActivity {
 
 	
 	private int mStartYear = 2011;
-	private int mStartMonth = 6;
+	private int mStartMonth = 5; //start from 0
 	private int mStartDay = 1;
 
 	private long start_time_utc = getUTCTime(mStartYear, mStartMonth, mStartDay);
 	
 	private int mEndYear = 2011;
-	private int mEndMonth = 6;
+	private int mEndMonth = 5; //start from 0
 	private int mEndDay = 2;
 	
 	private long end_time_utc = getUTCTime(mEndYear,mEndMonth,mEndDay);
@@ -106,7 +106,7 @@ public class EPGProviderActivity extends ListActivity {
 	private long getUTCTime(int y, int m ,int d)
 	{
 		
-		GregorianCalendar calendar = new GregorianCalendar(y,m-1,d);
+		GregorianCalendar calendar = new GregorianCalendar(y,m,d);
 		// set time zone
 		TimeZone zone = TimeZone.getTimeZone("UTC");
 		calendar.setTimeZone(zone);
@@ -117,6 +117,22 @@ public class EPGProviderActivity extends ListActivity {
 
 	// use current startTime and endTime to filter the result
 	void filterTheEventByTime() {
+		
+//		//update the view 
+//		Intent myIntent = new Intent(EPGProviderActivity.this,
+//				EPGProviderActivity.class);
+//
+//		// The detailActivity will use this to query the detail
+//		// information.
+//		startActivity(myIntent);
+//		finish();
+		
+		String selection = " start_time > ? AND start_time < ? ";
+		Log.d(TAG, "search events between " + start_time_utc + "," + end_time_utc);
+		
+		String[] selectionArgs = {String.valueOf(start_time_utc), String.valueOf(end_time_utc)};
+		ListAdapter adapter = normalSearch( selection, selectionArgs);
+		setListAdapter(adapter);
 		
 		
 		
@@ -433,7 +449,7 @@ public class EPGProviderActivity extends ListActivity {
 	// updates the date in the TextView
 	private void updateTimeViewDisplay() {
 		mStarTimeTextView.setText(new StringBuilder()
-		// Month is 0 based so add 1
+		        // Month is 0 based so add 1
 				.append(mStartMonth + 1).append("-").append(mStartDay).append(
 						"-").append(mStartYear).append(" "));
 

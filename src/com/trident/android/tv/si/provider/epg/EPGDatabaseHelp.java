@@ -26,7 +26,7 @@ import android.util.Log;
 		   private static final String DATABASE_PATH = "/data/system/";
 		   
 		   private String dbName;	
-		   private static final String DATABASE_NAME =  "epg_1.db";
+		   private static final String DATABASE_NAME =  "epg.db";
 		   private static final int DATABASE_VERSION = 2;
 		   
 		   
@@ -34,7 +34,7 @@ import android.util.Log;
 			   
 			   public static final String BASIC = "tblEvent_basic";
 			   public static final String EXTENDED = "tblEvent_extended";
-			   public static final String EXTENDED_FTS = "tblEvent_extDes";
+			   public static final String EXTENDED_FTS = "tblEvent_extdes";
 			   public static final String GROUP = "tblEvent_group";
 			   public static final String TYPE = "tblEvent_content";
 			   
@@ -135,6 +135,8 @@ import android.util.Log;
 				 return null;
 			 }
 			 }
+		   
+		   
 		   
 	      @Override
 	      public void onCreate(SQLiteDatabase db) 

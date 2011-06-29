@@ -52,7 +52,7 @@ public class EventCursorAdaptor extends SimpleCursorAdapter {
 						
 						//Note that start_time * 1000 will be overflow the int
 						long start_time = cursor.getInt(from[i]);
-					    text = (new Date(start_time * 1000 )).toString();
+					    text = (new Date(start_time * 1000 )).toGMTString();
 						
 					} else {
 						text = cursor.getString(from[i]);

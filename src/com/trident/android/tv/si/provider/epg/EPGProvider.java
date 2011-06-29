@@ -481,14 +481,16 @@ public class EPGProvider extends ContentProvider
 		   
 		   //Check the comments of CONTENT_URI_EVENTS_SEARCH.
 		   
+		   
+		   
 		   String search_projections = join(projection, " , ");
 		   
 		   String sql_search_event_name =  " SELECT " +  search_projections + 
-                                           " FROM tblEvent_basic a INNER JOIN tblEvent_shortDes b ON a.rowid = b.eguid " +  
+                                           " FROM tblEvent_basic a INNER JOIN tblEvent_shortdes b ON a.rowid = b.eguid " +  
                                            " WHERE b.event_name MATCH ? " ;
                                            //UNION ALL
 		   String sql_search_short_des =   " SELECT " +  search_projections + 
-                                           " FROM tblEvent_basic a INNER JOIN tblEvent_shortDes b ON a.rowid = b.eguid " +  
+                                           " FROM tblEvent_basic a INNER JOIN tblEvent_shortdes b ON a.rowid = b.eguid " +  
                                            " WHERE b.short_des MATCH ? ";
 		   //UNION ALL
 		   String sql_search_ext_des =  " SELECT " +  search_projections + 
@@ -496,7 +498,7 @@ public class EPGProvider extends ContentProvider
 		   " WHERE a._id IN ( " + 
 		   " Select a._id " + 
 		   " FROM " + 
-		   " tblEvent_basic a JOIN tblEvent_extDes c ON a._id = c.eguid " + 
+		   " tblEvent_basic a JOIN tblEvent_extdes c ON a._id = c.eguid " + 
 		   " WHERE c.item MATCH ?)";
 		   
 		   
