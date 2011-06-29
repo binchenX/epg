@@ -257,6 +257,47 @@ public class EPGProviderActivity extends ListActivity {
 			}
 		});
 		
+		// news button
+		Button newsButton = (Button) findViewById(R.id.bt_news);
+
+		newsButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				Log.d(TAG, "news button has been pressed...........");
+				// start himself...
+				Intent myIntent = new Intent(EPGProviderActivity.this,
+						EPGProviderActivity.class);
+
+				// The detailActivity will use this to query the detail
+				// information.
+
+				myIntent.putExtra("TYPE", "news");
+				startActivity(myIntent);
+				finish();
+			}
+		});
+		
+		// movie button
+		Button sportsButton = (Button) findViewById(R.id.bt_sports);
+
+		sportsButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				Log.d(TAG, "sports button has been pressed...........");
+				// start himself...
+				Intent myIntent = new Intent(EPGProviderActivity.this,
+						EPGProviderActivity.class);
+
+				// The detailActivity will use this to query the detail
+				// information.
+
+				myIntent.putExtra("TYPE", "sports");
+				startActivity(myIntent);
+				finish();
+			}
+		});
 		
 		//Handle the query ------->>>>>
 		
@@ -344,7 +385,10 @@ public class EPGProviderActivity extends ListActivity {
 
 					type = bd.getString("TYPE");
 
-					if (type.equals("movie") || type.equals("news")) {
+					if (type.equals("movie") || 
+						type.equals("news") ||
+						type.equals("sports") 
+						) {
 						
 
 						Log.d(TAG, "try to get events belong to type " + type);
@@ -451,10 +495,22 @@ public class EPGProviderActivity extends ListActivity {
 
 	}
 
-	ListAdapter searchByEventType(String query) {
+	ListAdapter searchByEventType(String type) {
 		Cursor c = null;
 		// TODO: use FTS instead of LIKE
-		c = managedQuery(EPGProvider.CONTENT_URI_EVENTS_MOVIE, null, null,
+		Uri uri;
+		if(type.equals("movie")) 
+		{
+			 uri = EPGProvider.CONTENT_URI_EVENTS_MOVIE;
+		}else if(type.equals("news")){
+			 uri = EPGProvider.CONTENT_URI_EVENTS_NEWS;
+		}else if (type.equals("sports")){
+			uri = EPGProvider.CONTENT_URI_EVENTS_SPORTS;
+		}else{
+			return null;
+		}
+			
+		c = managedQuery(uri, null, null,
 				null, null);
 
 		return getAdaptor(c);
