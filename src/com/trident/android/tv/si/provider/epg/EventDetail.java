@@ -55,12 +55,13 @@ public class EventDetail extends Activity {
 		Bundle bundle = getIntent().getExtras();
 		
 		if (bundle != null) {
-			String event_name = bundle.getString("EVENT_NAME");
+			//TODO: it is id
+		   String id = bundle.getString("EVENT_NAME");
 			//use the event_name to query
-		   String selection = Clause.QUERY_BASIC_INFO_BY_EVENT_NAME;
-		   String [] selectionArgs = new String[] {event_name};
+		   String selection = Clause.QUERY_BASIC_INFO_BY_ID;
+		   String [] selectionArgs = new String[] {id };
 	       Cursor c = managedQuery(EPGProvider.CONTENT_URI_EVENTS , 
-	    		   null, 
+	    		   null,  //projections
 	    		   selection, 
 	    		   selectionArgs, 
 	    		   null);
@@ -79,11 +80,12 @@ public class EventDetail extends Activity {
 	    	   short_description = c.getString(c.getColumnIndexOrThrow(BasicColumns.SHORT_DESCRIPTION));
 	    	   startTime = c.getInt(c.getColumnIndexOrThrow(BasicColumns.START_TIME));
 	    	   duration  = c.getInt(c.getColumnIndexOrThrow(BasicColumns.DURATION));
-	    	   
-	    	   
-	    	  String eguid = c.getString(c.getColumnIndexOrThrow(BasicColumns._ID));
+	    	   //String eguid = c.getString(c.getColumnIndexOrThrow(BasicColumns._ID));
+	    	   String eguid = id;
 	    	
-	    	  Log.d(TAG, "get extended information........star_time:" + startTime );
+	    	  //TODO:they should be the same, but they are not.....need to check 
+	    	  //assert eguid == id
+	    	  Log.d(TAG, "get extended information..." + eguid + ":" + id);
 			  	    	  
 		      Cursor c2 = managedQuery(Uri.parse(EPGProvider.CONTENT_URI_QUERY_EXTENED + "/" + eguid),
 		    		   null, 

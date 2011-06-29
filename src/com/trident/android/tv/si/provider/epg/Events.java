@@ -13,6 +13,13 @@ package com.trident.android.tv.si.provider.epg;
 
 public interface Events{
 	
+	 
+	/**
+	 * 
+	 * the unique id for each event ,used only for getting other attributes in other tables.
+	 * 
+	 */
+	    public static final String ID = "_id";
 	    
 		public static final String SECTION_GUID = "sguid";
 		public static final String TSID = "tsid";

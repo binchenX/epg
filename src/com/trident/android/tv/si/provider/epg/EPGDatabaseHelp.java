@@ -23,6 +23,8 @@ import android.util.Log;
 		   //From the native code's perspective it is something like /mnt/nfsroot/data/system, 
 		   //The native code should be able to write to this directory,
 		   //the ContentProviderEPG.apk should be able to read it..
+		   //Currently, plfApp are using this directory to save data, so it make sense to put it here.
+		   
 		   private static final String DATABASE_PATH = "/data/system/";
 		   
 		   private String dbName;	
@@ -105,6 +107,7 @@ import android.util.Log;
 		   
 		   public interface Clause{
 			   public static final String QUERY_BASIC_INFO_BY_EVENT_NAME = BasicColumns.NAME + " = ?";
+			   public static final String QUERY_BASIC_INFO_BY_ID = Table.BASIC+"."+BasicColumns._ID + " = ?";
 			   public static final String SEARCH_BY_TYPE = "_id IN (select eguid FROM tblEvent_content WHERE level1=? )";
 		   }
 		   

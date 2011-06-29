@@ -5,6 +5,11 @@
 	android:orientation="horizontal"
 	>
 
+   <TextView 
+	android:layout_width="0px" 
+	android:layout_height="wrap_content"
+	android:id="@+id/_id" 
+	/>
 
 	<TextView 
 	android:layout_width="50px" 

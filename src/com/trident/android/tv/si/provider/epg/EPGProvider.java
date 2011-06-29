@@ -15,7 +15,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import android.provider.SyncStateContract.Columns;
+//import android.provider.SyncStateContract.Columns;
 //import android.provider.ContactsContract.Contacts;
 //import android.text.TextUtils;
 import android.util.Log;
@@ -24,7 +24,6 @@ import android.util.Log;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.BasicColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.Clause;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ContentTypeColumns;
-import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ExtendedColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ExtendedFTSColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ShortDesFTSColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.Table;
@@ -43,7 +42,7 @@ public class EPGProvider extends ContentProvider
 	public static final String PROVIDER_NAME = "com.trident.android.tv.si.provider.EPG";
 	
 	/**
-	 * Query all the events.
+	 * Query the events.
 	 */
 	public static final Uri CONTENT_URI_EVENTS = Uri.parse("content://" + PROVIDER_NAME + "/events");
 	
@@ -158,11 +157,6 @@ public class EPGProvider extends ContentProvider
 	   //ARIB : STD-B10 Annex H : Genre designation in content descriptor
 	   //DVB  : DVB SI Spec section 6.2.9 Content Descriptor
 	   
-	   private static final int TYPE_MOVIE = 0x01;
-	   private static final int TYPE_NEWS = 0x02;
-	   private static final int TYPE_SPORTS = 0x02;
-	   private static final int TYPE_MUSIC = 0x02;
-	   private static final int TYPE_EDUCAITION = 0x02;
 
 	   private static final HashMap<Integer,String> dvbEventTypeMap = buildDvbEventTypeMap();
 	   
@@ -180,18 +174,19 @@ public class EPGProvider extends ContentProvider
 	          return map;
 	          
 	   }
-	   
-	   private static HashMap<Integer,String> buildARIBEventTypeMap() {
-	          HashMap<Integer,String> map = new HashMap<Integer,String>();
-	          
-	          map.put(new Integer(QUERY_MOVIE),     "6");
-	          map.put(new Integer(QUERY_NEWS),      "0");
-	          map.put(new Integer(QUERY_SPORTS),    "1");
-	          map.put(new Integer(QUERY_MUSIC),     "4");
-	          map.put(new Integer(QUERY_EDUCATION), "A");
-	          return map;
-	          
-	   }
+
+// event type mapping for ARIB	   
+//	   private static HashMap<Integer,String> buildARIBEventTypeMap() {
+//	          HashMap<Integer,String> map = new HashMap<Integer,String>();
+//	          
+//	          map.put(new Integer(QUERY_MOVIE),     "6");
+//	          map.put(new Integer(QUERY_NEWS),      "0");
+//	          map.put(new Integer(QUERY_SPORTS),    "1");
+//	          map.put(new Integer(QUERY_MUSIC),     "4");
+//	          map.put(new Integer(QUERY_EDUCATION), "A");
+//	          return map;
+//	          
+//	   }
 	   
 	   
 	   

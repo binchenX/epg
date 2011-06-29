@@ -209,10 +209,12 @@ public class EPGProviderActivity extends ListActivity {
 				Intent myIntent = new Intent(EPGProviderActivity.this,
 						EventDetail.class);
 
-				TextView nameView = (TextView) view
-						.findViewById(R.id.eventName);
+//				TextView nameView = (TextView) view
+//						.findViewById(R.id.eventName);
+				
+				TextView idView = (TextView) view.findViewById(R.id._id);
 
-				myIntent.putExtra("EVENT_NAME", nameView.getText());
+				myIntent.putExtra("EVENT_NAME", idView.getText());
 
 				startActivity(myIntent);
 				finish();
@@ -413,18 +415,21 @@ public class EPGProviderActivity extends ListActivity {
 
 		SimpleCursorAdapter adapter = null;
 
-		// if the c did not contains "LEVEL1"
-		// When using FTS, the returned Cursor won't contain level column
-
+		
+		
 		if (c.getColumnIndex(ContentTypeColumns.LEVEL1) != -1) {
 
-			adapter = new EventCursorAdaptor(this, R.layout.list_item, c,
-					new String[] { Events.SERVICE_ID, Events.NAME,
-							Events.LEVEL1, Events.START_TIME }, new int[] {
+			adapter = new EventCursorAdaptor(this, 
+					R.layout.list_item, 
+					c,
+					new String[] { Events.ID, Events.SERVICE_ID, Events.NAME,
+							Events.LEVEL1, Events.START_TIME }, 
+					new int[] { R.id._id,   //the hinder column used to search other information
 							R.id.serviceID, R.id.eventName, R.id.eventType,
 							R.id.startTime });
 
 		} else {
+			// When using FTS, the returned Cursor won't contain level column
 
 			adapter = new EventCursorAdaptor(this, R.layout.list_item, c,
 					new String[] { Events.SERVICE_ID, Events.NAME }, new int[] {
