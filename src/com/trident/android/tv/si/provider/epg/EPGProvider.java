@@ -30,9 +30,8 @@ import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.Table;
 
 
 /**
- * ref : 
- * http://www.reigndesign.com/blog/using-your-own-sqlite-database-in-android-applications/
- * http://www.devx.com/wireless/Article/41133/0/page/2
+ * EPGProvider is the provider of EPG data within the TV system. 
+ * 
  * @author Pierr Chen
  *
  */
@@ -42,7 +41,28 @@ public class EPGProvider extends ContentProvider
 	public static final String PROVIDER_NAME = "com.trident.android.tv.si.provider.EPG";
 	
 	/**
-	 * Query the events.
+	 *
+	 * Normal query. The projections, selections and selectionArgs are limited to :
+	 * Following Values.
+	 * 
+	 * <p>
+	 * 
+	 * 	Events.SECTION_GUID
+	 *  Events.TSID 
+	 *	Events.ONID 
+	 *	Events.SERVICE_ID
+	 *  Events.START_TIME 
+	 *  Events.DURATION 
+	 *  Events.RUNNING_STATUS 
+	 *  Events.CA_MODE 
+	 *	Events.NAME 
+	 *	Events.SHORT_DESCRIPTION
+	 *  Events.level1 *
+	 *  Events.level2
+	 *  <p>
+	 *  @see Events
+	 * 
+	 *
 	 */
 	public static final Uri CONTENT_URI_EVENTS = Uri.parse("content://" + PROVIDER_NAME + "/events");
 	
@@ -54,18 +74,35 @@ public class EPGProvider extends ContentProvider
 	 * 
 	 * 
 	 * 1. We will search following columns in respectively table,
-	 * BasicColumns.NAME , BasicColumns.SHORT_DESCRITPION and ExtendedFTSColumns.item
+	 * Events.NAME , Events.SHORT_DESCRITPION and Events.item
 	 * 
 	 * <p>
-	 * 2. It is important to note that CONTENT_URI_EVENTS_SEARCH will only return projections exsits in BasicColumns ;
-	 * to get the Columns in ExtendedFTSColumns, the user should issue another query using CONTENT_URI_QUERY_EXTENED
+	 * 2. It is important to note that CONTENT_URI_EVENTS_SEARCH the projects are limited to :
+	 * <p>
+	 *  Events.SECTION_GUID
+	 *  Events.TSID 
+	 *	Events.ONID 
+	 *	Events.SERVICE_ID
+	 *  Events.START_TIME 
+	 *  Events.DURATION 
+	 *  Events.RUNNING_STATUS 
+	 *  Events.CA_MODE 
+	 *	Events.NAME 
+	 *	Events.SHORT_DESCRIPTION
+	 *
+	 * To get the projections Events.item, Events.item_descriptions the user should issue another query 
+	 * using CONTENT_URI_QUERY_EXTENED
 	 * 
 	 */
 	public static final Uri CONTENT_URI_EVENTS_SEARCH = Uri.parse("content://" + PROVIDER_NAME + "/events/search");
 	
 	/**
-	 * Query extended events by event_guid.
+	 * Query extended events by eguid. Will return following attributes associated with this event specified by
+	 * the eguid.
+	 * <p>
+	 * Events.item, Events.item_descriptions
 	 * 
+	 * <p>
 	 * user case : get the basic event, use the id of that events to get the extended descriptors.
 	 * 
 	 * 
@@ -75,31 +112,31 @@ public class EPGProvider extends ContentProvider
 	
 	/**
 	 * 
-	 * Query all the movie events.
+	 * Query all the movie events. The projections can be used are some as that when using CONTENT_URI_EVENTS.
 	 * 
 	 */
 	public static final Uri CONTENT_URI_EVENTS_MOVIE = Uri.parse("content://" + PROVIDER_NAME + "/movie");
 	
 	/**
 	 * 
-	 * Query all the news events. The projections are limited to the columns resides in BasicColumns.
+	 * Query all the news events. 
 	 */
 	public static final Uri CONTENT_URI_EVENTS_NEWS = Uri.parse("content://" + PROVIDER_NAME + "/news");
 	
 	/**
 	 * 
-	 * Query all the sports events.The projections are limited to the columns resides in BasicColumns.
+	 * Query all the sports events.  
 	 */
 	public static final Uri CONTENT_URI_EVENTS_SPORTS = Uri.parse("content://" + PROVIDER_NAME + "/sports");
 	
 	/**
 	 * 
-	 * Query all the music events.The projections are limited to the columns resides in BasicColumns.
+	 * Query all the music events.
 	 */
 	public static final Uri CONTENT_URI_EVENTS_MUSIC = Uri.parse("content://" + PROVIDER_NAME + "/music");
 	
 	/**
-	 * Query all the educations events. The projections are limited to the columns resides in BasicColumns.
+	 * Query all the educations events. 
 	 * 
 	 */
 	public static final Uri CONTENT_URI_EVENTS_EDUCATION = Uri.parse("content://" + PROVIDER_NAME + "/education");
@@ -296,25 +333,19 @@ public class EPGProvider extends ContentProvider
 
      
    }
+   
+   /**
+    * 
+    * Application shall never use this function as it is the native code 
+    * that is responsible for updating the database. When called,  this function will throw an exception.
+    * 
+    */
 
    @Override
    public Uri insert(Uri uri, ContentValues values) {
 	   
-	  Log.d(TAG, "INSERT EVENTS  TO DATABASE xxxxx.................");
-	  
-//	  //---add a new book---
-//      long rowID = epgDB.insert(
-//         TABLE_BASIC, "", values);
-//           
-//      //---if added successfully---
-//      if (rowID>0)
-//      {
-//         Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
-//         getContext().getContentResolver().notifyChange(_uri, null);    
-//         return _uri;                
-//      }        
-//      throw new SQLException("Failed to insert row into " + uri);
-	  
+	  Log.d(TAG, "ERROR: shall never try to write to the database");
+	    
 	  throw new SQLException("Failed to insert row into " + uri);
 
    }
@@ -333,7 +364,7 @@ public class EPGProvider extends ContentProvider
    /**
     * Test if any of the columns appear in the given projection.
     */
-   public boolean isInProjection(String[] projection, String... columns) {
+   private boolean isInProjection(String[] projection, String... columns) {
        if (projection == null) {
            return true;
        }
@@ -358,6 +389,13 @@ public class EPGProvider extends ContentProvider
        return false;
    }
    
+   /**
+    * 
+    * The MAIN thing.
+    * 
+    * see http://developer.android.com/reference/android/content/ContentResolver.html#query%28android.net.Uri,%20java.lang.String[],%20java.lang.String,%20java.lang.String[],%20java.lang.String%29
+    * 
+    */
    @Override
    public Cursor query(Uri uri, String[] projection, String selection,
          String[] selectionArgs, String sortOrder) {
@@ -562,17 +600,6 @@ public class EPGProvider extends ContentProvider
       return 0;
    }
    
-   /**
-    * Search using FTS 
-    * @param keywords
-    * @return
-    */
-   private Cursor search(String keywords)
-   {
-	   
-	   return null;
-	   
-   }
    
    /**
     * Inserts an argument at the beginning of the selection arg list.

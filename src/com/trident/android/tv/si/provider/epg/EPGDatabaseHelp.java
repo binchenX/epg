@@ -1,5 +1,7 @@
 package com.trident.android.tv.si.provider.epg;
 
+
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +12,18 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+
+/**
+ * 
+ * A help class for EPGProvider.
+ * 
+ * Designed with only package access. 
+ * 
+ * 
+ */
+
+
 
   /*package*/ class EPGDatabaseHelp extends SQLiteOpenHelper 
 	   {
@@ -24,6 +38,7 @@ import android.util.Log;
 		   //The native code should be able to write to this directory,
 		   //the ContentProviderEPG.apk should be able to read it..
 		   //Currently, plfApp are using this directory to save data, so it make sense to put it here.
+		   
 		   
 		   //on simulator 
 		   private static final String DATABASE_PATH = "/data/system/";
