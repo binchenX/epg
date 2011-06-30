@@ -206,11 +206,10 @@ public class EPGProviderActivity extends ListActivity {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 
-				Intent myIntent = new Intent(EPGProviderActivity.this,
-						EventDetail.class);
-
-//				TextView nameView = (TextView) view
-//						.findViewById(R.id.eventName);
+//				Intent myIntent = new Intent(EPGProviderActivity.this,
+//						EventDetail.class);
+				
+				Intent myIntent = new Intent("com.trident.tv.si.intent.action.PICK");
 				
 				TextView idView = (TextView) view.findViewById(R.id._id);
 
