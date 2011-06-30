@@ -249,9 +249,6 @@ public class EPGProviderActivity extends ListActivity {
 				
 				Intent myIntent = new Intent("com.trident.tv.si.intent.action.CATEGORY");
 
-				// The detailActivity will use this to query the detail
-				// information.
-
 				myIntent.putExtra("TYPE", "movie");
 				startActivity(myIntent);
 				finish();
@@ -267,12 +264,11 @@ public class EPGProviderActivity extends ListActivity {
 
 				Log.d(TAG, "news button has been pressed...........");
 				// start himself...
-				Intent myIntent = new Intent(EPGProviderActivity.this,
-						EPGProviderActivity.class);
+//				Intent myIntent = new Intent(EPGProviderActivity.this,
+//						EPGProviderActivity.class);
 
-				// The detailActivity will use this to query the detail
-				// information.
 
+				Intent myIntent = new Intent("com.trident.tv.si.intent.action.CATEGORY");
 				myIntent.putExtra("TYPE", "news");
 				startActivity(myIntent);
 				finish();
@@ -287,12 +283,11 @@ public class EPGProviderActivity extends ListActivity {
 			public void onClick(View v) {
 
 				Log.d(TAG, "sports button has been pressed...........");
-				// start himself...
-				Intent myIntent = new Intent(EPGProviderActivity.this,
-						EPGProviderActivity.class);
+//				// start himself...
+//				Intent myIntent = new Intent(EPGProviderActivity.this,
+//						EPGProviderActivity.class);
 
-				// The detailActivity will use this to query the detail
-				// information.
+				Intent myIntent = new Intent("com.trident.tv.si.intent.action.CATEGORY");
 
 				myIntent.putExtra("TYPE", "sports");
 				startActivity(myIntent);
@@ -302,9 +297,13 @@ public class EPGProviderActivity extends ListActivity {
 		
 		//Handle the query ------->>>>>
 		
+		Log.d(TAG,"Checking query type---------------------------");
+		
 		String[] query = getQueryType();
 
 		ListAdapter adapter = null;
+		
+		Log.d(TAG,"Checking query type---------------------------" + query[0]);
 	
 	
 		switch(Integer.valueOf(query[0]))
@@ -360,23 +359,23 @@ public class EPGProviderActivity extends ListActivity {
 		String query = null;
 
 		
-		//case 1:
-		if (intent == null) {
+		//case 1: intent == null , init start
+		//        intent != null && intent.getAction() == null , back button for DetailActivity
+		if (intent == null || intent.getAction() == null ) {
 			
 			Log.d(TAG, "started without search query ,will display all the events..");
 
 			return new String[] {"1", ""};
+		
+		}else if (Intent.ACTION_SEARCH.equals(intent.getAction())){
 
-		} else {
-
-			// case 2 :intent from Search bar
-			if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			   // case 2 :intent from Search bar
 				query = intent.getStringExtra(SearchManager.QUERY);
 				Log.d(TAG, "Will search .." + query);
 				
 				return new String[] {"2", query};
 
-			} else if(getIntent().getAction().equals("com.trident.tv.si.intent.action.CATEGORY")) {
+	    } else if(getIntent().getAction().equals("com.trident.tv.si.intent.action.CATEGORY")) {
 				//case 3:intent from movie/news button
 				Bundle bd = getIntent().getExtras();
 				
@@ -389,7 +388,6 @@ public class EPGProviderActivity extends ListActivity {
 
 				}
 
-			}
 		}
 		
 	
