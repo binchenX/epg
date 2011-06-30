@@ -130,8 +130,8 @@ public class EventDetail extends Activity {
 			@Override
 			public void onClick(View v) {
 				
-				//create a intent for the EPGProviderActivity
-				startActivity(new Intent(context,  EPGProviderActivity.class));
+				startActivity(new Intent("com.trident.tv.si.intent.action.LIST"));
+				
 				finish();
 			}
 		});

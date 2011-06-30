@@ -359,9 +359,11 @@ public class EPGProviderActivity extends ListActivity {
 		String query = null;
 
 		
-		//case 1: intent == null , init start
-		//        intent != null && intent.getAction() == null , back button for DetailActivity
-		if (intent == null || intent.getAction() == null ) {
+		//case 1: 
+		if (intent == null ||              //MAIN LAUNCH
+			intent.getAction() == null ||   //IMPLICT start 
+			intent.getAction().equals("com.trident.tv.si.intent.action.LIST") //EXPLICT start
+		    ) {
 			
 			Log.d(TAG, "started without search query ,will display all the events..");
 
