@@ -244,8 +244,10 @@ public class EPGProviderActivity extends ListActivity {
 
 				Log.d(TAG, "movie button has been pressed...........");
 				// start himself...
-				Intent myIntent = new Intent(EPGProviderActivity.this,
-						EPGProviderActivity.class);
+//				Intent myIntent = new Intent(EPGProviderActivity.this,
+//						EPGProviderActivity.class);
+				
+				Intent myIntent = new Intent("com.trident.tv.si.intent.action.CATEGORY");
 
 				// The detailActivity will use this to query the detail
 				// information.
@@ -374,26 +376,16 @@ public class EPGProviderActivity extends ListActivity {
 				
 				return new String[] {"2", query};
 
-			} else {
-
+			} else if(getIntent().getAction().equals("com.trident.tv.si.intent.action.CATEGORY")) {
 				//case 3:intent from movie/news button
 				Bundle bd = getIntent().getExtras();
-
+				
 				String type;
 				if (bd != null) {
 
 					type = bd.getString("TYPE");
-
-					if (type.equals("movie") || 
-						type.equals("news") ||
-						type.equals("sports") 
-						) {
-						
-
-						Log.d(TAG, "try to get events belong to type " + type);
-						
-						return new String[] {"3", type};
-					}
+					Log.d(TAG, "try to get events belong to type " + type);
+					return new String[] {"3", type};
 
 				}
 

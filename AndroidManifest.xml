@@ -22,7 +22,11 @@
                 <action android:name="android.intent.action.VIEW" />     
                 <data android:mimeType="vnd.android.cursor.dir/vnd.trident.tv.si.events" />                      
             </intent-filter>
-            
+                      
+             <intent-filter>
+                <action android:name= "com.trident.tv.si.intent.action.CATEGORY" />   
+                <category android:name="android.intent.category.DEFAULT" />                              
+            </intent-filter>
           
             
             <meta-data android:name="android.app.searchable"
