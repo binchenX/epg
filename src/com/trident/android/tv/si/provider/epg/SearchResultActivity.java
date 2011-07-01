@@ -56,45 +56,15 @@ public class SearchResultActivity extends ListActivity {
 
 	private static final String TAG = "SearchResultActivity";
 
-	private TextView mStarTimeTextView;
-	private TextView mEndTimeTextView;
-
-	private int mStartYear = 2011;
-	private int mStartMonth = 5; //start from 0
-	private int mStartDay = 1;
-
-	private long start_time_utc = getUTCTime(mStartYear, mStartMonth, mStartDay);
+	private ListView lv;
+	private int lastSelectedPosition = 0;
 	
-	private int mEndYear = 2011;
-	private int mEndMonth = 5; //start from 0
-	private int mEndDay = 2;
-	
-	private long end_time_utc = getUTCTime(mEndYear,mEndMonth,mEndDay);
-	
-
 	static final int DATE_DIALOG_ID = 0;
 	static final int END_DATE_DIALOG_ID = 1;
 	
 	
 	private final int REQUEST_DETAIL = 0;
 
-		
-	private long getUTCTime(int y, int m ,int d)
-	{
-		
-		GregorianCalendar calendar = new GregorianCalendar(y,m,d);
-		// set time zone
-		TimeZone zone = TimeZone.getTimeZone("UTC");
-		calendar.setTimeZone(zone);
-		return calendar.getTime().getTime()/1000;
-		
-		
-	}
-
-	
-
-	
-	/** Called when the activity is first created. */
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -103,7 +73,7 @@ public class SearchResultActivity extends ListActivity {
 
 		Log.d(TAG, "onCreate");
 				
-		ListView lv = getListView(); // == findViewById(android.R.id.list)
+		lv = getListView(); // == findViewById(android.R.id.list)
 
 		lv.setTextFilterEnabled(true);
 				
@@ -112,6 +82,8 @@ public class SearchResultActivity extends ListActivity {
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+
+				lastSelectedPosition = position;
 				
 				Intent myIntent = new Intent("com.trident.tv.si.intent.action.PICK");
 				
@@ -180,115 +152,22 @@ public class SearchResultActivity extends ListActivity {
 	}
 	
 	
-	/**
-	 * 
-	 * case 1. Enter the main page ,displaying all the events
-	 * case 2. User press "Search"
-	 * case 3. User press "Movie", "Sports"
-	 * case 4. User change the star_time and/or end_time
-	 * @return
-	 */
-	
-	private String[] getQueryType()
+	@Override
+	public void onResume()
 	{
-		Intent intent = getIntent();
-
-		String query = null;
-
+		super.onResume();
+		Log.d(TAG, "onResume is called. LastSelectedPosition is " + lastSelectedPosition);
 		
-		//case 1: 
-		if (intent == null ||              //MAIN LAUNCH
-			intent.getAction() == null ||   //IMPLICT start 
-			intent.getAction().equals("com.trident.tv.si.intent.action.LIST") //EXPLICT start
-		    ) {
-			
-			Log.d(TAG, "started without search query ,will display all the events..");
-
-			return new String[] {"1", ""};
+		lv.setSelection(lastSelectedPosition);
+		lv.requestFocusFromTouch();
 		
-		}else if (Intent.ACTION_SEARCH.equals(intent.getAction())){
-
-			   // case 2 :intent from Search bar
-				query = intent.getStringExtra(SearchManager.QUERY);
-				Log.d(TAG, "Will search .." + query);
-				
-				return new String[] {"2", query};
-
-	    } else if(getIntent().getAction().equals("com.trident.tv.si.intent.action.CATEGORY")) {
-				//case 3:intent from movie/news button
-				Bundle bd = getIntent().getExtras();
-				
-				String type;
-				if (bd != null) {
-
-					type = bd.getString("TYPE");
-					Log.d(TAG, "try to get events belong to type " + type);
-					return new String[] {"3", type};
-
-				}
-
-		}
 		
-	
-		//default to case 1:
-		return new String[] {"1", ""};
-
 		
 	}
 	
 	
-	ListAdapter searchByKeywords(String keyWords) {
-		
-		Cursor c = null;
-		
-		c = managedQuery(EPGProvider.CONTENT_URI_EVENTS_SEARCH,
-				new String[] { Events.SERVICE_ID, Events.NAME }, // selections
-				null, // always be NULL
-				new String[] { keyWords }, // the keywords
-				null);
 
-	
-	// Used to map notes entries from the database to views
-	// show only the event name
-
-	return getAdaptor(c);
-		
-		
-	
-	}
-
-	ListAdapter normalSearch(String selection, String[] selectionArgs, String orderBy) {
-
-		Cursor c = null;
-
-		
-		//default sort order
-		if(orderBy == null)
-		{
-			
-			orderBy = Events.SERVICE_ID + " ASC " + " , " +  Events.START_TIME + " ASC ";
-		}
-
-		c = managedQuery(EPGProvider.CONTENT_URI_EVENTS, new String[] {
-					Events.SERVICE_ID, Events.NAME, Events.LEVEL1,
-					Events.START_TIME }, // projections
-					selection,
-					selectionArgs, 
-					orderBy);
-		
-		if(c == null)
-		{
-			return null;
-		}
-
-
-		// Used to map notes entries from the database to views
-		// show only the event name
-
-		return getAdaptor(c);
-	}
-
-	SimpleCursorAdapter getAdaptor(Cursor c) {
+	private SimpleCursorAdapter getAdaptor(Cursor c) {
 
 		// The Cursor should include all the entries specified in "from"
 		// TODO: add check??
@@ -323,55 +202,8 @@ public class SearchResultActivity extends ListActivity {
 
 	}
 
-	ListAdapter searchByEventType(String type) {
-		Cursor c = null;
-		// TODO: use FTS instead of LIKE
-		Uri uri;
-		if(type.equals("movie")) 
-		{
-			 uri = EPGProvider.CONTENT_URI_EVENTS_MOVIE;
-		}else if(type.equals("news")){
-			 uri = EPGProvider.CONTENT_URI_EVENTS_NEWS;
-		}else if (type.equals("sports")){
-			uri = EPGProvider.CONTENT_URI_EVENTS_SPORTS;
-		}else{
-			return null;
-		}
-			
-		c = managedQuery(uri, null, null,
-				null, null);
+	
+	
 
-		return getAdaptor(c);
-
-	}
-
-	// updates the date in the TextView
-	private void updateTimeViewDisplay() {
-		mStarTimeTextView.setText(new StringBuilder()
-		        // Month is 0 based so add 1
-				.append(mStartMonth + 1).append("-").append(mStartDay).append(
-						"-").append(mStartYear).append(" "));
-
-		mEndTimeTextView.setText(new StringBuilder()
-				// Month is 0 based so add 1
-				.append(mEndMonth + 1).append("-").append(mEndDay).append("-")
-				.append(mEndYear).append(" "));
-	}
-
-	void populate_the_database() {
-		// add 2 EPG events after app starte
-		// ---add an event
-		// ContentValues values = new ContentValues();
-		// values.put(EPGProvider.NAME, "hello");
-		// values.put(EPGProvider.SHORT_DESCRIPTION, "hello android");
-		// Uri uri = getContentResolver().insert(
-		// EPGProvider.CONTENT_URI, values);
-		//	               
-		// //---add another event---
-		// values.clear();
-		// values.put(EPGProvider.NAME, "hello2");
-		// values.put(EPGProvider.SHORT_DESCRIPTION, "hello android2");
-		// uri = getContentResolver().insert(
-		// EPGProvider.CONTENT_URI, values);
-	}
+	
 }
