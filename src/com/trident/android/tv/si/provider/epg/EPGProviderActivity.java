@@ -55,6 +55,10 @@ import android.view.View.OnClickListener;
 public class EPGProviderActivity extends ListActivity {
 
 	private static final String TAG = "EPGProviderActivity";
+	
+	//the listview for the events..
+	private ListView lv;
+	private int lastSelectedPosition = 0;
 
 	private TextView mStarTimeTextView;
 	private TextView mEndTimeTextView;
@@ -197,7 +201,7 @@ public class EPGProviderActivity extends ListActivity {
 		updateTimeViewDisplay();
 
 		
-		ListView lv = getListView(); // == findViewById(android.R.id.list)
+		lv = getListView(); // == findViewById(android.R.id.list)
 
 		lv.setTextFilterEnabled(true);
 				
@@ -216,7 +220,8 @@ public class EPGProviderActivity extends ListActivity {
 
 				myIntent.putExtra("EVENT_NAME", idView.getText());
 
-				//startActivity(myIntent);
+				lastSelectedPosition = position;
+
 				startActivityForResult(myIntent, REQEUST_DETAIL);
 				//should not finish ,we are waiting EventDetailActivity to finish
 				//finish();
@@ -347,6 +352,19 @@ public class EPGProviderActivity extends ListActivity {
 	}
 	
 	
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		Log.d(TAG, "onResume is called. LastSelectedPosition is " + lastSelectedPosition);
+		
+		lv.setSelection(lastSelectedPosition);
+		lv.requestFocusFromTouch();
+		
+		
+		
+	}
+	
 	/**
 	 * 
 	 * case 1. Enter the main page ,displaying all the events
@@ -406,7 +424,7 @@ public class EPGProviderActivity extends ListActivity {
 	}
 	
 	
-	ListAdapter searchByKeywords(String keyWords) {
+	private ListAdapter  searchByKeywords(String keyWords) {
 		
 		Cursor c = null;
 		
@@ -426,7 +444,7 @@ public class EPGProviderActivity extends ListActivity {
 	
 	}
 
-	ListAdapter normalSearch(String selection, String[] selectionArgs, String orderBy) {
+	private ListAdapter normalSearch(String selection, String[] selectionArgs, String orderBy) {
 
 		Cursor c = null;
 
@@ -457,7 +475,7 @@ public class EPGProviderActivity extends ListActivity {
 		return getAdaptor(c);
 	}
 
-	SimpleCursorAdapter getAdaptor(Cursor c) {
+	private SimpleCursorAdapter getAdaptor(Cursor c) {
 
 		// The Cursor should include all the entries specified in "from"
 		// TODO: add check??
@@ -492,7 +510,7 @@ public class EPGProviderActivity extends ListActivity {
 
 	}
 
-	ListAdapter searchByEventType(String type) {
+	private ListAdapter searchByEventType(String type) {
 		Cursor c = null;
 		// TODO: use FTS instead of LIKE
 		Uri uri;
@@ -526,21 +544,5 @@ public class EPGProviderActivity extends ListActivity {
 				.append(mEndMonth + 1).append("-").append(mEndDay).append("-")
 				.append(mEndYear).append(" "));
 	}
-
-	void populate_the_database() {
-		// add 2 EPG events after app starte
-		// ---add an event
-		// ContentValues values = new ContentValues();
-		// values.put(EPGProvider.NAME, "hello");
-		// values.put(EPGProvider.SHORT_DESCRIPTION, "hello android");
-		// Uri uri = getContentResolver().insert(
-		// EPGProvider.CONTENT_URI, values);
-		//	               
-		// //---add another event---
-		// values.clear();
-		// values.put(EPGProvider.NAME, "hello2");
-		// values.put(EPGProvider.SHORT_DESCRIPTION, "hello android2");
-		// uri = getContentResolver().insert(
-		// EPGProvider.CONTENT_URI, values);
-	}
+	
 }

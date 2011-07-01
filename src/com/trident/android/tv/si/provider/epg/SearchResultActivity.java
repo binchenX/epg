@@ -120,7 +120,7 @@ public class SearchResultActivity extends ListActivity {
 				myIntent.putExtra("EVENT_NAME", idView.getText());
 
 				startActivityForResult(myIntent, REQUEST_DETAIL);
-				//finish();
+				
 
 			}
 		});
@@ -131,9 +131,9 @@ public class SearchResultActivity extends ListActivity {
 			@Override
 			public void onClick(View v) {
 				
+				//no need - finish() will make you go back to previous Activity that start the SearchResult
+				//instead,following code will always back you to the main page
 				//startActivity(new Intent("com.trident.tv.si.intent.action.LIST"));
-				
-				
 				finish();
 			}
 		});
