@@ -14,7 +14,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-                <action android:name="android.intent.action.SEARCH" />
+                <!--action android:name="android.intent.action.SEARCH" /-->
                          
             </intent-filter>
             
@@ -29,8 +29,13 @@
             </intent-filter>
           
             
-            <meta-data android:name="android.app.searchable"
-                   android:resource="@xml/searchable"/>
+            <!-- meta-data android:name="android.app.searchable"
+                   android:resource="@xml/searchable"/-->
+                   
+           <!-- enable the .EPGProviderActivity enable search dialog to initiate search
+                 ,and enable the search dialog  to send search to .SearchResultActivity dialog  --> 
+            <meta-data android:name="android.app.default_searchable"
+                   android:value=".SearchResultActivity" />
             
         </activity>
         <activity android:name=".EventDetail"
@@ -47,10 +52,26 @@
             </intent-filter>
             
              <!-- enable the EventDetail Activity be able to use the search dialog  --> 
-              <meta-data android:name="android.app.default_searchable"
-                   android:value=".EPGProviderActivity" />
+              <!--meta-data android:name="android.app.default_searchable"
+                   android:value=".EPGProviderActivity" /-->
             
         </activity>
+        
+          <activity android:name=".SearchResultActivity"
+                 android:theme="@android:style/Theme.NoTitleBar.Fullscreen"> 
+                      
+            <intent-filter>                   
+                <category android:name="android.intent.category.DEFAULT" />   
+                <action android:name="android.intent.action.SEARCH" />
+                <!--data android:mimeType="vnd.android.cursor.item/vnd.trident.tv.si.events" /-->                 
+            </intent-filter>
+            
+            
+            <meta-data android:name="android.app.searchable"
+                   android:resource="@xml/searchable"/>
+            
+        </activity>
+        
         <provider android:name="EPGProvider"
          android:authorities="com.trident.android.tv.si.provider.EPG" /> 
 
