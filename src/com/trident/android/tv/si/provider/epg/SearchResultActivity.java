@@ -74,6 +74,9 @@ public class SearchResultActivity extends ListActivity {
 
 	static final int DATE_DIALOG_ID = 0;
 	static final int END_DATE_DIALOG_ID = 1;
+	
+	
+	private final int REQUEST_DETAIL = 0;
 
 		
 	private long getUTCTime(int y, int m ,int d)
@@ -116,8 +119,8 @@ public class SearchResultActivity extends ListActivity {
 
 				myIntent.putExtra("EVENT_NAME", idView.getText());
 
-				startActivity(myIntent);
-				finish();
+				startActivityForResult(myIntent, REQUEST_DETAIL);
+				//finish();
 
 			}
 		});
@@ -128,7 +131,8 @@ public class SearchResultActivity extends ListActivity {
 			@Override
 			public void onClick(View v) {
 				
-				startActivity(new Intent("com.trident.tv.si.intent.action.LIST"));
+				//startActivity(new Intent("com.trident.tv.si.intent.action.LIST"));
+				
 				
 				finish();
 			}

@@ -130,9 +130,13 @@ public class EventDetail extends Activity {
 			@Override
 			public void onClick(View v) {
 				
-				startActivity(new Intent("com.trident.tv.si.intent.action.LIST"));
+				//startActivity(new Intent("com.trident.tv.si.intent.action.LIST"));
+				//Will destroy current EventDetailActivity ,and back to what ever previouse Activity, could be 
+				//EPGProviderActivity or SearchResultActivity.
+				Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+                finish();
 				
-				finish();
 			}
 		});
 		

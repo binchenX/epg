@@ -59,6 +59,7 @@ public class EPGProviderActivity extends ListActivity {
 	private TextView mStarTimeTextView;
 	private TextView mEndTimeTextView;
 
+	private final int  REQEUST_DETAIL = 1;
 	
 	private int mStartYear = 2011;
 	private int mStartMonth = 5; //start from 0
@@ -215,8 +216,10 @@ public class EPGProviderActivity extends ListActivity {
 
 				myIntent.putExtra("EVENT_NAME", idView.getText());
 
-				startActivity(myIntent);
-				finish();
+				//startActivity(myIntent);
+				startActivityForResult(myIntent, REQEUST_DETAIL);
+				//should not finish ,we are waiting EventDetailActivity to finish
+				//finish();
 
 			}
 		});
