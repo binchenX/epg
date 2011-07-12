@@ -58,21 +58,22 @@ import android.util.Log;
 			   public static final String GROUP = "tblEvent_group";
 			   public static final String TYPE = "tblEvent_content";
 			   public static final String BASIC_JOIN_SHORT_DES = "tblEvent_basic a INNER JOIN tblEvent_shortdes b ON a.rowid = b.eguid";
-			   
+			   public static final String BASIC_JOIN_TYPE = Table.BASIC + " LEFT OUTER JOIN " + Table.TYPE + 
+			                                                " ON tblEvent_basic._id = tblEvent_content.eguid ";
 		   }
 		   
 		   public interface BasicColumns{
-			    public static final String _ID = "_id";
-				public static final String SECTION_GUID = "sguid";
-				public static final String TSID = "tsid";
-				public static final String ONID = "onid";
-				public static final String SERVICE_ID = "service_id";
-			    public static final String START_TIME = "start_time";
-			    public static final String DURATION = "duration";
-			    public static final String RUNNING_STATUS = "running_status";
-			    public static final String CA_MODE = "free_ca_mode";
-				public static final String NAME = "event_name";
-				public static final String SHORT_DESCRIPTION = "text";
+			    public static final String CONCRETE_ID          =  Table.BASIC + "." + "_id";
+				public static final String CONCRETE_SECTION_GUID = Table.BASIC + "." + "sguid";
+				public static final String CONCRETE_TSID         = Table.BASIC + "." +"tsid";
+				public static final String CONCRETE_ONID         = Table.BASIC + "." +"onid";
+				public static final String CONCRETE_SERVICE_ID   = Table.BASIC + "." +"service_id";
+			    public static final String CONCRETE_START_TIME   = Table.BASIC + "." +"start_time";
+			    public static final String CONCRETE_DURATION     = Table.BASIC + "." +"duration";
+			    public static final String CONCRETE_RUNNING_STATUS = Table.BASIC + "." +"running_status";
+			    public static final String CONCRETE_CA_MODE      = Table.BASIC + "." + "free_ca_mode";
+				public static final String CONCRETE_NAME         = Table.BASIC + "." + "event_name";
+				public static final String CONCRETE_SHORT_DESCRIPTION = Table.BASIC + "." + "text";
 				
 		   }
 		   
@@ -125,8 +126,8 @@ import android.util.Log;
  
 		   
 		   public interface Clause{
-			   public static final String QUERY_BASIC_INFO_BY_EVENT_NAME = BasicColumns.NAME + " = ?";
-			   public static final String QUERY_BASIC_INFO_BY_ID = Table.BASIC+"."+BasicColumns._ID + " = ?";
+			   public static final String QUERY_BASIC_INFO_BY_EVENT_NAME = BasicColumns.CONCRETE_NAME + " = ?";
+			   public static final String QUERY_BASIC_INFO_BY_ID =  BasicColumns.CONCRETE_ID + " = ?";
 			   public static final String SEARCH_BY_TYPE = "_id IN (select eguid FROM tblEvent_content WHERE level1=? )";
 		   }
 		   
@@ -148,6 +149,8 @@ import android.util.Log;
 		   public synchronized SQLiteDatabase getReadableDatabase ()
 		   {
 			 try{  
+				 
+				 Log.d(TAG,"Trying to open database " + DATABASE_PATH+DATABASE_NAME);
 			 return   SQLiteDatabase.openDatabase(DATABASE_PATH + DATABASE_NAME, null, SQLiteDatabase.OPEN_READONLY);
 			
 			 }catch(SQLiteException ex)

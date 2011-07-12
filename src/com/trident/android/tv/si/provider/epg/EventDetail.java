@@ -56,8 +56,8 @@ public class EventDetail extends Activity {
 		
 		if (bundle != null) {
 			//TODO: it is id
-		   String id = bundle.getString("EVENT_NAME");
-			//use the event_name to query
+		   String id = bundle.getString("EVENTID");
+			//use the event_id to query
 		   String selection = Clause.QUERY_BASIC_INFO_BY_ID;
 		   String [] selectionArgs = new String[] {id };
 	       Cursor c = managedQuery(EPGProvider.CONTENT_URI_EVENTS , 
@@ -77,9 +77,9 @@ public class EventDetail extends Activity {
 	    	   
 	       }else{
 	    	   c.moveToFirst();
-	    	   short_description = c.getString(c.getColumnIndexOrThrow(BasicColumns.SHORT_DESCRIPTION));
-	    	   startTime = c.getInt(c.getColumnIndexOrThrow(BasicColumns.START_TIME));
-	    	   duration  = c.getInt(c.getColumnIndexOrThrow(BasicColumns.DURATION));
+	    	   short_description = c.getString(c.getColumnIndexOrThrow(Events.SHORT_DESCRIPTION));
+	    	   startTime = c.getInt(c.getColumnIndexOrThrow(Events.START_TIME));
+	    	   duration  = c.getInt(c.getColumnIndexOrThrow(Events.DURATION));
 	    	   //String eguid = c.getString(c.getColumnIndexOrThrow(BasicColumns._ID));
 	    	   String eguid = id;
 	    	

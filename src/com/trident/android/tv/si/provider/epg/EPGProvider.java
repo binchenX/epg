@@ -294,9 +294,9 @@ public class EPGProvider extends ContentProvider
 	     private static HashMap<String,String> buildSearchColumnMap() {
 	          HashMap<String,String> map = new HashMap<String,String>();
 	          
-	          map.put(BaseColumns._ID,                   Table.BASIC+ "." +  BaseColumns._ID);
-	          map.put(BasicColumns.NAME,                 Table.BASIC + "." + BasicColumns.NAME);
-	          map.put(BasicColumns.SHORT_DESCRIPTION,    Table.BASIC + "." + BasicColumns.SHORT_DESCRIPTION);
+	          map.put(BaseColumns._ID,                    BaseColumns._ID);
+	          map.put(Events.NAME,                  BasicColumns.CONCRETE_NAME);
+	          map.put(Events.SHORT_DESCRIPTION,     BasicColumns.CONCRETE_SHORT_DESCRIPTION);
 	          
 	          return map;
 	      }
@@ -423,8 +423,7 @@ public class EPGProvider extends ContentProvider
 				  ContentTypeColumns.LEVEL1,
 				  ContentTypeColumns.LEVEL2))
 		  {
-			  qb.setTables(Table.BASIC + " LEFT OUTER JOIN " + Table.TYPE + 
-			      " ON tblEvent_basic._id = tblEvent_content.eguid ");
+			  qb.setTables(Table.BASIC_JOIN_TYPE);
 			 
 		  } else {
 			  qb.setTables(Table.BASIC); 
@@ -433,10 +432,10 @@ public class EPGProvider extends ContentProvider
 	     	      
 	      //should always select _id, otherwise, cursor won't working complaining : column '_id' does not exist
 	      //_id will become ambiguous when join with tblEvent_content
-		  projection = prePendProjectionArg(projection,"tblEvent_basic._id");
+		  projection = prePendProjectionArg(projection, BasicColumns.CONCRETE_ID);
 	       
 	      if (sortOrder==null || sortOrder=="")
-	         sortOrder = "tblEvent_basic._id";//BasicColumns._ID;
+	         sortOrder = BasicColumns.CONCRETE_ID;
 	      break;
 	    
 	      

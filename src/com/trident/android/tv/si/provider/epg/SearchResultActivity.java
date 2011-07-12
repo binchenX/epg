@@ -88,8 +88,10 @@ public class SearchResultActivity extends ListActivity {
 				Intent myIntent = new Intent("com.trident.tv.si.intent.action.PICK");
 				
 				TextView idView = (TextView) view.findViewById(R.id._id);
+				
+				Log.d(TAG, "get detail of event " + idView.getText());
 
-				myIntent.putExtra("EVENT_NAME", idView.getText());
+				myIntent.putExtra("EVENTID", idView.getText());
 
 				startActivityForResult(myIntent, REQUEST_DETAIL);
 				

@@ -218,7 +218,7 @@ public class EPGProviderActivity extends ListActivity {
 				
 				TextView idView = (TextView) view.findViewById(R.id._id);
 
-				myIntent.putExtra("EVENT_NAME", idView.getText());
+				myIntent.putExtra("EVENTID", idView.getText());
 
 				lastSelectedPosition = position;
 
@@ -483,7 +483,7 @@ public class EPGProviderActivity extends ListActivity {
 		SimpleCursorAdapter adapter = null;
 
 		
-		
+		//TODO:if we were to change level1 to concrete_level , what we will use to getColumnIndex
 		if (c.getColumnIndex(ContentTypeColumns.LEVEL1) != -1) {
 
 			//TODO:we can use setTag/getTag to associate a tag, the _id of the event in our case, to
@@ -498,11 +498,13 @@ public class EPGProviderActivity extends ListActivity {
 							R.id.startTime });
 
 		} else {
-			// When using FTS, the returned Cursor won't contain level column
-
+			// in case of searching by keywords and by event type, the returned Cursor won't contain level column
+			// should always associate R.id._id with Events.ID otherwise , get Detail will Fail
 			adapter = new EventCursorAdaptor(this, R.layout.list_item, c,
-					new String[] { Events.SERVICE_ID, Events.NAME }, new int[] {
-							R.id.serviceID, R.id.eventName });
+					new String[] { Events.ID, Events.SERVICE_ID, Events.NAME },
+					new int[] { R.id._id,
+							R.id.serviceID, R.id.eventName }
+				);
 
 		}
 
@@ -525,7 +527,11 @@ public class EPGProviderActivity extends ListActivity {
 			return null;
 		}
 			
-		c = managedQuery(uri, null, null,
+		c = managedQuery(uri, 
+				new String[] {
+				Events.ID, Events.SERVICE_ID, Events.NAME,
+				Events.START_TIME }, // projections 
+				null,
 				null, null);
 
 		return getAdaptor(c);
