@@ -2,7 +2,5 @@ An demostration of using ContentProvider to provide EPG database.
 
 Notes: after install the apk ,use following command to install the sample database file
 
-adb push epg_1.db /data/data/com.trident.android.tv.si.provider.epg/databases/epg_1.db
 
-//or
-adb push epg_1.db /data/system/epg_1.db
+adb push asserts/epg.db /data/system/epg.db
