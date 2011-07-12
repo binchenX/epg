@@ -63,17 +63,18 @@ import android.util.Log;
 		   }
 		   
 		   public interface BasicColumns{
-			    public static final String CONCRETE_ID          =  Table.BASIC + "." + "_id";
-				public static final String CONCRETE_SECTION_GUID = Table.BASIC + "." + "sguid";
-				public static final String CONCRETE_TSID         = Table.BASIC + "." +"tsid";
-				public static final String CONCRETE_ONID         = Table.BASIC + "." +"onid";
-				public static final String CONCRETE_SERVICE_ID   = Table.BASIC + "." +"service_id";
-			    public static final String CONCRETE_START_TIME   = Table.BASIC + "." +"start_time";
-			    public static final String CONCRETE_DURATION     = Table.BASIC + "." +"duration";
-			    public static final String CONCRETE_RUNNING_STATUS = Table.BASIC + "." +"running_status";
-			    public static final String CONCRETE_CA_MODE      = Table.BASIC + "." + "free_ca_mode";
-				public static final String CONCRETE_NAME         = Table.BASIC + "." + "event_name";
-				public static final String CONCRETE_SHORT_DESCRIPTION = Table.BASIC + "." + "text";
+			   
+			    public static final String CONCRETE_ID          =  Table.BASIC + "." + EventsContract.Events._ID;
+				public static final String CONCRETE_SECTION_GUID = Table.BASIC + "." + EventsContract.Events.SECTION_GUID;//"sguid";
+				public static final String CONCRETE_TSID         = Table.BASIC + "." + EventsContract.Events.TSID;
+				public static final String CONCRETE_ONID         = Table.BASIC + "." + EventsContract.Events.ONID;
+				public static final String CONCRETE_SERVICE_ID   = Table.BASIC + "." + EventsContract.Events.SERVICE_ID;
+			    public static final String CONCRETE_START_TIME   = Table.BASIC + "." + EventsContract.Events.START_TIME;
+			    public static final String CONCRETE_DURATION     = Table.BASIC + "." + EventsContract.Events.DURATION;
+			    public static final String CONCRETE_RUNNING_STATUS = Table.BASIC + "." + EventsContract.Events.RUNNING_STATUS;
+			    public static final String CONCRETE_CA_MODE      = Table.BASIC + "." + EventsContract.Events.CA_MODE;
+				public static final String CONCRETE_NAME         = Table.BASIC + "." + EventsContract.Events.NAME;
+				public static final String CONCRETE_SHORT_DESCRIPTION = Table.BASIC + "." + EventsContract.Events.SHORT_DESCRIPTION;
 				
 		   }
 		   
