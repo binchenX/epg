@@ -57,6 +57,7 @@ import android.util.Log;
 			   public static final String EXTENDED_FTS = "tblEvent_extdes";
 			   public static final String GROUP = "tblEvent_group";
 			   public static final String TYPE = "tblEvent_content";
+			   public static final String BASIC_JOIN_SHORT_DES = "tblEvent_basic a INNER JOIN tblEvent_shortdes b ON a.rowid = b.eguid";
 			   
 		   }
 		   

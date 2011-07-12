@@ -523,13 +523,19 @@ public class EPGProvider extends ContentProvider
 		   
 		   String search_projections = join(projection, " , ");
 		   
-		   String sql_search_event_name =  " SELECT " +  search_projections + 
-                                           " FROM tblEvent_basic a INNER JOIN tblEvent_shortdes b ON a.rowid = b.eguid " +  
-                                           " WHERE b.event_name MATCH ? " ;
-                                           //UNION ALL
-		   String sql_search_short_des =   " SELECT " +  search_projections + 
-                                           " FROM tblEvent_basic a INNER JOIN tblEvent_shortdes b ON a.rowid = b.eguid " +  
-                                           " WHERE b.short_des MATCH ? ";
+//		   String sql_search_event_name =  " SELECT " +  search_projections + 
+//                                           " FROM  " + Table.BASIC_JOIN_SHORT_DES  +
+//                                           " WHERE b.event_name MATCH ? " ;
+//                                           //UNION ALL
+//		   String sql_search_short_des =   " SELECT " +  search_projections + 
+//                                           " FROM " + Table.BASIC_JOIN_SHORT_DES  +
+//                                           " WHERE b.short_des MATCH ? ";
+		   
+		   String sql_search_event_name_and_short_des =  " SELECT " +  search_projections + 
+		   							" FROM " + Table.BASIC_JOIN_SHORT_DES  +
+		   							" WHERE tblEvent_shortdes MATCH ? ";
+		   
+		   
 		   //UNION ALL
 		   String sql_search_ext_des =  " SELECT " +  search_projections + 
 		   " FROM tblEvent_basic a " +  
@@ -540,15 +546,17 @@ public class EPGProvider extends ContentProvider
 		   " WHERE c.item MATCH ?)";
 		   
 		   
-		   String sql_search_all = qb.buildUnionQuery(new String[] {sql_search_event_name, 
-				                                                    sql_search_short_des,
-				                                                    sql_search_ext_des}, 
+		   String sql_search_all = qb.buildUnionQuery(new String[] {
+				   //sql_search_event_name, 
+				   //sql_search_short_des,
+				   sql_search_event_name_and_short_des,
+				   sql_search_ext_des}, 
 				                                      sortOrder, 
 				                                      null);
 
 		   Log.d(TAG, sql_search_all);
 	   
-		   return epgDB.rawQuery(sql_search_all, new String[] {keyWords ,keyWords ,keyWords});
+		   return epgDB.rawQuery(sql_search_all, new String[] {keyWords ,keyWords });
 		   
 		   //break;
             
