@@ -2,6 +2,8 @@ package com.trident.android.tv.si.provider.epg;
 
 import java.util.Date;
 
+import com.trident.android.tv.si.provider.epg.EventsContract.Events;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.view.View;

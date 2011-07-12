@@ -27,6 +27,7 @@ import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ContentTypeColumns
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ExtendedFTSColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ShortDesFTSColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.Table;
+import com.trident.android.tv.si.provider.epg.EventsContract.Events;
 
 
 /**

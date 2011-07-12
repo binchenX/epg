@@ -10,6 +10,7 @@ import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.BasicColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.Clause;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ExtendedColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ExtendedFTSColumns;
+import com.trident.android.tv.si.provider.epg.EventsContract.Events;
 
 //import android.content.ContentValues;
 import android.content.Context;

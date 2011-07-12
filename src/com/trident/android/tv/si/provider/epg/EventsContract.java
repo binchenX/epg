@@ -11,9 +11,11 @@ package com.trident.android.tv.si.provider.epg;
  */
 
 
-public interface Events{
+public interface EventsContract{
 	
 	 
+	
+	public interface Events {
 	/**
 	 * 
 	 * the unique id for each event ,used only for getting other attributes in other tables.
@@ -38,6 +40,7 @@ public interface Events{
 		public static final String LEVEL1 = "level1";
        	public static final String LEVEL2 = "level2";
 		
+	}
 	
 	
 	

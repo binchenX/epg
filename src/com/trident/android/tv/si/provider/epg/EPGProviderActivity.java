@@ -10,6 +10,9 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ContentTypeColumns;
+import com.trident.android.tv.si.provider.epg.EventsContract.Events;
+import com.trident.android.tv.si.provider.epg.EventsContract;
+
 
 import android.content.Intent;
 import android.net.Uri;
