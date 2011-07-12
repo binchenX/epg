@@ -1,5 +1,7 @@
 package com.trident.android.tv.si.provider.epg;
 
+import android.provider.BaseColumns;
+
 
 
 /**
@@ -11,18 +13,19 @@ package com.trident.android.tv.si.provider.epg;
  */
 
 
-public interface EventsContract{
+public final class EventsContract{
 	
 	 
 	
-	public interface Events {
-	/**
-	 * 
-	 * the unique id for each event ,used only for getting other attributes in other tables.
-	 * 
-	 */
-	    public static final String ID = "_id";
-	    
+	public static class Events implements BaseColumns, BasicColumns , ContentColumns {
+				
+		//public static final String ITEM_DES = "item_description";
+		//public static final String ITEM_CONTENT = "item";
+		   		
+	}
+	
+	protected interface BasicColumns{
+		
 		public static final String SECTION_GUID = "sguid";
 		public static final String TSID = "tsid";
 		public static final String ONID = "onid";
@@ -34,13 +37,13 @@ public interface EventsContract{
 		public static final String NAME = "event_name";
 		public static final String SHORT_DESCRIPTION = "text";
 		
-		public static final String ITEM_DES = "item_description";
-		public static final String ITEM_CONTENT = "item";
-		   
+	}
+	
+	protected interface ContentColumns{
 		public static final String LEVEL1 = "level1";
        	public static final String LEVEL2 = "level2";
-		
 	}
+	
 	
 	
 	

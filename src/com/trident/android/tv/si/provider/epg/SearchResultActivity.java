@@ -186,7 +186,7 @@ public class SearchResultActivity extends ListActivity {
 			adapter = new EventCursorAdaptor(this, 
 					R.layout.list_item, 
 					c,
-					new String[] { Events.ID, Events.SERVICE_ID, Events.NAME,
+					new String[] { Events._ID, Events.SERVICE_ID, Events.NAME,
 							Events.LEVEL1, Events.START_TIME }, 
 					new int[] { R.id._id,   //the hinder column used to search other information
 							R.id.serviceID, R.id.eventName, R.id.eventType,
@@ -196,7 +196,7 @@ public class SearchResultActivity extends ListActivity {
 			// When using FTS, the returned Cursor won't contain level column
 			//ID is must to be able get the detail information
 			adapter = new EventCursorAdaptor(this, R.layout.list_item, c,
-					new String[] { Events.ID, Events.SERVICE_ID, Events.NAME }, 
+					new String[] { Events._ID, Events.SERVICE_ID, Events.NAME }, 
 					new int[] { R.id._id, R.id.serviceID, R.id.eventName });
 
 		}
