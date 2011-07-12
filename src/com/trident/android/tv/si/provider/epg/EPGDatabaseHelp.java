@@ -120,8 +120,8 @@ import android.util.Log;
         
         public interface ContentTypeColumns{
         	public static final String _ID = "_id";
-        	public static final String LEVEL1 = "level1";
-        	public static final String LEVEL2 = "level2";
+        	public static final String CONCRETE_LEVEL1 = Table.TYPE + EventsContract.Events.LEVEL1;
+        	public static final String CONCRETE_LEVEL2 = Table.TYPE + EventsContract.Events.LEVEL1;
         	
         }
  

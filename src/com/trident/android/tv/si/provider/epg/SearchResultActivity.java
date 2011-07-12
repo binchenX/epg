@@ -179,7 +179,7 @@ public class SearchResultActivity extends ListActivity {
 
 		
 		
-		if (c.getColumnIndex(ContentTypeColumns.LEVEL1) != -1) {
+		if (c.getColumnIndex(Events.LEVEL1) != -1) {
 
 			//TODO:we can use setTag/getTag to associate a tag, the _id of the event in our case, to
 			//the view ,and in the listener we can get the tag.

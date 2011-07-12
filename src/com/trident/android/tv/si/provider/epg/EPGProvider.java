@@ -421,8 +421,8 @@ public class EPGProvider extends ContentProvider
 		  //otherwise,simply setTable to Table.BASIC
 		   
 		  if(isInProjection(projection, 
-				  ContentTypeColumns.LEVEL1,
-				  ContentTypeColumns.LEVEL2))
+				  Events.LEVEL1,
+				  Events.LEVEL2))
 		  {
 			  qb.setTables(Table.BASIC_JOIN_TYPE);
 			 
