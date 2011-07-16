@@ -307,10 +307,7 @@ public class EPGProviderActivity extends ListActivity {
 			}
 		});
 		
-		//Handle the query ------->>>>>
-		
-		Log.d(TAG,"Checking query type---------------------------");
-		
+		//Handle the query ------->>>>>	
 		String[] query = getQueryType();
 
 		ListAdapter adapter = null;
@@ -364,8 +361,38 @@ public class EPGProviderActivity extends ListActivity {
 		lv.setSelection(lastSelectedPosition);
 		lv.requestFocusFromTouch();
 		
+	}
+	
+	@Override
+	public void onStart()
+	{
+		super.onStart();
 		
+		Log.d(TAG, "onStart");
+	}
+	
+	@Override
+	public void onPause()
+	{
+		super.onPause();
 		
+		Log.d(TAG, "onPause");
+	}
+	
+	@Override
+	public void onStop()
+	{
+		super.onStop();
+		
+		Log.d(TAG, "onStop");
+	}
+	
+	@Override
+	public void onRestart()
+	{
+		super.onRestart();
+		
+		Log.d(TAG, "onRestart");
 	}
 	
 	/**
@@ -536,6 +563,12 @@ public class EPGProviderActivity extends ListActivity {
 				Events.START_TIME }, // projections 
 				null,
 				null, null);
+		
+		//no result
+		if(c == null)
+		{
+			return null;
+		}
 
 		return getAdaptor(c);
 
