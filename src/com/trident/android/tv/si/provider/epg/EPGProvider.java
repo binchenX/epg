@@ -25,6 +25,7 @@ import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.BasicColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.Clause;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ContentTypeColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ExtendedFTSColumns;
+import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.RatingColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ShortDesFTSColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.Table;
 import com.trident.android.tv.si.provider.epg.EventsContract.Events;
@@ -115,6 +116,21 @@ public class EPGProvider extends ContentProvider
 	
 	
 	/**
+	 * Query extended events by Rating. Will return following attributes associated with this event specified by
+	 * the eguid.
+	 * <p>
+	 * Events.country_code, Events.rating
+	 * 
+	 * <p>
+	 * user case : get the basic event, use the id of that events to get the extended descriptors.
+	 * 
+	 * 
+	 */
+	public static final Uri CONTENT_URI_QUERY_RATING = Uri.parse("content://" + PROVIDER_NAME + "/ratings/eguid");
+	
+	
+	
+	/**
 	 * 
 	 * Query all the movie events. The projections can be used are some as that when using CONTENT_URI_EVENTS.
 	 * 
@@ -181,6 +197,7 @@ public class EPGProvider extends ContentProvider
 	   private static final int QUERY_EXTENDED_QUERY_ID = 3;
 	   private static final int QUERY_EXTENDED_QUERY_EGUID = 4;
 	   private static final int QUERY_EVENTS_SEARCH = 7;
+	   private static final int QUERY_RATINGS_QUERY_EGUID = 8;
 	   
 	   //for Query by  genre
 	   private static final int QUERY_MOVIE = 0x1001;
@@ -256,6 +273,8 @@ public class EPGProvider extends ContentProvider
 	         //extended/id/3 , query the extended information whose _id = 3
 	         uriMatcher.addURI(PROVIDER_NAME, "extended/id/#", QUERY_EXTENDED_QUERY_ID);
 	         uriMatcher.addURI(PROVIDER_NAME, "extended/eguid/#", QUERY_EXTENDED_QUERY_EGUID);  
+	         
+	         uriMatcher.addURI(PROVIDER_NAME, "ratings/eguid/#", QUERY_RATINGS_QUERY_EGUID);  
 	         
 	         uriMatcher.addURI(PROVIDER_NAME, "movie",  QUERY_MOVIE);   
 	         uriMatcher.addURI(PROVIDER_NAME, "news",   QUERY_NEWS);  
@@ -444,7 +463,7 @@ public class EPGProvider extends ContentProvider
 	    
 	      
 	   case QUERY_EXTENDED_QUERY_EGUID:
-
+	   {
 			qb.setTables(Table.EXTENDED_FTS);
 			if (sortOrder == null || sortOrder == "") {
 				sortOrder =  "rowid"; //ExtendedFTSColumns._ID;
@@ -486,7 +505,37 @@ public class EPGProvider extends ContentProvider
 //			 
 //			return c;
 			break;
+	   }
             
+			
+	   case QUERY_RATINGS_QUERY_EGUID:
+	   {
+		   qb.setTables(Table.RATINGS);
+		   
+			if (sortOrder == null || sortOrder == "") {
+				sortOrder =  "rowid"; //ExtendedFTSColumns._ID;
+			}
+			
+			long event_guid = ContentUris.parseId(uri);
+			//setTablesAndProjectionMapForContacts(qb, uri, projection);
+			
+			Log.d(TAG, "query ratings descriotors for eguid " + event_guid);
+			
+			//the final selectionArgs is:
+			//even_guid , query()'s selectionArgs parameters
+			//selectionArgs = insertSelectionArg(selectionArgs, String.valueOf(event_guid));
+			
+			//selectionArgs = new String[] {"196"};
+			
+			//I can not get the ? to work with selectionArgs, so use this workaround
+			//TODO:find the root cause
+			qb.appendWhere(RatingColumns.EVENT_ID + " =  " + String.valueOf(event_guid));
+			
+			//qb.setProjectionMap(tblExtFTScolumnMap);
+
+
+			break;
+	   }
 	   case QUERY_EVENTS_SEARCH:
 		 
 		   if (selectionArgs == null) {

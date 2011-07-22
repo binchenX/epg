@@ -106,15 +106,36 @@ public class EventDetail extends Activity {
 	    	                        + " : " 
 	    	   	    	            + c2.getString(c2.getColumnIndexOrThrow(ExtendedFTSColumns.ITEM_CONTENT));
 	    	   }
+	    	   
+	    	   //go and get the rating..
+	    	   
 	    	   //show the details
+	    	   String rating = "rating: unknown";
+	    	   
+	    	   Cursor c3 = managedQuery(Uri.parse(EPGProvider.CONTENT_URI_QUERY_RATING + "/" + eguid),
+		    		   null, 
+		    		   null,  
+		    		   null, 
+		    		   null);
+	    	   
+	    	   if(c3 != null)
+	    	   {
+	    		   rating = "rating: " + c3.getString(c3.getColumnIndexOrThrow(Events.RATING));
+	    		   
+	    	   }
+	    	   
+	    	   
 		       
 	    	   ListView detailListView = (ListView)findViewById(R.id.event_detail_list);
 		       String []info = new String[] {
 		    		   (new Date(startTime * 1000)).toGMTString(),   //Java need milliseconds, so x 1000
 		    		   Integer.toString(duration/60) + "minutes", //duration
 		    		   short_description,
-		    		   extended_description};
-	    	   detailListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1,info));
+		    		   extended_description,
+		    		   rating};
+	    	   detailListView.setAdapter(new ArrayAdapter<String>(this, 
+	    			   android.R.layout.simple_expandable_list_item_1,
+	    			   info));
 	    	   
 	    	   
 	       }

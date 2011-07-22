@@ -25,7 +25,7 @@ public final class EventsContract{
 	 */
 	 
 	
-	public static class Events implements BaseColumns, BasicColumns , ContentColumns {
+	public static class Events implements BaseColumns, BasicColumns , ContentColumns, RatingColumns {
 				
 		//public static final String ITEM_DES = "item_description";
 		//public static final String ITEM_CONTENT = "item";
@@ -52,6 +52,10 @@ public final class EventsContract{
        	public static final String LEVEL2 = "level2";
 	}
 	
+	protected interface RatingColumns{
+		public static final String COUNTRY_CODE = "country_code";
+		public static final String RATING = "rating";
+	}
 	
 	public interface Gerne{
 		public int EDUCATION = 0;

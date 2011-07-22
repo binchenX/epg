@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.trident.android.tv.si.provider.epg.EventsContract.Events;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -59,9 +61,11 @@ import android.util.Log;
 			   public static final String EXTENDED_FTS = "tblEvent_extdes";
 			   public static final String GROUP = "tblEvent_group";
 			   public static final String TYPE = "tblEvent_content";
+			   public static final String RATINGS = "tblEvent_rating";
 			   public static final String BASIC_JOIN_SHORT_DES = "tblEvent_basic a INNER JOIN tblEvent_shortdes b ON a.rowid = b.eguid";
 			   public static final String BASIC_JOIN_TYPE = Table.BASIC + " LEFT OUTER JOIN " + Table.TYPE + 
 			                                                " ON tblEvent_basic._id = tblEvent_content.eguid ";
+			   
 		   }
 		   
 		   public interface BasicColumns{
@@ -110,6 +114,13 @@ import android.util.Log;
 			   
 			   
 		   }
+           
+           public interface RatingColumns{
+        	   public static final String CONCRETE_ID =  Table.RATINGS + "." + Events._ID;
+        	   public static final String EVENT_ID = Table.RATINGS + "." + "eguid";
+        	   public static final String CONCRETE_COUNTRY_CODE = Table.RATINGS + "." + EventsContract.RatingColumns.COUNTRY_CODE;
+        	   public static final String CONCRETE_RATING = Table.RATINGS + "." + EventsContract.RatingColumns.RATING;
+           }
            
         public interface ShortDesFTSColumns{
 			   
