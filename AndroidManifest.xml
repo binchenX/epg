@@ -7,7 +7,7 @@
     <uses-sdk android:minSdkVersion="8"/>
       
       
-    <application android:icon="@drawable/icon" android:label="@string/app_name">
+    <application android:icon="@drawable/iconepg" android:label="@string/app_name">
         <activity android:name=".EPGProviderActivity"
                   android:label="@string/app_name" 
                   android:theme="@android:style/Theme.NoTitleBar.Fullscreen">

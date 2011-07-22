@@ -42,11 +42,13 @@ import android.util.Log;
 		   
 		   //on simulator 
 		   private static final String DATABASE_PATH = "/data/system/";
+		   private static final String DATABASE_NAME =  "epg.db";
 		   //for SX5
-		   //private static final String DATABASE_PATH = "/system/app/";
+		   //private static final String DATABASE_PATH = "/tmp/";
+		   //private static final String DATABASE_NAME =  "eit.sqlite";
 		   
 		   private String dbName;	
-		   private static final String DATABASE_NAME =  "epg.db";
+	
 		   private static final int DATABASE_VERSION = 2;
 		   
 		   

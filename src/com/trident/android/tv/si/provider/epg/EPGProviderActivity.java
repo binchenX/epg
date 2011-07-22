@@ -221,6 +221,7 @@ public class EPGProviderActivity extends ListActivity {
 				
 				TextView idView = (TextView) view.findViewById(R.id._id);
 
+				//TODO: the name should be com.trident.tv.EVENTID
 				myIntent.putExtra("EVENTID", idView.getText());
 
 				lastSelectedPosition = position;

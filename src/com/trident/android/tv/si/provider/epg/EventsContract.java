@@ -15,6 +15,14 @@ import android.provider.BaseColumns;
 
 public final class EventsContract{
 	
+	
+	/**
+	 * 
+	 * 
+	 * The Contracts between the database and the User. Client code will use the members in Events as the 
+	 * query projections.
+	 *
+	 */
 	 
 	
 	public static class Events implements BaseColumns, BasicColumns , ContentColumns {
