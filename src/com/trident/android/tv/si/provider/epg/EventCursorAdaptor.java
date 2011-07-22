@@ -3,6 +3,7 @@ package com.trident.android.tv.si.provider.epg;
 import java.util.Date;
 
 import com.trident.android.tv.si.provider.epg.EventsContract.Events;
+import com.trident.android.tv.si.provider.epg.EventsContract.Gerne;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -84,8 +85,18 @@ public class EventCursorAdaptor extends SimpleCursorAdapter {
 	@Override
 	 public void setViewImage(ImageView v, String value) {
 	        try {
-	            //v.setImageResource(Integer.parseInt(value));
-	            v.setImageResource(R.drawable.iconepg);
+	        	switch(Integer.parseInt(value))
+	        	{
+	        	case Gerne.MOVIE:
+	        		v.setImageResource(R.drawable.ic_movie); break;
+	        	case Gerne.SPORTS:
+	        		v.setImageResource(R.drawable.ic_sports); break;
+	            default:
+	            	v.setImageResource(R.drawable.iconepg); break;
+	        	}
+	        	
+	       
+	           
 	        } catch (NumberFormatException nfe) {
 	            //v.setImageURI(Uri.parse(value));
 	        }

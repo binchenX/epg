@@ -53,6 +53,15 @@ public final class EventsContract{
 	}
 	
 	
+	public interface Gerne{
+		public int EDUCATION = 0;
+		public int MOVIE = 1;
+		public int NEWS = 2;
+		public int SPORTS = 4;
+		public int MUSIC = 6;
+	
+	}
+	
 	
 	
 }

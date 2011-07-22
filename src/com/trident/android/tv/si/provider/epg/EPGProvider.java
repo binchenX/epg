@@ -189,6 +189,9 @@ public class EPGProvider extends ContentProvider
 	   private static final int QUERY_MUSIC  = 0x1004;
 	   private static final int QUERY_EDUCATION  = 0x1005;
 	   
+	   //TODO: native code should convert standard specific type definition to a unified code
+	   //Currently, let's just use what was for DVB
+	   //see EventsContract.Gerne
 	   
 	   
 	   
