@@ -143,6 +143,7 @@ import android.util.Log;
 			   public static final String QUERY_BASIC_INFO_BY_EVENT_NAME = BasicColumns.CONCRETE_NAME + " = ?";
 			   public static final String QUERY_BASIC_INFO_BY_ID =  BasicColumns.CONCRETE_ID + " = ?";
 			   public static final String SEARCH_BY_TYPE = "_id IN (select eguid FROM tblEvent_content WHERE level1=? )";
+			   public static final String QUERY_RATING_BY_EVENT_ID = RatingColumns.EVENT_ID  + " = ? ";
 		   }
 		   
 		   EPGDatabaseHelp(Context context) {

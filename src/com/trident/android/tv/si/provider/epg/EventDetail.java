@@ -123,9 +123,7 @@ public class EventDetail extends Activity {
 	    		   rating = "rating: " + c3.getString(c3.getColumnIndexOrThrow(Events.RATING));
 	    		   
 	    	   }
-	    	   
-	    	   
-		       
+
 	    	   ListView detailListView = (ListView)findViewById(R.id.event_detail_list);
 		       String []info = new String[] {
 		    		   (new Date(startTime * 1000)).toGMTString(),   //Java need milliseconds, so x 1000

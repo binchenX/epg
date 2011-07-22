@@ -419,9 +419,6 @@ public class EPGProvider extends ContentProvider
     * 
     * THE ENTRY point for query. For details see following URL.
     * 
-    * <p>
-    * 
-    * http://developer.android.com/reference/android/content/ContentResolver.html#query%28android.net.Uri,%20java.lang.String[],%20java.lang.String,%20java.lang.String[],%20java.lang.String%29
     * 
     */
    @Override
@@ -521,15 +518,9 @@ public class EPGProvider extends ContentProvider
 			
 			Log.d(TAG, "query ratings descriotors for eguid " + event_guid);
 			
-			//the final selectionArgs is:
-			//even_guid , query()'s selectionArgs parameters
-			//selectionArgs = insertSelectionArg(selectionArgs, String.valueOf(event_guid));
-			
-			//selectionArgs = new String[] {"196"};
-			
-			//I can not get the ? to work with selectionArgs, so use this workaround
-			//TODO:find the root cause
-			qb.appendWhere(RatingColumns.EVENT_ID + " =  " + String.valueOf(event_guid));
+			selectionArgs = insertSelectionArg(selectionArgs, String.valueOf(event_guid));
+						
+			qb.appendWhere(Clause.QUERY_RATING_BY_EVENT_ID);//RatingColumns.EVENT_ID + " =  " + String.valueOf(event_guid));
 			
 			//qb.setProjectionMap(tblExtFTScolumnMap);
 
