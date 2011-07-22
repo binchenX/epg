@@ -23,10 +23,10 @@ import android.util.Log;
 
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.BasicColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.Clause;
-import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ContentTypeColumns;
+//import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ContentTypeColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ExtendedFTSColumns;
-import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.RatingColumns;
-import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ShortDesFTSColumns;
+//import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.RatingColumns;
+//import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ShortDesFTSColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.Table;
 import com.trident.android.tv.si.provider.epg.EventsContract.Events;
 
@@ -173,8 +173,8 @@ public class EPGProvider extends ContentProvider
 	
 	private static final String TAG = "EPGProvider";
 	
-	private static final HashMap<String,String> columnMap = buildColumnMap();
-	private static final HashMap<String,String> searchColumnMap =  buildSearchColumnMap();
+	//private static final HashMap<String,String> columnMap = buildColumnMap();
+	//private static final HashMap<String,String> searchColumnMap =  buildSearchColumnMap();
 
 	private static final HashMap<String,String> tblExtFTScolumnMap = buildExtFTSColumnMap();
 	
@@ -283,28 +283,28 @@ public class EPGProvider extends ContentProvider
 	         uriMatcher.addURI(PROVIDER_NAME, "education", QUERY_EDUCATION);  
 	      }
 
-	     private static HashMap<String,String> buildColumnMap() {
-	          HashMap<String,String> map = new HashMap<String,String>();
-	          
-	          
-	     /*     map.put(BasicColumns._ID,                Table.BASIC + "." + BasicColumns._ID);
-	          map.put(BasicColumns.NAME,               Table.BASIC + "." + BasicColumns.NAME);
-	          map.put(BasicColumns.SHORT_DESCRIPTION,  Table.BASIC + "." + BasicColumns.SHORT_DESCRIPTION);
-	     */     
-	
-	     /*     map.put(ExtendedFTSColumns._ID,         "rowid as _id");
-	          map.put(ExtendedFTSColumns.EVENG_GUID,   ExtendedFTSColumns.EVENG_GUID +  " AS eguid" );
-	          map.put(ExtendedFTSColumns.ITEM_CONTENT, ExtendedFTSColumns.ITEM_CONTENT);
-	          map.put(ExtendedFTSColumns.ITEM_DES,     ExtendedFTSColumns.ITEM_DES);*/
-	          
-	          map.put(ShortDesFTSColumns._ID,         "rowid as _id");
-	          map.put(ShortDesFTSColumns.EVENG_GUID,            ShortDesFTSColumns.EVENG_GUID );
-	          map.put(ShortDesFTSColumns.NAME,                  ShortDesFTSColumns.NAME);
-	          map.put(ShortDesFTSColumns.SHORT_DESCRIPTION,     ShortDesFTSColumns.SHORT_DESCRIPTION);
-		       		         
-	    
-	          return map;
-	      }
+//	     private static HashMap<String,String> buildColumnMap() {
+//	          HashMap<String,String> map = new HashMap<String,String>();
+//	          
+//	          
+//	     /*     map.put(BasicColumns._ID,                Table.BASIC + "." + BasicColumns._ID);
+//	          map.put(BasicColumns.NAME,               Table.BASIC + "." + BasicColumns.NAME);
+//	          map.put(BasicColumns.SHORT_DESCRIPTION,  Table.BASIC + "." + BasicColumns.SHORT_DESCRIPTION);
+//	     */     
+//	
+//	     /*     map.put(ExtendedFTSColumns._ID,         "rowid as _id");
+//	          map.put(ExtendedFTSColumns.EVENG_GUID,   ExtendedFTSColumns.EVENG_GUID +  " AS eguid" );
+//	          map.put(ExtendedFTSColumns.ITEM_CONTENT, ExtendedFTSColumns.ITEM_CONTENT);
+//	          map.put(ExtendedFTSColumns.ITEM_DES,     ExtendedFTSColumns.ITEM_DES);*/
+//	          
+//	          map.put(ShortDesFTSColumns._ID,         "rowid as _id");
+//	          map.put(ShortDesFTSColumns.EVENG_GUID,            ShortDesFTSColumns.EVENG_GUID );
+//	          map.put(ShortDesFTSColumns.NAME,                  ShortDesFTSColumns.NAME);
+//	          map.put(ShortDesFTSColumns.SHORT_DESCRIPTION,     ShortDesFTSColumns.SHORT_DESCRIPTION);
+//		       		         
+//	    
+//	          return map;
+//	      }
 	     
 	     /*
 	      * 
@@ -314,15 +314,15 @@ public class EPGProvider extends ContentProvider
 	     
 	     
 	     
-	     private static HashMap<String,String> buildSearchColumnMap() {
-	          HashMap<String,String> map = new HashMap<String,String>();
-	          
-	          map.put(BaseColumns._ID,                    BaseColumns._ID);
-	          map.put(Events.NAME,                  BasicColumns.CONCRETE_NAME);
-	          map.put(Events.SHORT_DESCRIPTION,     BasicColumns.CONCRETE_SHORT_DESCRIPTION);
-	          
-	          return map;
-	      }
+//	     private static HashMap<String,String> buildSearchColumnMap() {
+//	          HashMap<String,String> map = new HashMap<String,String>();
+//	          
+//	          map.put(BaseColumns._ID,                    BaseColumns._ID);
+//	          map.put(Events.NAME,                  BasicColumns.CONCRETE_NAME);
+//	          map.put(Events.SHORT_DESCRIPTION,     BasicColumns.CONCRETE_SHORT_DESCRIPTION);
+//	          
+//	          return map;
+//	      }
 	     
 	     private static HashMap<String,String>  buildExtFTSColumnMap(){
 	          HashMap<String,String> map = new HashMap<String,String>();
@@ -668,16 +668,16 @@ public class EPGProvider extends ContentProvider
        }
    }
 
-   private String[] appendProjectionArg(String[] projection, String arg) {
-       if (projection == null) {
-           return null;
-       }
-       final int length = projection.length;
-       String[] newProjection = new String[length + 1];
-       System.arraycopy(projection, 0, newProjection, 0, length);
-       newProjection[length] = arg;
-       return newProjection;
-   }
+//   private String[] appendProjectionArg(String[] projection, String arg) {
+//       if (projection == null) {
+//           return null;
+//       }
+//       final int length = projection.length;
+//       String[] newProjection = new String[length + 1];
+//       System.arraycopy(projection, 0, newProjection, 0, length);
+//       newProjection[length] = arg;
+//       return newProjection;
+//   }
    
    
    private String[] prePendProjectionArg(String[] projection, String arg) {

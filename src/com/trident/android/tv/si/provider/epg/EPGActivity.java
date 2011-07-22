@@ -4,14 +4,14 @@ package com.trident.android.tv.si.provider.epg;
 
 //import android.content.ContentValues;
 //import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.BasicColumns;
-import java.util.Calendar;
-import java.util.Date;
+//import java.util.Calendar;
+//import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
-import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ContentTypeColumns;
+//import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ContentTypeColumns;
 import com.trident.android.tv.si.provider.epg.EventsContract.Events;
-import com.trident.android.tv.si.provider.epg.EventsContract;
+//import com.trident.android.tv.si.provider.epg.EventsContract;
 
 
 import android.content.Intent;
@@ -22,7 +22,7 @@ import android.util.Log;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
-import android.app.SearchManager;
+//import android.app.SearchManager;
 
 //import android.app.Activity;
 import android.os.Bundle;
@@ -409,7 +409,7 @@ public class EPGActivity extends ListActivity {
 	{
 		Intent intent = getIntent();
 
-		String query = null;
+		//String query = null;
 
 		
 		//case 1: 

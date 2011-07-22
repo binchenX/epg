@@ -32,14 +32,10 @@ import android.util.Log;
 	  
 	       private static final String TAG = "EPGDatabaseHelp"; 		   
 		   private final Context myContext;
-		   private static final String PACKAGE_NAME = "com.trident.android.tv.si.provider.epg";
+		   //private static final String PACKAGE_NAME = "com.trident.android.tv.si.provider.epg";
 		   //path for application mode
 		   //private static final String DATABASE_PATH = "/data/data/" + PACKAGE_NAME + "/databases/";
 		   
-		   //From the native code's perspective it is something like /mnt/nfsroot/data/system, 
-		   //The native code should be able to write to this directory,
-		   //the ContentProviderEPG.apk should be able to read it..
-		   //Currently, plfApp are using this directory to save data, so it make sense to put it here.
 		   
 		   
 		   //on simulator 

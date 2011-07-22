@@ -6,14 +6,13 @@ package com.trident.android.tv.si.provider.epg;
 
 import java.util.*; //For Date
 
-import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.BasicColumns;
+
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.Clause;
-import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ExtendedColumns;
 import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ExtendedFTSColumns;
 import com.trident.android.tv.si.provider.epg.EventsContract.Events;
 
 //import android.content.ContentValues;
-import android.content.Context;
+//import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.database.*;
@@ -40,7 +39,7 @@ import android.view.View.OnClickListener;
 
 public class EventDetailActivity extends Activity {
 	
-	private Context context;
+	//private Context context;
 	private static final String TAG = "EventDetail";
 
 	@Override
@@ -145,7 +144,7 @@ public class EventDetailActivity extends Activity {
 			
 		}
 		
-		context = this;
+		//context = this;
 		button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
