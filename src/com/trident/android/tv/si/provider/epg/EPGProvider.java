@@ -507,23 +507,19 @@ public class EPGProvider extends ContentProvider
 			
 	   case QUERY_RATINGS_QUERY_EGUID:
 	   {
-		   qb.setTables(Table.RATINGS);
+		    qb.setTables(Table.RATINGS);
 		   
 			if (sortOrder == null || sortOrder == "") {
 				sortOrder =  "rowid"; //ExtendedFTSColumns._ID;
 			}
 			
 			long event_guid = ContentUris.parseId(uri);
-			//setTablesAndProjectionMapForContacts(qb, uri, projection);
 			
 			Log.d(TAG, "query ratings descriotors for eguid " + event_guid);
 			
 			selectionArgs = insertSelectionArg(selectionArgs, String.valueOf(event_guid));
 						
-			qb.appendWhere(Clause.QUERY_RATING_BY_EVENT_ID);//RatingColumns.EVENT_ID + " =  " + String.valueOf(event_guid));
-			
-			//qb.setProjectionMap(tblExtFTScolumnMap);
-
+			qb.appendWhere(Clause.QUERY_RATING_BY_EVENT_ID); 
 
 			break;
 	   }
