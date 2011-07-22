@@ -55,7 +55,7 @@ import android.view.View.OnClickListener;
  * 
  */
 
-public class EPGProviderActivity extends ListActivity {
+public class EPGActivity extends ListActivity {
 
 	private static final String TAG = "EPGProviderActivity";
 	
