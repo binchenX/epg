@@ -38,7 +38,7 @@ import android.view.View.OnClickListener;
  *
  */
 
-public class EventDetail extends Activity {
+public class EventDetailActivity extends Activity {
 	
 	private Context context;
 	private static final String TAG = "EventDetail";

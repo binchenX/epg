@@ -38,7 +38,7 @@
                    android:value=".SearchResultActivity" />
             
         </activity>
-        <activity android:name=".EventDetail"
+        <activity android:name=".EventDetailActivity"
                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"> 
             <intent-filter>
                <!-- category android:name="android.intent.category.LAUNCHER" /-->
