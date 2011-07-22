@@ -68,6 +68,7 @@ public class EventCursorAdaptor extends SimpleCursorAdapter {
 					if (v instanceof TextView) {
 						setViewText((TextView) v, text);
 					} else if (v instanceof ImageView) {
+						//TODO: 
 						setViewImage((ImageView) v, text);
 					} else {
 						throw new IllegalStateException(
@@ -79,6 +80,16 @@ public class EventCursorAdaptor extends SimpleCursorAdapter {
 			}
 		}
 	}
+	
+	@Override
+	 public void setViewImage(ImageView v, String value) {
+	        try {
+	            //v.setImageResource(Integer.parseInt(value));
+	            v.setImageResource(R.drawable.iconepg);
+	        } catch (NumberFormatException nfe) {
+	            //v.setImageURI(Uri.parse(value));
+	        }
+	    }
 	
     /**
      * Create a map from an array of strings to an array of column-id integers in mCursor.
