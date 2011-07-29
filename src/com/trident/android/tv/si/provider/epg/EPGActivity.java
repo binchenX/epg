@@ -319,17 +319,38 @@ public class EPGActivity extends ListActivity {
 		switch(Integer.valueOf(query[0]))
 		{
 			
-			case 2:adapter = searchByKeywords(query[1]);break;
+			//case 2:adapter = searchByKeywords(query[1]);break;
 			case 3:adapter = searchByEventType(query[1]);break;
 			case 4:  //fall through
 			case 1: 
 			{
-				String selection = " start_time > ? AND start_time < ? ";
-				Log.d(TAG, "search events between " + start_time_utc + "," + end_time_utc);
+				 //
+						
+				////select by service_id
 				
-				String[] selectionArgs = {String.valueOf(start_time_utc), String.valueOf(end_time_utc)};
+				if (!query[1].equals(""))
+				{
+					
+					String serviceId = query[1];
+					String selection = " service_id = ? AND start_time > ? AND start_time < ? ";
+					Log.d(TAG, "search events for service " + serviceId + " between " + start_time_utc + "," + end_time_utc);
+					
+					String[] selectionArgs = {serviceId, String.valueOf(start_time_utc), String.valueOf(end_time_utc)};
+					
+					adapter = normalSearch( selection, selectionArgs,null);
+					
+				//all service	
+				}else {
+					String selection = " start_time > ? AND start_time < ? ";
+					Log.d(TAG, "search events in all service between " + start_time_utc + "," + end_time_utc);
+					
+					String[]  selectionArgs = {String.valueOf(start_time_utc), String.valueOf(end_time_utc)};
+					
+					adapter = normalSearch( selection, selectionArgs,null);
+					
+					
+				}
 				
-				adapter = normalSearch( selection, selectionArgs,null);
 				
 				break;
 				}
@@ -417,10 +438,25 @@ public class EPGActivity extends ListActivity {
 			intent.getAction() == null ||   //IMPLICT start 
 			intent.getAction().equals("com.trident.tv.si.intent.action.LIST") //EXPLICT start
 		    ) {
+						
+			Bundle bd = getIntent().getExtras();
 			
-			Log.d(TAG, "started without search query ,will display all the events..");
+			String serviceID;
+			if (bd != null) {
 
-			return new String[] {"1", ""};
+				serviceID = bd.getString("service_id");
+				Log.d(TAG, "try to get events belong to service " + serviceID);
+				return new String[] {"1", serviceID};
+
+			} else {
+				Log.d(TAG, "try to display  all the events..");
+				return new String[] {"1", ""};
+				
+			}
+
+			
+
+
 		
 		}
 //		else if (Intent.ACTION_SEARCH.equals(intent.getAction())){
