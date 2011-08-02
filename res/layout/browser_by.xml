@@ -31,6 +31,26 @@
         android:layout_toRightOf="@id/bt_news"
                
         />
+         
+        <Button 
+    	android:layout_width= "100px"
+    	android:layout_height="wrap_content"
+        android:id="@+id/bt_all"
+        android:text="All "  
+        android:layout_alignParentBottom="true" 
+        android:layout_toRightOf="@id/bt_sports"
+               
+        />
+         
+        <Button 
+    	android:layout_width= "100px"
+    	android:layout_height="wrap_content"
+        android:id="@+id/bt_byServiceId"
+        android:text="By ServiceId"  
+        android:layout_alignParentBottom="true" 
+        android:layout_toRightOf="@id/bt_all"
+               
+        />
         
  </RelativeLayout>
         

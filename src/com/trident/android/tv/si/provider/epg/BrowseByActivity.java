@@ -6,11 +6,11 @@ package com.trident.android.tv.si.provider.epg;
 //import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.BasicColumns;
 //import java.util.Calendar;
 //import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
+//import java.util.GregorianCalendar;
+//import java.util.TimeZone;
 
 //import com.trident.android.tv.si.provider.epg.EPGDatabaseHelp.ContentTypeColumns;
-import com.trident.android.tv.si.provider.epg.EventsContract.Events;
+//import com.trident.android.tv.si.provider.epg.EventsContract.Events;
 //import com.trident.android.tv.si.provider.epg.EventsContract;
 
 
@@ -133,6 +133,38 @@ public class BrowseByActivity extends Activity {
 				myIntent.putExtra("TYPE", "sports");
 				startActivity(myIntent);
 				finish();
+			}
+		});
+		
+		// movie button
+		Button allButton = (Button) findViewById(R.id.bt_all);
+
+		allButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				Log.d(TAG, "sports button has been pressed...........");
+
+				Intent myIntent = new Intent("com.trident.tv.si.intent.action.LIST");
+				startActivity(myIntent);
+				finish();
+			}
+		});
+		
+		// movie button
+		Button byServiceIDButton = (Button) findViewById(R.id.bt_byServiceId);
+
+		byServiceIDButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+//				Log.d(TAG, "sports button has been pressed...........");
+//
+//				Intent myIntent = new Intent("com.trident.tv.si.intent.action.CATEGORY");
+//
+//				myIntent.putExtra("TYPE", "sports");
+//				startActivity(myIntent);
+//				finish();
 			}
 		});
 		
