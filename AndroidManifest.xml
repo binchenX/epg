@@ -11,12 +11,7 @@
         <activity android:name=".EPGActivity"
                   android:label="@string/app_name" 
                   android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-                <!--action android:name="android.intent.action.SEARCH" /-->
-                         
-            </intent-filter>
+      
             
             <intent-filter>
                 <action android:name= "com.trident.tv.si.intent.action.LIST" />  
@@ -27,20 +22,10 @@
                 <action android:name= "com.trident.tv.si.intent.action.CATEGORY" />   
                 <category android:name="android.intent.category.DEFAULT" />                              
             </intent-filter>
-          
-            
-            <!-- meta-data android:name="android.app.searchable"
-                   android:resource="@xml/searchable"/-->
-                   
-        
-            
+                    
         </activity>
         <activity android:name=".EventDetailActivity"
                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"> 
-            <intent-filter>
-               <!-- category android:name="android.intent.category.LAUNCHER" /-->
-                
-            </intent-filter>
             
             <intent-filter>
                 <action android:name="com.trident.tv.si.intent.action.PICK" />   
@@ -62,8 +47,7 @@
                 <action android:name="android.intent.action.SEARCH" />
                 <!--data android:mimeType="vnd.android.cursor.item/vnd.trident.tv.si.events" /-->                 
             </intent-filter>
-            
-            
+
             <meta-data android:name="android.app.searchable"
                    android:resource="@xml/searchable"/>
             
@@ -72,13 +56,16 @@
         <activity android:name=".BrowseByActivity"
                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"> 
                       
-            <intent-filter>                   
-                <category android:name="android.intent.category.DEFAULT" />   
-               
-                <!--data android:mimeType="vnd.android.cursor.item/vnd.trident.tv.si.events" /-->                 
+          
+            
+             <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                         
             </intent-filter>
             
-               <!-- enable the .EPGProviderActivity enable search dialog to initiate search
+            
+               <!-- enable the ..BrowseByActivity to launch the search dialog to initiate search
                  ,and enable the search dialog  to send search to .SearchResultActivity dialog  --> 
             <meta-data android:name="android.app.default_searchable"
                    android:value=".SearchResultActivity" />

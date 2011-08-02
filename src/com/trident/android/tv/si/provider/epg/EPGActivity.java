@@ -239,19 +239,19 @@ public class EPGActivity extends ListActivity {
 		
 		
 		//
-		// browser by button
-		Button browseBy = (Button) findViewById(R.id.bt_browseBy);
-
-		browseBy.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-
-				Log.d(TAG, "browseBy button has been pressed...........");
-				Intent myIntent = new Intent(EPGActivity.this, BrowseByActivity.class);
-				startActivity(myIntent);
-				finish();
-			}
-		});
+//		// browser by button
+//		Button browseBy = (Button) findViewById(R.id.bt_browseBy);
+//
+//		browseBy.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//
+//				Log.d(TAG, "browseBy button has been pressed...........");
+//				Intent myIntent = new Intent(EPGActivity.this, BrowseByActivity.class);
+//				startActivity(myIntent);
+//				finish();
+//			}
+//		});
 		
 		//
 		// back button
@@ -270,59 +270,6 @@ public class EPGActivity extends ListActivity {
 //		
 		
 		
-//
-//		// movie button
-//		Button movieButton = (Button) findViewById(R.id.bt_movie);
-//
-//		movieButton.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//
-//				Log.d(TAG, "movie button has been pressed...........");
-//
-//				
-//				Intent myIntent = new Intent("com.trident.tv.si.intent.action.CATEGORY");
-//
-//				myIntent.putExtra("TYPE", "movie");
-//				startActivity(myIntent);
-//				finish();
-//			}
-//		});
-//		
-//		// news button
-//		Button newsButton = (Button) findViewById(R.id.bt_news);
-//
-//		newsButton.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//
-//				Log.d(TAG, "news button has been pressed...........");
-//
-//
-//				Intent myIntent = new Intent("com.trident.tv.si.intent.action.CATEGORY");
-//				myIntent.putExtra("TYPE", "news");
-//				startActivity(myIntent);
-//				finish();
-//			}
-//		});
-//		
-//		// movie button
-//		Button sportsButton = (Button) findViewById(R.id.bt_sports);
-//
-//		sportsButton.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//
-//				Log.d(TAG, "sports button has been pressed...........");
-//
-//
-//				Intent myIntent = new Intent("com.trident.tv.si.intent.action.CATEGORY");
-//
-//				myIntent.putExtra("TYPE", "sports");
-//				startActivity(myIntent);
-//				finish();
-//			}
-//		});
 		
 		//Handle the query ------->>>>>	
 		String[] query = getQueryType();

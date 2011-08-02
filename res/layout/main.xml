@@ -12,34 +12,15 @@
         android:layout_alignParentLeft="true"
         
         />
-    
-        <Button 
-        android:layout_width= "100px"
-        android:layout_height="wrap_content"
-        android:id="@+id/bt_browseBy"
-        android:text="Browse By"  
-        android:layout_alignParentTop="true"         
-        android:layout_toRightOf="@id/list_bt_back"
-        />
-        
-        <Button 
-        android:layout_width= "100px"
-        android:layout_height="wrap_content"
-        android:id="@+id/searchbutton"
-        android:text="@string/search"  
-        android:layout_alignParentTop="true" 
-        android:layout_toRightOf="@id/bt_browseBy"
-      
-        />
-        
-         <TextView 
+ 
+        <TextView 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/hint"
     	android:text="@string/hint"  
     	android:layout_alignParentTop="true" 	
     	android:layout_marginLeft="10px" 
-        android:layout_toRightOf="@id/searchbutton"
+        android:layout_toRightOf="@id/list_bt_back"
      
         />
         
@@ -50,8 +31,8 @@
         android:id="@+id/startDateDisplay"
     	android:text=""  	
     	android:layout_marginLeft="10px" 
-    	android:layout_alignBottom="@id/searchbutton"
-        android:layout_toRightOf="@id/searchbutton"
+    	android:layout_alignBottom="@id/list_bt_back"
+        android:layout_toRightOf="@id/list_bt_back"
      
         />
         
@@ -66,14 +47,9 @@
      
         />
         
-        
-     
-        
-
-        
      <ListView android:layout_width="fill_parent"
         android:layout_height="fill_parent" android:id="@id/android:list"
-        android:layout_below="@id/searchbutton"
+        android:layout_below="@id/list_bt_back"
        
         />
         
