@@ -59,8 +59,9 @@ import android.view.View.OnClickListener;
 public class BrowseByActivity extends Activity {
 
 	private static final String TAG = "BrowseByActivity";
-	private static int REQUEST_BROWS_BY_CATEGORY = 1;
-	private static int REQUEST_BROWS_ALL = 1;
+	private static final int REQUEST_BROWS_BY_CATEGORY = 1;
+	private static final int REQUEST_BROWS_ALL = 2;
+	private static final int REQUEST_TIMEPICKER = 3;
 		
 	
 	
@@ -164,6 +165,24 @@ public class BrowseByActivity extends Activity {
 
 			}
 		});
+		
+		
+		
+		// byTime button
+		Button byTimeButton = (Button) findViewById(R.id.home_bt_time);
+
+		byTimeButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				Log.d(TAG, "byTime button has been pressed...........");
+
+				startActivityForResult(new Intent(BrowseByActivity.this, TimePicker.class), REQUEST_TIMEPICKER);
+				
+
+			}
+		});
+		
 		
 		
 		// byChannel button

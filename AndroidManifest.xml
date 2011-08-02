@@ -73,6 +73,22 @@
             
         </activity>
         
+          <activity android:name=".TimePicker"
+                 android:theme="@android:style/Theme.NoTitleBar.Fullscreen"> 
+                      
+          
+            
+             <intent-filter>
+              
+                <category android:name="android.intent.category.DEFAULT" />
+                         
+            </intent-filter>
+            
+>
+            
+            
+        </activity>
+        
         <provider android:name="EPGProvider"
          android:authorities="com.trident.android.tv.si.provider.EPG" /> 
 

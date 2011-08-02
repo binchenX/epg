@@ -47,6 +47,14 @@
         android:text="By Channel"  
         />
         
+              
+        <Button 
+    	android:layout_width= "100px"
+    	android:layout_height="wrap_content"
+        android:id="@+id/home_bt_time"
+        android:text="By Time"  
+        />
+        
         <Button 
     	android:layout_width= "100px"
     	android:layout_height="wrap_content"

@@ -161,24 +161,24 @@ public class EPGActivity extends ListActivity {
 
 		Log.d(TAG, "onCreate");
 		
-		mStarTimeTextView = (TextView) findViewById(R.id.startDateDisplay);
-		mEndTimeTextView = (TextView) findViewById(R.id.endDateDisplay);
-		
-		
-		
-	
-		mStarTimeTextView.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				showDialog(DATE_DIALOG_ID);
-			}
-		});
-
-
-		mEndTimeTextView.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				showDialog(END_DATE_DIALOG_ID);
-			}
-		});
+//		mStarTimeTextView = (TextView) findViewById(R.id.startDateDisplay);
+//		mEndTimeTextView = (TextView) findViewById(R.id.endDateDisplay);
+//		
+//		
+//		
+//	
+//		mStarTimeTextView.setOnClickListener(new View.OnClickListener() {
+//			public void onClick(View v) {
+//				showDialog(DATE_DIALOG_ID);
+//			}
+//		});
+//
+//
+//		mEndTimeTextView.setOnClickListener(new View.OnClickListener() {
+//			public void onClick(View v) {
+//				showDialog(END_DATE_DIALOG_ID);
+//			}
+//		});
 
 		// get the current date and init the start_time and end_time
 		
@@ -193,7 +193,7 @@ public class EPGActivity extends ListActivity {
 
 		
 		// display the current date, which will be used as the search constraint
-		updateTimeViewDisplay();
+		//updateTimeViewDisplay();
 
 		
 		lv = getListView(); // == findViewById(android.R.id.list)
@@ -358,10 +358,10 @@ public class EPGActivity extends ListActivity {
 	
 	/**
 	 * <ul>
-	 * <li>case 1. Displaying all the events
-	 * <li>case 2. Display by Time filtering
-	 * <li>case 3. By channel
-	 * <li>case 4. By category , sports/movie/...
+	 * <li>case QUERY_ALL        : Displaying all the events
+	 * <li>case QUERY_TIME       : Display by Time filtering
+	 * <li>case QUERY_SERVICE_ID : By channel
+	 * <li>case QUERY_CATEGORY   : By category , sports/movie/...
 	 * </ul>
 	 * 
 	 * @return
@@ -370,9 +370,7 @@ public class EPGActivity extends ListActivity {
 	private String[] getQueryType() {
 		Intent intent = getIntent();
 
-		// String query = null;
 
-		// case 1:
 		if (intent == null || // MAIN LAUNCH
 				intent.getAction() == null || // IMPLICT start
 				intent.getAction().equals(
@@ -387,7 +385,7 @@ public class EPGActivity extends ListActivity {
 			if (bd == null) {
 
 				Log.d(TAG, "try to display  all the events..");
-				return new String[] { "1", "" };
+				return new String[] { String.valueOf(QUERY_ALL), "" };
 
 			}
 
@@ -396,13 +394,13 @@ public class EPGActivity extends ListActivity {
 			
 			if (serviceID != null) {
 				Log.d(TAG, "try to get events belong to service " + serviceID);
-				return new String[] { "3", serviceID };
+				return new String[] { String.valueOf(QUERY_SERVICE_ID), serviceID };
 			} else {
 				String start_time = bd.getString("start_time");
 				String end_time = bd.getString("end_time");
 
 				Log.d(TAG, "try to get events between ( " + start_time + "," + end_time + ")");
-				return new String[] { "2", start_time, end_time };
+				return new String[] { String.valueOf(QUERY_TIME), start_time, end_time };
 			}
 
 		} else if (getIntent().getAction().equals(
@@ -414,14 +412,14 @@ public class EPGActivity extends ListActivity {
 			if (bd != null) {
 				type = bd.getString("TYPE");
 				Log.d(TAG, "try to get events belong to type " + type);
-				return new String[] { "4", type };
+				return new String[] { String.valueOf(QUERY_CATEGORY), type };
 
 			}
 
 		}
 
 		// default to case 1:
-		return new String[] { "1", "" };
+		return new String[] { String.valueOf(QUERY_ALL), "" };
 
 	}
 	
