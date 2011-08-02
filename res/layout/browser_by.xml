@@ -43,9 +43,14 @@
     	android:layout_width= "100px"
     	android:layout_height="wrap_content"
         android:id="@+id/bt_byServiceId"
-        android:text="By ServiceId"  
-   
-               
+        android:text="By Channel"  
+        />
+        
+        <Button 
+    	android:layout_width= "100px"
+    	android:layout_height="wrap_content"
+        android:id="@+id/home_bt_search"
+        android:text="Search"  
         />
         
  </LinearLayout>

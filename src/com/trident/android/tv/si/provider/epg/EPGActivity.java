@@ -222,20 +222,20 @@ public class EPGActivity extends ListActivity {
 			}
 		});
 
-		// search button
-		Button searchButton = (Button) findViewById(R.id.searchbutton);
-
-		searchButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-
-				// start an search
-				Log.d(TAG,"start search...............................");
-				onSearchRequested();
-				// finish() should not be called
-
-			}
-		});
+//		// search button
+//		Button searchButton = (Button) findViewById(R.id.searchbutton);
+//
+//		searchButton.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//
+//				// start an search
+//				Log.d(TAG,"start search...............................");
+//				onSearchRequested();
+//				// finish() should not be called
+//
+//			}
+//		});
 		
 		
 		//

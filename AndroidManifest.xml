@@ -32,10 +32,7 @@
             <!-- meta-data android:name="android.app.searchable"
                    android:resource="@xml/searchable"/-->
                    
-           <!-- enable the .EPGProviderActivity enable search dialog to initiate search
-                 ,and enable the search dialog  to send search to .SearchResultActivity dialog  --> 
-            <meta-data android:name="android.app.default_searchable"
-                   android:value=".SearchResultActivity" />
+        
             
         </activity>
         <activity android:name=".EventDetailActivity"
@@ -80,7 +77,12 @@
                
                 <!--data android:mimeType="vnd.android.cursor.item/vnd.trident.tv.si.events" /-->                 
             </intent-filter>
-            s
+            
+               <!-- enable the .EPGProviderActivity enable search dialog to initiate search
+                 ,and enable the search dialog  to send search to .SearchResultActivity dialog  --> 
+            <meta-data android:name="android.app.default_searchable"
+                   android:value=".SearchResultActivity" />
+            
             
         </activity>
         

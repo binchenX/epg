@@ -161,13 +161,25 @@ public class BrowseByActivity extends Activity {
 
 				Log.d(TAG, "byChannel button has been pressed...........");
 
-//				Intent myIntent = new Intent("com.trident.tv.si.intent.action.CATEGORY");
-//
-//				myIntent.putExtra("TYPE", "sports");
-//				startActivity(myIntent);
-				//finish();
+
 			}
 		});
+		
+		
+		// byChannel button
+		Button searchButton = (Button) findViewById(R.id.home_bt_search);
+
+		searchButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				Log.d(TAG, "search button has been pressed...........");
+				onSearchRequested();
+
+
+			}
+		});
+		
 		
 	
 	}
