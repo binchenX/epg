@@ -5,6 +5,14 @@
     android:orientation="vertical"
     >
 
+        <Button 
+    	android:layout_width= "100px"
+    	android:layout_height="wrap_content"
+        android:id="@+id/bt_all"
+        android:text="All "  
+               
+        />
+        
        <Button 
     	android:layout_width= "100px"
     	android:layout_height="wrap_content"
@@ -30,14 +38,7 @@
                
         />
          
-        <Button 
-    	android:layout_width= "100px"
-    	android:layout_height="wrap_content"
-        android:id="@+id/bt_all"
-        android:text="All "  
-       
-               
-        />
+        
          
         <Button 
     	android:layout_width= "100px"
