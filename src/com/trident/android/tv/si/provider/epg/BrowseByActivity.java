@@ -76,7 +76,7 @@ public class BrowseByActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.browser_by);
+		setContentView(R.layout.main);
 
 		Log.d(TAG, "onCreate");
 		
