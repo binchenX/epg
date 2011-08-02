@@ -59,7 +59,6 @@ public class EPGActivity extends ListActivity {
 
 	private static final String TAG = "EPGProviderActivity";
 	
-	//the listview for the events..
 	private ListView lv;
 	private int lastSelectedPosition = 0;
 
@@ -83,6 +82,11 @@ public class EPGActivity extends ListActivity {
 
 	static final int DATE_DIALOG_ID = 0;
 	static final int END_DATE_DIALOG_ID = 1;
+	
+	private static final int QUERY_ALL = 1;
+	private static final int QUERY_SERVICE_ID = 2;
+	private static final int QUERY_TIME = 3;
+	private static final int QUERY_CATEGORY = 4;
 
 	private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
 
@@ -133,9 +137,6 @@ public class EPGActivity extends ListActivity {
 		ListAdapter adapter = normalSearch( selection, selectionArgs, null);
 		setListAdapter(adapter);
 		
-		
-		
-
 	}
 
 	@Override
@@ -222,38 +223,7 @@ public class EPGActivity extends ListActivity {
 			}
 		});
 
-//		// search button
-//		Button searchButton = (Button) findViewById(R.id.searchbutton);
-//
-//		searchButton.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//
-//				// start an search
-//				Log.d(TAG,"start search...............................");
-//				onSearchRequested();
-//				// finish() should not be called
-//
-//			}
-//		});
-		
-		
-		//
-//		// browser by button
-//		Button browseBy = (Button) findViewById(R.id.bt_browseBy);
-//
-//		browseBy.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//
-//				Log.d(TAG, "browseBy button has been pressed...........");
-//				Intent myIntent = new Intent(EPGActivity.this, BrowseByActivity.class);
-//				startActivity(myIntent);
-//				finish();
-//			}
-//		});
-		
-		//
+
 		// back button
 		Button backButton = (Button) findViewById(R.id.list_bt_back);
 
@@ -267,9 +237,6 @@ public class EPGActivity extends ListActivity {
 			}
 		});
 		
-//		
-		
-		
 		
 		//Handle the query ------->>>>>	
 		String[] query = getQueryType();
@@ -282,41 +249,46 @@ public class EPGActivity extends ListActivity {
 		switch(Integer.valueOf(query[0]))
 		{
 			
-			//case 2:adapter = searchByKeywords(query[1]);break;
-			case 3:adapter = searchByEventType(query[1]);break;
-			case 4:  //fall through
-			case 1: 
+		
+		    case QUERY_CATEGORY:adapter = searchByEventType(query[1]);break;
+			case QUERY_ALL: 
 			{
-				 //
+				adapter = normalSearch( null, null, null);
+				break;
 						
-				////select by service_id
+			}
+			
+			case QUERY_SERVICE_ID:
+			{
+				String serviceId = query[1];
 				
-				if (!query[1].equals(""))
-				{
-					
-					String serviceId = query[1];
-					String selection = " service_id = ? AND start_time > ? AND start_time < ? ";
-					Log.d(TAG, "search events for service " + serviceId + " between " + start_time_utc + "," + end_time_utc);
-					
-					String[] selectionArgs = {serviceId, String.valueOf(start_time_utc), String.valueOf(end_time_utc)};
-					
-					adapter = normalSearch( selection, selectionArgs,null);
-					
-				//all service	
-				}else {
-					String selection = " start_time > ? AND start_time < ? ";
-					Log.d(TAG, "search events in all service between " + start_time_utc + "," + end_time_utc);
-					
-					String[]  selectionArgs = {String.valueOf(start_time_utc), String.valueOf(end_time_utc)};
-					
-					adapter = normalSearch( selection, selectionArgs,null);
-					
-					
-				}
+				Log.d(TAG, "search events for service " + serviceId);
 				
+				String selection = " service_id = ?";
+				
+				String[] selectionArgs = {serviceId};
+				
+				adapter = normalSearch( selection, selectionArgs,null);
 				
 				break;
-				}
+				
+			}
+			case QUERY_TIME: 
+			{
+				
+				Log.d(TAG, "search events in all service between " + query[1] + "," + query[2]);
+				
+				String selection = " start_time > ? AND start_time < ? ";
+				
+				String[]  selectionArgs = {query[1], query[2]};
+				
+				adapter = normalSearch( selection, selectionArgs,null);
+				break;
+				
+				
+			}
+			
+				
 			default:
 			{
 				Log.d(TAG, "unexpect query type,  return ...");
@@ -328,8 +300,12 @@ public class EPGActivity extends ListActivity {
 		if(adapter == null)
 		{
 			Log.d(TAG, "Opooos. Find nothing....");
+			
+			Toast.makeText(this, "Oopps, find nothings ", Toast.LENGTH_LONG);
 			return; 
 		}
+		
+		
 		setListAdapter(adapter);
 
 
@@ -381,76 +357,72 @@ public class EPGActivity extends ListActivity {
 	}
 	
 	/**
+	 * <ul>
+	 * <li>case 1. Displaying all the events
+	 * <li>case 2. Display by Time filtering
+	 * <li>case 3. By channel
+	 * <li>case 4. By category , sports/movie/...
+	 * </ul>
 	 * 
-	 * case 1. Enter the main page ,displaying all the events
-	 * case 2. User press "Search"
-	 * case 3. User press "Movie", "Sports"
-	 * case 4. User change the star_time and/or end_time
 	 * @return
 	 */
-	
-	private String[] getQueryType()
-	{
+
+	private String[] getQueryType() {
 		Intent intent = getIntent();
 
-		//String query = null;
+		// String query = null;
 
-		
-		//case 1: 
-		if (intent == null ||              //MAIN LAUNCH
-			intent.getAction() == null ||   //IMPLICT start 
-			intent.getAction().equals("com.trident.tv.si.intent.action.LIST") //EXPLICT start
-		    ) {
-						
+		// case 1:
+		if (intent == null || // MAIN LAUNCH
+				intent.getAction() == null || // IMPLICT start
+				intent.getAction().equals(
+						"com.trident.tv.si.intent.action.LIST") // EXPLICT start
+		) {
+
 			Bundle bd = getIntent().getExtras();
-			
+
 			String serviceID;
-			if (bd != null) {
 
-				serviceID = bd.getString("service_id");
-				Log.d(TAG, "try to get events belong to service " + serviceID);
-				return new String[] {"1", serviceID};
+			//Display ALL
+			if (bd == null) {
 
-			} else {
 				Log.d(TAG, "try to display  all the events..");
-				return new String[] {"1", ""};
-				
+				return new String[] { "1", "" };
+
 			}
 
+			//There is a "where"...
+			serviceID = bd.getString("service_id");
 			
+			if (serviceID != null) {
+				Log.d(TAG, "try to get events belong to service " + serviceID);
+				return new String[] { "3", serviceID };
+			} else {
+				String start_time = bd.getString("start_time");
+				String end_time = bd.getString("end_time");
 
+				Log.d(TAG, "try to get events between ( " + start_time + "," + end_time + ")");
+				return new String[] { "2", start_time, end_time };
+			}
 
-		
-		}
-//		else if (Intent.ACTION_SEARCH.equals(intent.getAction())){
-//
-//			   // case 2 :intent from Search bar
-//				query = intent.getStringExtra(SearchManager.QUERY);
-//				Log.d(TAG, "Will search .." + query);
-//				
-//				return new String[] {"2", query};
-//
-//	    }
-		else if(getIntent().getAction().equals("com.trident.tv.si.intent.action.CATEGORY")) {
-				//case 3:intent from movie/news button
-				Bundle bd = getIntent().getExtras();
-				
-				String type;
-				if (bd != null) {
+		} else if (getIntent().getAction().equals(
+				"com.trident.tv.si.intent.action.CATEGORY")) {
+			// case 3:intent from movie/news button
+			Bundle bd = getIntent().getExtras();
 
-					type = bd.getString("TYPE");
-					Log.d(TAG, "try to get events belong to type " + type);
-					return new String[] {"3", type};
+			String type;
+			if (bd != null) {
+				type = bd.getString("TYPE");
+				Log.d(TAG, "try to get events belong to type " + type);
+				return new String[] { "4", type };
 
-				}
+			}
 
 		}
-		
-	
-		//default to case 1:
-		return new String[] {"1", ""};
 
-		
+		// default to case 1:
+		return new String[] { "1", "" };
+
 	}
 	
 	
