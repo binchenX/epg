@@ -252,6 +252,21 @@ public class EPGActivity extends ListActivity {
 				finish();
 			}
 		});
+		
+		//
+		// back button
+		Button backButton = (Button) findViewById(R.id.list_bt_back);
+
+		backButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+                finish();
+			}
+		});
+		
 //		
 		
 		

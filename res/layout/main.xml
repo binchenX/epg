@@ -3,14 +3,23 @@
     android:layout_width="fill_parent" android:layout_height="fill_parent">
 
     
+       <Button 
+        android:layout_width= "100px"
+        android:layout_height="wrap_content"
+        android:id="@+id/list_bt_back"
+        android:text="Back"  
+        android:layout_alignParentTop="true" 
+        android:layout_alignParentLeft="true"
+        
+        />
     
         <Button 
         android:layout_width= "100px"
         android:layout_height="wrap_content"
         android:id="@+id/bt_browseBy"
         android:text="Browse By"  
-        android:layout_alignParentTop="true" 
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"         
+        android:layout_toRightOf="@id/list_bt_back"
         />
         
         <Button 

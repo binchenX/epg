@@ -59,7 +59,8 @@ import android.view.View.OnClickListener;
 public class BrowseByActivity extends Activity {
 
 	private static final String TAG = "BrowseByActivity";
-	
+	private static int REQUEST_BROWS_BY_CATEGORY = 1;
+	private static int REQUEST_BROWS_ALL = 1;
 		
 	
 	
@@ -97,8 +98,8 @@ public class BrowseByActivity extends Activity {
 				Intent myIntent = new Intent("com.trident.tv.si.intent.action.CATEGORY");
 
 				myIntent.putExtra("TYPE", "movie");
-				startActivity(myIntent);
-				finish();
+				startActivityForResult(myIntent, REQUEST_BROWS_BY_CATEGORY);  
+				//finish();
 			}
 		});
 		
@@ -114,12 +115,12 @@ public class BrowseByActivity extends Activity {
 
 				Intent myIntent = new Intent("com.trident.tv.si.intent.action.CATEGORY");
 				myIntent.putExtra("TYPE", "news");
-				startActivity(myIntent);
-				finish();
+				startActivityForResult(myIntent, REQUEST_BROWS_BY_CATEGORY);  
+				//finish();
 			}
 		});
 		
-		// movie button
+		// sports button
 		Button sportsButton = (Button) findViewById(R.id.bt_sports);
 
 		sportsButton.setOnClickListener(new OnClickListener() {
@@ -131,12 +132,12 @@ public class BrowseByActivity extends Activity {
 				Intent myIntent = new Intent("com.trident.tv.si.intent.action.CATEGORY");
 
 				myIntent.putExtra("TYPE", "sports");
-				startActivity(myIntent);
-				finish();
+				startActivityForResult(myIntent, REQUEST_BROWS_BY_CATEGORY);  
+				//finish();
 			}
 		});
 		
-		// movie button
+		// all button
 		Button allButton = (Button) findViewById(R.id.bt_all);
 
 		allButton.setOnClickListener(new OnClickListener() {
@@ -146,25 +147,25 @@ public class BrowseByActivity extends Activity {
 				Log.d(TAG, "sports button has been pressed...........");
 
 				Intent myIntent = new Intent("com.trident.tv.si.intent.action.LIST");
-				startActivity(myIntent);
-				finish();
+				startActivityForResult(myIntent, REQUEST_BROWS_ALL);  
+				//finish();
 			}
 		});
 		
-		// movie button
+		// byChannel button
 		Button byServiceIDButton = (Button) findViewById(R.id.bt_byServiceId);
 
 		byServiceIDButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 
-//				Log.d(TAG, "sports button has been pressed...........");
-//
+				Log.d(TAG, "byChannel button has been pressed...........");
+
 //				Intent myIntent = new Intent("com.trident.tv.si.intent.action.CATEGORY");
 //
 //				myIntent.putExtra("TYPE", "sports");
 //				startActivity(myIntent);
-//				finish();
+				//finish();
 			}
 		});
 		
