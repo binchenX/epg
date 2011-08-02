@@ -36,14 +36,6 @@ import android.util.Log;
 	private static final int SIMULATOR = 1;
 	private static final int SX5 = 2;
 
-//	// on simulator
-//	private static final String DATABASE_PATH = "/data/system/";
-//	private static final String DATABASE_NAME = "epg.db";
-//
-//	// for SX5
-//	// private static final String DATABASE_PATH = "/tmp/";
-//	// private static final String DATABASE_NAME = "eit.sqlite";
-
 	private static int target() {
 
 		File dir = new File("/tmp");

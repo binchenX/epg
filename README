@@ -4,3 +4,11 @@ Notes: after install the apk ,use following command to install the sample databa
 
 
 adb push asserts/epg.db /data/system/epg.db
+
+
+KNOWN ISSUE:
+1. when lauching search box, the softkey board will keep flashing.
+http://code.google.com/p/android/issues/detail?id=8851#makechanges
+http://code.google.com/p/cyanogenmod/issues/detail?id=1822#c18
+
+
