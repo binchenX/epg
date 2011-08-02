@@ -71,6 +71,18 @@
                    android:resource="@xml/searchable"/>
             
         </activity>
+                
+        <activity android:name=".BrowseByActivity"
+                 android:theme="@android:style/Theme.NoTitleBar.Fullscreen"> 
+                      
+            <intent-filter>                   
+                <category android:name="android.intent.category.DEFAULT" />   
+               
+                <!--data android:mimeType="vnd.android.cursor.item/vnd.trident.tv.si.events" /-->                 
+            </intent-filter>
+            s
+            
+        </activity>
         
         <provider android:name="EPGProvider"
          android:authorities="com.trident.android.tv.si.provider.EPG" /> 

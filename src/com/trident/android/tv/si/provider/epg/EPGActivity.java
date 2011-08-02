@@ -68,7 +68,7 @@ public class EPGActivity extends ListActivity {
 
 	private final int  REQEUST_DETAIL = 1;
 	
-	private int mStartYear = 2011;
+	private int mStartYear = 1960;
 	private int mStartMonth = 5; //start from 0
 	private int mStartDay = 1;
 
@@ -125,16 +125,7 @@ public class EPGActivity extends ListActivity {
 
 	// use current startTime and endTime to filter the result
 	void filterTheEventByTime() {
-		
-//		//update the view 
-//		Intent myIntent = new Intent(EPGProviderActivity.this,
-//				EPGProviderActivity.class);
-//
-//		// The detailActivity will use this to query the detail
-//		// information.
-//		startActivity(myIntent);
-//		finish();
-		
+				
 		String selection = " start_time > ? AND start_time < ? ";
 		Log.d(TAG, "search events between " + start_time_utc + "," + end_time_utc);
 		
@@ -214,8 +205,6 @@ public class EPGActivity extends ListActivity {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 
-//				Intent myIntent = new Intent(EPGProviderActivity.this,
-//						EventDetail.class);
 				
 				Intent myIntent = new Intent("com.trident.tv.si.intent.action.PICK");
 				
@@ -247,66 +236,78 @@ public class EPGActivity extends ListActivity {
 
 			}
 		});
-
-		// movie button
-		Button movieButton = (Button) findViewById(R.id.bt_movie);
-
-		movieButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-
-				Log.d(TAG, "movie button has been pressed...........");
-				// start himself...
-//				Intent myIntent = new Intent(EPGProviderActivity.this,
-//						EPGProviderActivity.class);
-				
-				Intent myIntent = new Intent("com.trident.tv.si.intent.action.CATEGORY");
-
-				myIntent.putExtra("TYPE", "movie");
-				startActivity(myIntent);
-				finish();
-			}
-		});
 		
-		// news button
-		Button newsButton = (Button) findViewById(R.id.bt_news);
-
-		newsButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-
-				Log.d(TAG, "news button has been pressed...........");
-				// start himself...
-//				Intent myIntent = new Intent(EPGProviderActivity.this,
-//						EPGProviderActivity.class);
-
-
-				Intent myIntent = new Intent("com.trident.tv.si.intent.action.CATEGORY");
-				myIntent.putExtra("TYPE", "news");
-				startActivity(myIntent);
-				finish();
-			}
-		});
 		
-		// movie button
-		Button sportsButton = (Button) findViewById(R.id.bt_sports);
+		//
+		// browser by button
+		Button browseBy = (Button) findViewById(R.id.bt_browseBy);
 
-		sportsButton.setOnClickListener(new OnClickListener() {
+		browseBy.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 
-				Log.d(TAG, "sports button has been pressed...........");
-//				// start himself...
-//				Intent myIntent = new Intent(EPGProviderActivity.this,
-//						EPGProviderActivity.class);
-
-				Intent myIntent = new Intent("com.trident.tv.si.intent.action.CATEGORY");
-
-				myIntent.putExtra("TYPE", "sports");
+				Log.d(TAG, "browseBy button has been pressed...........");
+				Intent myIntent = new Intent(EPGActivity.this, BrowseByActivity.class);
 				startActivity(myIntent);
 				finish();
 			}
 		});
+//		
+		
+		
+//
+//		// movie button
+//		Button movieButton = (Button) findViewById(R.id.bt_movie);
+//
+//		movieButton.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//
+//				Log.d(TAG, "movie button has been pressed...........");
+//
+//				
+//				Intent myIntent = new Intent("com.trident.tv.si.intent.action.CATEGORY");
+//
+//				myIntent.putExtra("TYPE", "movie");
+//				startActivity(myIntent);
+//				finish();
+//			}
+//		});
+//		
+//		// news button
+//		Button newsButton = (Button) findViewById(R.id.bt_news);
+//
+//		newsButton.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//
+//				Log.d(TAG, "news button has been pressed...........");
+//
+//
+//				Intent myIntent = new Intent("com.trident.tv.si.intent.action.CATEGORY");
+//				myIntent.putExtra("TYPE", "news");
+//				startActivity(myIntent);
+//				finish();
+//			}
+//		});
+//		
+//		// movie button
+//		Button sportsButton = (Button) findViewById(R.id.bt_sports);
+//
+//		sportsButton.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//
+//				Log.d(TAG, "sports button has been pressed...........");
+//
+//
+//				Intent myIntent = new Intent("com.trident.tv.si.intent.action.CATEGORY");
+//
+//				myIntent.putExtra("TYPE", "sports");
+//				startActivity(myIntent);
+//				finish();
+//			}
+//		});
 		
 		//Handle the query ------->>>>>	
 		String[] query = getQueryType();
@@ -491,25 +492,7 @@ public class EPGActivity extends ListActivity {
 	}
 	
 	
-	private ListAdapter  searchByKeywords(String keyWords) {
-		
-		Cursor c = null;
-		
-		c = managedQuery(EPGProvider.CONTENT_URI_EVENTS_SEARCH,
-				new String[] { Events.SERVICE_ID, Events.NAME }, // selections
-				null, // always be NULL
-				new String[] { keyWords }, // the keywords
-				null);
 
-	
-	// Used to map notes entries from the database to views
-	// show only the event name
-
-	return getAdaptor(c);
-		
-		
-	
-	}
 
 	private ListAdapter normalSearch(String selection, String[] selectionArgs, String orderBy) {
 
