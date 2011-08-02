@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    >
+    
+    
+       <Button 
+        android:layout_width= "100px"
+        android:layout_height="wrap_content"
+        android:id="@+id/pick_bt_back"
+        android:text="Cancel"  
+        android:layout_alignParentTop="true" 
+        android:layout_alignParentLeft="true" 
+        />
+        
+        <Button 
+        android:layout_width= "100px"
+        android:layout_height="wrap_content"
+        android:id="@+id/pick_bt_ok"
+        android:text="OK"  
+        android:layout_alignParentTop="true" 
+  		android:layout_alignParentRight="true"
+        />
+        
+    <TableLayout 
+	android:layout_width="fill_parent" 
+	android:layout_height="fill_parent" 
+	android:layout_below="@id/pick_bt_back"
+	>
+	
+	    <TableRow>
+                <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/hint"
+    	android:text="@string/hint"  
+    	android:layout_alignParentTop="true" 	
+    	android:layout_marginLeft="10px" 
+        />
+        </TableRow>
+        
+        <TableRow>
+      
+         <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt_startTime"
+    	android:text="start_time"  	
+    	android:layout_marginLeft="20px" 
+    	
+        />
+        <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/startDateDisplay"
+    	android:text=""  	
+    	android:layout_marginLeft="20px" 
+    	
+        />
+           </TableRow>
+           <TableRow>
+              <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt_endTime"
+    	android:text="end_time"  	
+    	android:layout_marginLeft="20px" 
+    	
+        />
+        <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/endDateDisplay"
+    	android:text=""  	
+    	android:layout_marginLeft="20px"
+        android:layout_toRightOf="@id/startDateDisplay"
+        android:layout_alignBottom="@id/startDateDisplay"
+     
+        />
+        </TableRow>
+        
+         
+       </TableLayout> 
+        
+      
+        
+ </LinearLayout>
