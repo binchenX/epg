@@ -179,6 +179,7 @@ import android.util.Log;
 		public static final String SEARCH_BY_TYPE = "_id IN (select eguid FROM tblEvent_content WHERE level1=? )";
 		public static final String QUERY_RATING_BY_EVENT_ID = RatingColumns.EVENT_ID
 				+ " = ? ";
+		public static final String QUERY_PF_EVENTS = "sguid IN ( SELECT _id FROM tblSection WHERE table_id = 78 AND ";
 	}
 
 	EPGDatabaseHelp(Context context) {

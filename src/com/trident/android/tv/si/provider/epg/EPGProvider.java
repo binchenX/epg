@@ -162,6 +162,13 @@ public class EPGProvider extends ContentProvider
 	public static final Uri CONTENT_URI_EVENTS_EDUCATION = Uri.parse("content://" + PROVIDER_NAME + "/education");
 	
 	
+	/**
+	 * Query present and following events of service xxx. 
+	 * 
+	 */
+	public static final Uri CONTENT_URI_PF_EVENT = Uri.parse("content://" + PROVIDER_NAME + "/pf");
+	
+	
 	
 	
 	
@@ -198,6 +205,7 @@ public class EPGProvider extends ContentProvider
 	   private static final int QUERY_EXTENDED_QUERY_EGUID = 4;
 	   private static final int QUERY_EVENTS_SEARCH = 7;
 	   private static final int QUERY_RATINGS_QUERY_EGUID = 8;
+	   private static final int QUERY_PF_EVENT = 9;
 	   
 	   //for Query by  genre
 	   private static final int QUERY_MOVIE = 0x1001;
@@ -280,7 +288,11 @@ public class EPGProvider extends ContentProvider
 	         uriMatcher.addURI(PROVIDER_NAME, "news",   QUERY_NEWS);  
 	         uriMatcher.addURI(PROVIDER_NAME, "sports", QUERY_SPORTS);  
 	         uriMatcher.addURI(PROVIDER_NAME, "music",  QUERY_MUSIC);  
-	         uriMatcher.addURI(PROVIDER_NAME, "education", QUERY_EDUCATION);  
+	         uriMatcher.addURI(PROVIDER_NAME, "education", QUERY_EDUCATION); 
+	         
+	         uriMatcher.addURI(PROVIDER_NAME, "pf", QUERY_PF_EVENT);
+	     
+	         
 	      }
 
 //	     private static HashMap<String,String> buildColumnMap() {
@@ -613,7 +625,20 @@ public class EPGProvider extends ContentProvider
 		   
 		   break;
 		   
-	  
+	   case QUERY_PF_EVENT:
+		   qb.setTables(Table.BASIC);
+		   
+		   if (sortOrder == null || sortOrder == "") {
+				sortOrder =  "start_time ASC"; 
+		   }
+		   
+		   qb.appendWhere(Clause.QUERY_PF_EVENTS + selection + ")");
+		   //we have integrate the selection with QUERY_PF_EVENTS
+		   selection = null;
+		   
+		   break;
+		   
+	   
 	   default:
 	   
 		   throw new IllegalArgumentException("unknown Content Uri");
